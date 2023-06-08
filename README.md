@@ -35,7 +35,7 @@ git checkout _새로운브랜치이름_
 # 푸쉬 할때
 git add . 
 git commit -m "_커밋을 설명하는 코멘트_"
-git push origin _새로운브랜치이름_
+git push origin _파생브랜치이름_ _새로운브랜치이름_
 
 # main브랜치 없데이트 필요시, main pull + main rebase
 git checkout develop
