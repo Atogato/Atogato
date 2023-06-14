@@ -1,9 +1,8 @@
-package portfolio.backend.api.repository;
+package portfolio.backend.api.project.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import portfolio.backend.api.entity.Project;
+import portfolio.backend.api.project.entity.Project;
 
 
 @Repository
