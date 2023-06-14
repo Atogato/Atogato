@@ -1,9 +1,8 @@
-package portfolio.backend.api.service;
+package portfolio.backend.api.project.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import portfolio.backend.api.entity.Project;
-import portfolio.backend.api.repository.ProjectRepository;
+import portfolio.backend.api.project.entity.Project;
+import portfolio.backend.api.project.repository.ProjectRepository;
 
 import java.time.LocalDate;
 
