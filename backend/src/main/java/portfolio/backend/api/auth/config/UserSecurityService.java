@@ -1,4 +1,4 @@
-package portfolio.backend.api.config;
+package portfolio.backend.api.auth.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,4 +1,4 @@
-package portfolio.backend.api.exception;
+package portfolio.backend.api.project.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

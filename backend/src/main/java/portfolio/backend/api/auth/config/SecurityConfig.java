@@ -1,4 +1,4 @@
-package portfolio.backend.api.config;
+package portfolio.backend.api.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,12 +1,11 @@
-package portfolio.backend.api.controller;
+package portfolio.backend.api.project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import portfolio.backend.api.entity.Project;
-import portfolio.backend.api.repository.ProjectRepository;
-import portfolio.backend.api.exception.ResourceNotFoundException; // Import statement for ResourceNotFoundException
+import portfolio.backend.api.project.entity.Project;
+import portfolio.backend.api.project.repository.ProjectRepository;
+import portfolio.backend.api.project.exception.ResourceNotFoundException; // Import statement for ResourceNotFoundException
 
 import java.time.LocalDate;
 import java.util.List;
@@ -50,17 +49,19 @@ public class ProjectController {
                                  @RequestParam(defaultValue = "None") String image,
                                  @RequestParam String description,
                                  @RequestParam Long userId,
+                                 @RequestParam(defaultValue = "true") Boolean ongoingStatus,
+                                 @RequestParam(defaultValue = "both") String remoteStatus,
                                  @RequestParam(defaultValue = "0") Long participantId) {
         Project project = new Project();
         project.setProjectName(projectName);
         project.setCreatorArtCategory(creatorArtCategory);
-        project.setCreatorArtCategory(creatorArtCategory);
+        project.setLiked(liked);
         project.setLocation(location);
         project.setCreatedDate(LocalDate.now());
-        project.setLiked(liked);
+        project.setOngoingStatus(ongoingStatus);
+        project.setRemoteStatus(remoteStatus);
         project.setDeadline(deadline);
         project.setRequiredPeople(requiredPeople);
-        project.setRequiredCategory(requiredCategory);
         project.setRequiredCategory(requiredCategory);
         project.setSwipeAlgorithm(swipeAlgorithm);
         project.setImage(image);
@@ -87,9 +88,12 @@ public class ProjectController {
         existingProject.setRequiredCategory(updatedProject.getRequiredCategory());
         existingProject.setRequiredPeople(updatedProject.getRequiredPeople());
         existingProject.setDeadline(updatedProject.getDeadline());
-
+        existingProject.setOngoingStatus(updatedProject.getOngoingStatus());
+        existingProject.setRemoteStatus(updatedProject.getRemoteStatus());
         existingProject.setDescription(updatedProject.getDescription());
         existingProject.setUserId(updatedProject.getUserId());
+        existingProject.setParticipantId(updatedProject.getParticipantId());
+
 
         return projectRepository.save(existingProject);
     }

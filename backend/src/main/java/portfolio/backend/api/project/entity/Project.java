@@ -1,4 +1,4 @@
-package portfolio.backend.api.entity;
+package portfolio.backend.api.project.entity;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -12,6 +12,12 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long projectId;
+
+
+    private Boolean ongoingStatus;
+
+    @Column(nullable=false)
+    private String remoteStatus;
 
     @Column(nullable=false)
     private String projectName;
@@ -39,6 +45,8 @@ public class Project {
     @Column(nullable=true)
     private String image;
     private Long liked;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
     private Long userId;
 
@@ -154,6 +162,22 @@ public class Project {
         this.liked = liked;
     }
 
+    public Boolean getOngoingStatus() {
+        return ongoingStatus;
+    }
+
+    public void setOngoingStatus(Boolean ongoingStatus) {
+        this.ongoingStatus = ongoingStatus;
+    }
+
+    public String getRemoteStatus() {
+        return remoteStatus;
+    }
+
+    public void setRemoteStatus(String remoteStatus) {
+        this.remoteStatus = remoteStatus;
+    }
+
 
     public Long getUserId() {
         return userId;
@@ -162,6 +186,7 @@ public class Project {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
+
 
     public Long getParticipantId() {
         return participantId;
