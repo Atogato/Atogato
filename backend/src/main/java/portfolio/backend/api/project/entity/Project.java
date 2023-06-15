@@ -13,6 +13,12 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long projectId;
 
+
+    private Boolean ongoingStatus;
+
+    @Column(nullable=false)
+    private String remoteStatus;
+
     @Column(nullable=false)
     private String projectName;
 
@@ -39,6 +45,9 @@ public class Project {
     @Column(nullable=true)
     private String image;
     private Long liked;
+
+    @Column(columnDefinition = "TEXT")
+
     private String description;
     private Long userId;
 
@@ -152,6 +161,22 @@ public class Project {
 
     public void setLiked(Long liked) {
         this.liked = liked;
+    }
+
+    public Boolean getOngoingStatus() {
+        return ongoingStatus;
+    }
+
+    public void setOngoingStatus(Boolean ongoingStatus) {
+        this.ongoingStatus = ongoingStatus;
+    }
+
+    public String getRemoteStatus() {
+        return remoteStatus;
+    }
+
+    public void setRemoteStatus(String remoteStatus) {
+        this.remoteStatus = remoteStatus;
     }
 
 

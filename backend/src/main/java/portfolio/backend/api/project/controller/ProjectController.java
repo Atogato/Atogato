@@ -49,17 +49,20 @@ public class ProjectController {
                                  @RequestParam(defaultValue = "None") String image,
                                  @RequestParam String description,
                                  @RequestParam Long userId,
+
+                                 @RequestParam(defaultValue = "true") Boolean ongoingStatus,
+                                 @RequestParam(defaultValue = "both") String remoteStatus,
                                  @RequestParam(defaultValue = "0") Long participantId) {
         Project project = new Project();
         project.setProjectName(projectName);
         project.setCreatorArtCategory(creatorArtCategory);
-        project.setCreatorArtCategory(creatorArtCategory);
+        project.setLiked(liked);
         project.setLocation(location);
         project.setCreatedDate(LocalDate.now());
-        project.setLiked(liked);
+        project.setOngoingStatus(ongoingStatus);
+        project.setRemoteStatus(remoteStatus);
         project.setDeadline(deadline);
         project.setRequiredPeople(requiredPeople);
-        project.setRequiredCategory(requiredCategory);
         project.setRequiredCategory(requiredCategory);
         project.setSwipeAlgorithm(swipeAlgorithm);
         project.setImage(image);
@@ -87,8 +90,12 @@ public class ProjectController {
         existingProject.setRequiredPeople(updatedProject.getRequiredPeople());
         existingProject.setDeadline(updatedProject.getDeadline());
 
+        existingProject.setOngoingStatus(updatedProject.getOngoingStatus());
+        existingProject.setRemoteStatus(updatedProject.getRemoteStatus());
         existingProject.setDescription(updatedProject.getDescription());
         existingProject.setUserId(updatedProject.getUserId());
+        existingProject.setParticipantId(updatedProject.getParticipantId());
+
 
         return projectRepository.save(existingProject);
     }
