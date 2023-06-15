@@ -3,6 +3,7 @@ package portfolio.backend.api.auth.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import portfolio.backend.api.auth.entity.UserCreateForm;
 import portfolio.backend.api.auth.repository.UserRepository;
 import portfolio.backend.api.auth.service.UserService;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
+    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "users/signup_form";
         }
@@ -42,14 +44,14 @@ public class UserController {
         }
 
         try {
-            userService.create(userCreateForm.getUsername(), userCreateForm.getUser_id(),
-                    userCreateForm.getPassword1(), userCreateForm.getFirst_name(),
-                    userCreateForm.getLast_name(), userCreateForm.getArtist_type());
+            userService.create(userCreateForm.getUsername(), userCreateForm.getUserId(),
+                    userCreateForm.getPassword1(),  userCreateForm.getArtistType());
         } catch (DataIntegrityViolationException e) {
             //이메일 주소가 동일할 경우에는 DataIntegrityViolationException이 발생
             e.printStackTrace();
-            bindingResult.rejectValue("username", "signupFailed", "이미 등록된 사용자입니다.");
+            bindingResult.rejectValue("username","signupFailed", "이미 등록된 이메일입니다.");
             return "users/signup_form";
+
         } catch (Exception e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", e.getMessage());

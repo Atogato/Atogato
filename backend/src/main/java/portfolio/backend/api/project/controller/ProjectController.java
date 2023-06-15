@@ -49,6 +49,7 @@ public class ProjectController {
                                  @RequestParam(defaultValue = "None") String image,
                                  @RequestParam String description,
                                  @RequestParam Long userId,
+
                                  @RequestParam(defaultValue = "true") Boolean ongoingStatus,
                                  @RequestParam(defaultValue = "both") String remoteStatus,
                                  @RequestParam(defaultValue = "0") Long participantId) {
@@ -88,6 +89,7 @@ public class ProjectController {
         existingProject.setRequiredCategory(updatedProject.getRequiredCategory());
         existingProject.setRequiredPeople(updatedProject.getRequiredPeople());
         existingProject.setDeadline(updatedProject.getDeadline());
+
         existingProject.setOngoingStatus(updatedProject.getOngoingStatus());
         existingProject.setRemoteStatus(updatedProject.getRemoteStatus());
         existingProject.setDescription(updatedProject.getDescription());

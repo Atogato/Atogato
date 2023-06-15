@@ -3,12 +3,12 @@ package portfolio.backend.api.auth.constant;
 import lombok.Getter;
 
 @Getter
-public enum USER_TYPE {
+public enum UserType {
 
     ADMIN("ROLE_ADMIN"),
     USER("ROLE_USER");
 
-    USER_TYPE(String value) {
+    UserType(String value) {
         this.value = value;
     }
 

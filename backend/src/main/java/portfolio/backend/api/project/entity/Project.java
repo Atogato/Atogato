@@ -47,6 +47,7 @@ public class Project {
     private Long liked;
 
     @Column(columnDefinition = "TEXT")
+
     private String description;
     private Long userId;
 
@@ -186,7 +187,6 @@ public class Project {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
-
 
     public Long getParticipantId() {
         return participantId;
