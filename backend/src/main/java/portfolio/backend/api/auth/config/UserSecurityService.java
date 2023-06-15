@@ -45,12 +45,13 @@ public class UserSecurityService implements UserDetailsService {
         } else {
             //사용자명이 "user"인 경우에는 USER 권한을 부여
             authorities.add(new SimpleGrantedAuthority(UserType.USER.getValue()));
+            }
 
+            //username로, 비밀번호, 권한을 입력으로 스프링 시큐리티의 User 객체를 생성하여 리턴
+            //loadUserByUsername 메서드에 의해 리턴된 User 객체의 비밀번호가 화면으로부터 입력 받은 비밀번호와 일치하는지를 검사하는 로직을 내부적으로 가지고 있다.
+            return new User(siteUser.getUsername(), siteUser.getPassword(), authorities);
 
-        //username로, 비밀번호, 권한을 입력으로 스프링 시큐리티의 User 객체를 생성하여 리턴
-        //loadUserByUsername 메서드에 의해 리턴된 User 객체의 비밀번호가 화면으로부터 입력 받은 비밀번호와 일치하는지를 검사하는 로직을 내부적으로 가지고 있다.
-        return new User(siteUser.getUsername(), siteUser.getPassword(), authorities);
+        }
 
-
-    }
 }
+
