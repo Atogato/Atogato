@@ -1,4 +1,4 @@
-package portfolio.backend.api.config;
+package portfolio.backend.api.auth.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import portfolio.backend.api.auth.repository.UserRepository;
-import portfolio.backend.api.auth.constant.USER_TYPE;
+import portfolio.backend.api.auth.constant.UserType;
 import portfolio.backend.api.auth.entity.SiteUser;
 
 import java.util.ArrayList;
@@ -38,10 +38,10 @@ public class UserSecurityService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>();
         if ("admin".equals(username)) {
             //사용자명이 "admin"인 경우에는 ADMIN 권한을 부여
-            authorities.add(new SimpleGrantedAuthority(USER_TYPE.ADMIN.getValue()));
+            authorities.add(new SimpleGrantedAuthority(UserType.ADMIN.getValue()));
         } else {
             //사용자명이 "user"인 경우에는 USER 권한을 부여
-            authorities.add(new SimpleGrantedAuthority(USER_TYPE.USER.getValue()));
+            authorities.add(new SimpleGrantedAuthority(UserType.USER.getValue()));
         }
 
         //username로, 비밀번호, 권한을 입력으로 스프링 시큐리티의 User 객체를 생성하여 리턴

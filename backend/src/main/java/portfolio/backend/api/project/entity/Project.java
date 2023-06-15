@@ -1,4 +1,4 @@
-package portfolio.backend.api.entity;
+package portfolio.backend.api.project.entity;
 
 import org.springframework.format.annotation.DateTimeFormat;
 

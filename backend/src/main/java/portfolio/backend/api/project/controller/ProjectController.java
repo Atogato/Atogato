@@ -1,12 +1,11 @@
-package portfolio.backend.api.controller;
+package portfolio.backend.api.project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import portfolio.backend.api.entity.Project;
-import portfolio.backend.api.repository.ProjectRepository;
-import portfolio.backend.api.exception.ResourceNotFoundException; // Import statement for ResourceNotFoundException
+import portfolio.backend.api.project.entity.Project;
+import portfolio.backend.api.project.repository.ProjectRepository;
+import portfolio.backend.api.project.exception.ResourceNotFoundException; // Import statement for ResourceNotFoundException
 
 import java.time.LocalDate;
 import java.util.List;

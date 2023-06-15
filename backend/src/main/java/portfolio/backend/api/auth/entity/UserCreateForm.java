@@ -19,7 +19,7 @@ public class UserCreateForm {
 
     @Size(min = 3, max = 25)
     @NotEmpty(message = "창작자 고유 아이디는 필수 입력 값 입니다.")
-    private String user_id; //창작자 고유 id
+    private String userId; //창작자 고유 id
 
     @NotEmpty(message = "비밀번호는 필수 입력 값입니다.")
     @Length(min = 4, max = 16, message = "비밀번호는 4자 이상, 16자 이하로 입력해주세요")
@@ -28,14 +28,8 @@ public class UserCreateForm {
     @NotEmpty(message = "비밀번호 확인은 필수항목입니다.")
     private String password2;
 
-    @NotEmpty(message = "사용자 이름(first_name)은 필수 입력 값입니다.")
-    private String first_name;
-
-    @NotEmpty(message = "사용자 성(last_name)은 필수 입력 값입니다.")
-    private String last_name;
-
     @NotEmpty(message = "아티스트 유형은 필수항목입니다.")
-    private String artist_type;
+    private String artistType;
 
 
     
