@@ -141,6 +141,7 @@ export default function ProjectForm() {
           </div>
         </div>
       </div>
+      <button className="border-2"> 등록하기 </button>
     </form>
   )
 }
