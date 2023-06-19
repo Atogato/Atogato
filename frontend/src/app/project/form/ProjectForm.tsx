@@ -1,12 +1,7 @@
 'use client'
 import ImageUploader from './components/uploader/ImageUploader'
-import dynamic from 'next/dynamic'
+import Editor from './components/editor/Editor'
 import { SyntheticEvent, useEffect, useRef } from 'react'
-
-const Editor = dynamic(() => import('./components/editor/Editor'), {
-  ssr: false,
-  loading: () => <></>,
-})
 
 type Genre = {
   genre: string
