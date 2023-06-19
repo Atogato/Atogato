@@ -2,6 +2,7 @@ package portfolio.backend.api.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -24,6 +25,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests().requestMatchers(
                         new AntPathRequestMatcher("/**")).permitAll()
+                .antMatchers(HttpMethod.POST, "/api/projects").authenticated() // Apply authentication requirement for POST requests to /api/projects
                 .and()
                 .headers(headers -> headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
