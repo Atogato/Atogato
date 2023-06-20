@@ -17,5 +17,11 @@ public class HomeController {
         return "home";
     }
 
+    // create-project 프로젝트 생성 엔드포인트
+    @RequestMapping("/create-project")
+    public String createProjectForm() {
+        return "project";
+    }
+
 
 }

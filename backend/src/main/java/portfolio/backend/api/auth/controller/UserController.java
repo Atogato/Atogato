@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import portfolio.backend.api.auth.entity.UserCreateForm;
 import portfolio.backend.api.auth.repository.UserRepository;
 import portfolio.backend.api.auth.service.UserService;
+import portfolio.backend.api.project.repository.ProjectRepository;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
