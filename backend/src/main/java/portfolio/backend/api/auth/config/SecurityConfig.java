@@ -30,6 +30,7 @@ public class SecurityConfig {
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
                 .formLogin(login -> login
                         .loginPage("/api/auth/login")
+                        .loginPage("/oauth/login/redirect")
                         .defaultSuccessUrl("/"))
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/api/auth/logout"))

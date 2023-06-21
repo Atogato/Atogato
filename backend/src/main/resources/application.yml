@@ -8,7 +8,7 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       use-new-id-generator-mappings: false
@@ -17,9 +17,23 @@ spring:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
 
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+
 logging:
   level:
     org.hibernate.SQL: debug
 
 server:
   port: 7072
+
+mygoogle:
+  clientid: 755677315359-39dgl1eveoci7gvvucnnblr5069una6d.apps.googleusercontent.com
+  clientsecret: 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
+  clientredirect: http://localhost:7072/oauth/login/redirect
+  authurl: https://oauth2.googleapis.com
+  loginurl : https://accounts.google.com
+  scope: profile,email,openid
+

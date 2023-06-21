@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head th:replace="fragments/header :: header"/>
+
+<nav th:replace="fragments/nav :: nav"/>
+
+<div class="container my-3">
+
+    <a href="/">home</a>
+
+    <div class="form-group">
+        <th>등록번호</th></br>
+        <th>아이디(이메일)</th></br>
+        <th>창작자 고유id</th></br>
+        <th>비밀번호</th></br>
+        <th>아티스트 유형</th></br>
+        <th>권한</th></br>
+    </div>
+
+
+    <div class="form-group">
+        <span type="text" th:text="${userInfo.id}"></span></br>
+        <span type="text" th:text="${userInfo.username}"></span></br>
+        <span type="text" th:text="${userInfo.userId}"></span></br>
+        <span type="text" th:text="${userInfo.password}"></span></br>
+        <span type="text" th:text="${userInfo.artistType}"></span></br>
+        <span type="text" th:text="${userInfo.user_type}"></span></br>
+    </div>
+
+
+
+</div> <!-- /container -->
+
+
+</html>

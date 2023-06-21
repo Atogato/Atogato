@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 결과값</title>
+</head>
+<body>
+
+<div class="boardDiv">
+    <h3>결과</h3>
+    <img th:src="${result.getPicture()}" alt=""><br>
+    <span class="name">이름 :</span><span th:text="${result.getFamilyName()}"></span></span><span
+        th:text="${result.getGivenName()}"></span> <br>
+    <span class="name">getAlg :</span><span th:text="${result.getAlg()}"></span> <br>
+    <span class="name">email :</span><span th:text="${result.getEmail()}"></span> <br>
+    <span class="name">azp :</span><span th:text="${result.getAzp()}"></span> <br>
+    <span class="name">emailVerified :</span><span th:text="${result.getEmailVerified()}"></span> <br>
+
+    <a href="/">home page link</a></br>
+
+    <span>
+         <a href="/api/auth/logout" class="btn btn-outline-primary me-2">Logout</a>
+    </span>
+
+</div>
+</body>
+</html>

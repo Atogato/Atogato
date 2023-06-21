@@ -10,24 +10,21 @@ select * from SITEUSER;
 use backend;
 
 CREATE TABLE SITEUSER (
-	 ID INT NOT NULL AUTO_INCREMENT,
-	 USER_ID VARCHAR(40) NOT NULL,
-     USERNAME VARCHAR(40) NOT NULL , 
-	 PASSWORD  VARCHAR(200)  NOT NULL,
-     FIRST_NAME VARCHAR(30) NOT NULL , 
-     LAST_NAME VARCHAR(30) NOT NULL , 
-     ARTIST_TYPE VARCHAR(20) NOT NULL , 
-     USER_TYPE VARCHAR(10) DEFAULT 'USER',
+	 id INT NOT NULL AUTO_INCREMENT,
+	 userId VARCHAR(40) NOT NULL,
+     username VARCHAR(40) NOT NULL , 
+	 password  VARCHAR(200)  NOT NULL,
+     artistType VARCHAR(20) NOT NULL , 
+     user_type VARCHAR(10) DEFAULT 'USER',
      CONSTRAINT USER_ID_PK  PRIMARY KEY(ID),
      CONSTRAINT USER_USERNAME_UQ 	UNIQUE (USERNAME),
-     CONSTRAINT USER_USER_ID_UQ 	UNIQUE (USER_ID),
-     CONSTRAINT USER_ARTIST_TYPE_CK CHECK (ARTIST_TYPE IN ('악기연주', '작곡', '시나리오', '영상편집', '연극', 
-     '영화', '웹툰', '일러스트', '설치예술', '조형예술', '거리예술', '3D아트', 'VR공간디자인', '미디어아트', '애니메이션', '기타')),
-     CONSTRAINT USER_USER_TYPE_CK CHECK (USER_TYPE IN ('USER', 'ADMIN'))
+     CONSTRAINT USER_USERID_UQ 	UNIQUE (USERID),
+     CONSTRAINT USER_ARTISTTYPE_CK CHECK (ARTISTTYPE IN ('연기', '노래', '제작', '춤', '작곡', '기타')),
+     CONSTRAINT USER_USER_TYPE_CK CHECK (USERTYPE IN ('USER', 'ADMIN'))
 );
 
-INSERT INTO SITEUSER(USER_ID, USERNAME, PASSWORD, FIRST_NAME, LAST_NAME, ARTIST_TYPE)
- VALUES('rudgusee', 'kim@naver.com',  '1234', 'kyunghyun', 'kim', '일러스트');
+INSERT INTO SITEUSER(userId, username, password, artistType)
+ VALUES( 'kim@naver.com', 'rudgusee',  '1234', '연기');
 
-INSERT INTO SITEUSER(USER_ID, USERNAME, PASSWORD, FIRST_NAME, LAST_NAME, ARTIST_TYPE)
- VALUES( 'hmson', 'hmson@naver.com', '5678', 'heungmin', 'son', '애니메이션');
+INSERT INTO SITEUSER(userId, username, password, artistType)
+ VALUES(  'hmson@naver.com', 'hmson', '5678', '노래');
