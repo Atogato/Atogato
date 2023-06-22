@@ -1,0 +1,22 @@
+backend:
+#  image: spring boot
+  build: ./backend
+  ports:
+    - 8080:7028
+  links:
+    - frontend
+    - db
+
+db:
+  image: mysql
+  links:
+    - backend
+
+frontend:
+#  image: react
+  build: ./frontend
+  ports:
+    - 8000: 7990
+  links:
+    - backend
+
