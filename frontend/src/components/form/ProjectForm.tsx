@@ -1,6 +1,5 @@
-'use client'
-import ImageUploader from './components/uploader/ImageUploader'
-import Editor from './components/editor/Editor'
+import ImageUploader from '@/components/uploader/ImageUploader'
+import Editor from '@/components/editor/Editor'
 import { SyntheticEvent, useEffect, useRef } from 'react'
 
 type Genre = {

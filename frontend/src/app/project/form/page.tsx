@@ -1,15 +1,5 @@
-import ProjectFormContainer from './ProjectFormContainer'
-import dynamic from 'next/dynamic'
-
-const ProjectForm = dynamic(() => import('./ProjectForm'), {
-  ssr: false,
-  loading: () => <></>,
-})
+import { Form } from '../../../components/form/Form'
 
 export default function ProjectFormPage() {
-  return (
-    <ProjectFormContainer>
-      <ProjectForm />
-    </ProjectFormContainer>
-  )
+  return <Form type="project" />
 }
