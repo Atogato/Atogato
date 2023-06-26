@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<SiteUser, Long> {
 
     //username(username=이메일)으로 회원 검색
-    Optional<SiteUser> findByUsername(String username);
+    SiteUser findByUsername(String username);
 
     //회원정보 모두를 출력
     List<SiteUser> findAll();

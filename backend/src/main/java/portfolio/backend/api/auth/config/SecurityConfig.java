@@ -1,9 +1,11 @@
 package portfolio.backend.api.auth.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,11 +16,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import portfolio.backend.api.auth.config.oauth.PrincipalOAuth2UserService;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true) //@PreAuthorize 애너테이션을 사용하기 위해 반드시 필요
 public class SecurityConfig {
+
+    @Autowired
+    private PrincipalOAuth2UserService principalOAuth2UserService;
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
@@ -33,6 +40,9 @@ public class SecurityConfig {
                 .formLogin(login -> login
                         .loginPage("/api/auth/login")
                         .defaultSuccessUrl("/"))
+                 .oauth2Login(login -> login
+                        .loginPage("/api/auth/login").userInfoEndpoint().userService(principalOAuth2UserService)) // 소셜 로그인 이후에도, 인증토큰 받기 + 엑세스토큰 받기 + 사용자 프로필 가져와야함
+
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/api/auth/logout"))
                         .logoutSuccessUrl("/")
@@ -48,7 +58,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
