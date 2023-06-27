@@ -1,0 +1,1814 @@
+{
+  "/Users/soon/Desktop/project/project_A_working/Project_A/frontend/src/components/uploader/ImageUploader.tsx": {
+    "path": "/Users/soon/Desktop/project/project_A_working/Project_A/frontend/src/components/uploader/ImageUploader.tsx",
+    "statementMap": {
+      "0": {
+        "start": {
+          "line": 10,
+          "column": 28
+        },
+        "end": {
+          "line": 10,
+          "column": 33
+        }
+      },
+      "1": {
+        "start": {
+          "line": 11,
+          "column": 21
+        },
+        "end": {
+          "line": 19,
+          "column": 3
+        }
+      },
+      "2": {
+        "start": {
+          "line": 13,
+          "column": 6
+        },
+        "end": {
+          "line": 16,
+          "column": 7
+        }
+      },
+      "3": {
+        "start": {
+          "line": 14,
+          "column": 26
+        },
+        "end": {
+          "line": 14,
+          "column": 42
+        }
+      },
+      "4": {
+        "start": {
+          "line": 15,
+          "column": 8
+        },
+        "end": {
+          "line": 15,
+          "column": 32
+        }
+      },
+      "5": {
+        "start": {
+          "line": 21,
+          "column": 25
+        },
+        "end": {
+          "line": 23,
+          "column": 8
+        }
+      },
+      "6": {
+        "start": {
+          "line": 22,
+          "column": 4
+        },
+        "end": {
+          "line": 22,
+          "column": 32
+        }
+      },
+      "7": {
+        "start": {
+          "line": 25,
+          "column": 56
+        },
+        "end": {
+          "line": 34,
+          "column": 4
+        }
+      },
+      "8": {
+        "start": {
+          "line": 36,
+          "column": 2
+        },
+        "end": {
+          "line": 45,
+          "column": 3
+        }
+      }
+    },
+    "fnMap": {
+      "0": {
+        "name": "ImageUploader",
+        "decl": {
+          "start": {
+            "line": 9,
+            "column": 24
+          },
+          "end": {
+            "line": 9,
+            "column": 37
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 9,
+            "column": 65
+          },
+          "end": {
+            "line": 46,
+            "column": 1
+          }
+        },
+        "line": 9
+      },
+      "1": {
+        "name": "(anonymous_1)",
+        "decl": {
+          "start": {
+            "line": 12,
+            "column": 4
+          },
+          "end": {
+            "line": 12,
+            "column": 5
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 12,
+            "column": 31
+          },
+          "end": {
+            "line": 17,
+            "column": 5
+          }
+        },
+        "line": 12
+      },
+      "2": {
+        "name": "(anonymous_2)",
+        "decl": {
+          "start": {
+            "line": 21,
+            "column": 37
+          },
+          "end": {
+            "line": 21,
+            "column": 38
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 21,
+            "column": 74
+          },
+          "end": {
+            "line": 23,
+            "column": 3
+          }
+        },
+        "line": 21
+      }
+    },
+    "branchMap": {
+      "0": {
+        "loc": {
+          "start": {
+            "line": 13,
+            "column": 6
+          },
+          "end": {
+            "line": 16,
+            "column": 7
+          }
+        },
+        "type": "if",
+        "locations": [
+          {
+            "start": {
+              "line": 13,
+              "column": 6
+            },
+            "end": {
+              "line": 16,
+              "column": 7
+            }
+          },
+          {
+            "start": {},
+            "end": {}
+          }
+        ],
+        "line": 13
+      },
+      "1": {
+        "loc": {
+          "start": {
+            "line": 37,
+            "column": 52
+          },
+          "end": {
+            "line": 37,
+            "column": 80
+          }
+        },
+        "type": "cond-expr",
+        "locations": [
+          {
+            "start": {
+              "line": 37,
+              "column": 67
+            },
+            "end": {
+              "line": 37,
+              "column": 75
+            }
+          },
+          {
+            "start": {
+              "line": 37,
+              "column": 78
+            },
+            "end": {
+              "line": 37,
+              "column": 80
+            }
+          }
+        ],
+        "line": 37
+      },
+      "2": {
+        "loc": {
+          "start": {
+            "line": 39,
+            "column": 7
+          },
+          "end": {
+            "line": 43,
+            "column": 7
+          }
+        },
+        "type": "cond-expr",
+        "locations": [
+          {
+            "start": {
+              "line": 40,
+              "column": 8
+            },
+            "end": {
+              "line": 40,
+              "column": 59
+            }
+          },
+          {
+            "start": {
+              "line": 42,
+              "column": 8
+            },
+            "end": {
+              "line": 42,
+              "column": 39
+            }
+          }
+        ],
+        "line": 39
+      }
+    },
+    "s": {
+      "0": 2,
+      "1": 2,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 2,
+      "6": 0,
+      "7": 2,
+      "8": 2
+    },
+    "f": {
+      "0": 2,
+      "1": 0,
+      "2": 0
+    },
+    "b": {
+      "0": [
+        0,
+        0
+      ],
+      "1": [
+        0,
+        2
+      ],
+      "2": [
+        0,
+        2
+      ]
+    },
+    "_coverageSchema": "1a1c01bbd47fc00a2c39e90264f33305004495a9",
+    "hash": "326d2d343c03671a80ed2e9f67d9d45cea72d979"
+  },
+  "/Users/soon/Desktop/project/project_A_working/Project_A/frontend/src/components/editor/Editor.tsx": {
+    "path": "/Users/soon/Desktop/project/project_A_working/Project_A/frontend/src/components/editor/Editor.tsx",
+    "statementMap": {
+      "0": {
+        "start": {
+          "line": 12,
+          "column": 52
+        },
+        "end": {
+          "line": 12,
+          "column": 62
+        }
+      },
+      "1": {
+        "start": {
+          "line": 14,
+          "column": 0
+        },
+        "end": {
+          "line": 21,
+          "column": 1
+        }
+      },
+      "2": {
+        "start": {
+          "line": 27,
+          "column": 30
+        },
+        "end": {
+          "line": 27,
+          "column": 35
+        }
+      },
+      "3": {
+        "start": {
+          "line": 28,
+          "column": 18
+        },
+        "end": {
+          "line": 37,
+          "column": 3
+        }
+      },
+      "4": {
+        "start": {
+          "line": 38,
+          "column": 18
+        },
+        "end": {
+          "line": 53,
+          "column": 3
+        }
+      },
+      "5": {
+        "start": {
+          "line": 55,
+          "column": 28
+        },
+        "end": {
+          "line": 55,
+          "column": 40
+        }
+      },
+      "6": {
+        "start": {
+          "line": 57,
+          "column": 2
+        },
+        "end": {
+          "line": 61,
+          "column": 13
+        }
+      },
+      "7": {
+        "start": {
+          "line": 58,
+          "column": 4
+        },
+        "end": {
+          "line": 60,
+          "column": 5
+        }
+      },
+      "8": {
+        "start": {
+          "line": 59,
+          "column": 6
+        },
+        "end": {
+          "line": 59,
+          "column": 23
+        }
+      },
+      "9": {
+        "start": {
+          "line": 63,
+          "column": 2
+        },
+        "end": {
+          "line": 63,
+          "column": 93
+        }
+      }
+    },
+    "fnMap": {
+      "0": {
+        "name": "Editor",
+        "decl": {
+          "start": {
+            "line": 26,
+            "column": 24
+          },
+          "end": {
+            "line": 26,
+            "column": 30
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 26,
+            "column": 51
+          },
+          "end": {
+            "line": 64,
+            "column": 1
+          }
+        },
+        "line": 26
+      },
+      "1": {
+        "name": "(anonymous_1)",
+        "decl": {
+          "start": {
+            "line": 57,
+            "column": 12
+          },
+          "end": {
+            "line": 57,
+            "column": 13
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 57,
+            "column": 18
+          },
+          "end": {
+            "line": 61,
+            "column": 3
+          }
+        },
+        "line": 57
+      }
+    },
+    "branchMap": {
+      "0": {
+        "loc": {
+          "start": {
+            "line": 58,
+            "column": 4
+          },
+          "end": {
+            "line": 60,
+            "column": 5
+          }
+        },
+        "type": "if",
+        "locations": [
+          {
+            "start": {
+              "line": 58,
+              "column": 4
+            },
+            "end": {
+              "line": 60,
+              "column": 5
+            }
+          },
+          {
+            "start": {},
+            "end": {}
+          }
+        ],
+        "line": 58
+      }
+    },
+    "s": {
+      "0": 2,
+      "1": 2,
+      "2": 2,
+      "3": 2,
+      "4": 2,
+      "5": 2,
+      "6": 2,
+      "7": 1,
+      "8": 1,
+      "9": 2
+    },
+    "f": {
+      "0": 2,
+      "1": 1
+    },
+    "b": {
+      "0": [
+        1,
+        0
+      ]
+    },
+    "_coverageSchema": "1a1c01bbd47fc00a2c39e90264f33305004495a9",
+    "hash": "d0944da26c3e508777a1b13bdbb0e3bd8e8f064d"
+  },
+  "/Users/soon/Desktop/project/project_A_working/Project_A/frontend/src/components/form/ArtistForm.tsx": {
+    "path": "/Users/soon/Desktop/project/project_A_working/Project_A/frontend/src/components/form/ArtistForm.tsx",
+    "statementMap": {
+      "0": {
+        "start": {
+          "line": 12,
+          "column": 30
+        },
+        "end": {
+          "line": 29,
+          "column": 3
+        }
+      },
+      "1": {
+        "start": {
+          "line": 32,
+          "column": 24
+        },
+        "end": {
+          "line": 34,
+          "column": 3
+        }
+      },
+      "2": {
+        "start": {
+          "line": 33,
+          "column": 4
+        },
+        "end": {
+          "line": 33,
+          "column": 22
+        }
+      },
+      "3": {
+        "start": {
+          "line": 36,
+          "column": 24
+        },
+        "end": {
+          "line": 36,
+          "column": 32
+        }
+      },
+      "4": {
+        "start": {
+          "line": 37,
+          "column": 22
+        },
+        "end": {
+          "line": 37,
+          "column": 30
+        }
+      },
+      "5": {
+        "start": {
+          "line": 39,
+          "column": 2
+        },
+        "end": {
+          "line": 39,
+          "column": 25
+        }
+      },
+      "6": {
+        "start": {
+          "line": 41,
+          "column": 2
+        },
+        "end": {
+          "line": 104,
+          "column": 3
+        }
+      },
+      "7": {
+        "start": {
+          "line": 49,
+          "column": 12
+        },
+        "end": {
+          "line": 54,
+          "column": 13
+        }
+      }
+    },
+    "fnMap": {
+      "0": {
+        "name": "ArtistForm",
+        "decl": {
+          "start": {
+            "line": 10,
+            "column": 24
+          },
+          "end": {
+            "line": 10,
+            "column": 34
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 10,
+            "column": 37
+          },
+          "end": {
+            "line": 105,
+            "column": 1
+          }
+        },
+        "line": 10
+      },
+      "1": {
+        "name": "(anonymous_1)",
+        "decl": {
+          "start": {
+            "line": 32,
+            "column": 24
+          },
+          "end": {
+            "line": 32,
+            "column": 25
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 32,
+            "column": 47
+          },
+          "end": {
+            "line": 34,
+            "column": 3
+          }
+        },
+        "line": 32
+      },
+      "2": {
+        "name": "(anonymous_2)",
+        "decl": {
+          "start": {
+            "line": 36,
+            "column": 24
+          },
+          "end": {
+            "line": 36,
+            "column": 25
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 36,
+            "column": 30
+          },
+          "end": {
+            "line": 36,
+            "column": 32
+          }
+        },
+        "line": 36
+      },
+      "3": {
+        "name": "(anonymous_3)",
+        "decl": {
+          "start": {
+            "line": 37,
+            "column": 22
+          },
+          "end": {
+            "line": 37,
+            "column": 23
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 37,
+            "column": 28
+          },
+          "end": {
+            "line": 37,
+            "column": 30
+          }
+        },
+        "line": 37
+      },
+      "4": {
+        "name": "(anonymous_4)",
+        "decl": {
+          "start": {
+            "line": 39,
+            "column": 12
+          },
+          "end": {
+            "line": 39,
+            "column": 13
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 39,
+            "column": 18
+          },
+          "end": {
+            "line": 39,
+            "column": 20
+          }
+        },
+        "line": 39
+      },
+      "5": {
+        "name": "(anonymous_5)",
+        "decl": {
+          "start": {
+            "line": 48,
+            "column": 26
+          },
+          "end": {
+            "line": 48,
+            "column": 27
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 48,
+            "column": 41
+          },
+          "end": {
+            "line": 55,
+            "column": 11
+          }
+        },
+        "line": 48
+      },
+      "6": {
+        "name": "(anonymous_6)",
+        "decl": {
+          "start": {
+            "line": 82,
+            "column": 38
+          },
+          "end": {
+            "line": 82,
+            "column": 39
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 82,
+            "column": 49
+          },
+          "end": {
+            "line": 82,
+            "column": 51
+          }
+        },
+        "line": 82
+      }
+    },
+    "branchMap": {},
+    "s": {
+      "0": 1,
+      "1": 1,
+      "2": 0,
+      "3": 1,
+      "4": 1,
+      "5": 1,
+      "6": 1,
+      "7": 4
+    },
+    "f": {
+      "0": 1,
+      "1": 0,
+      "2": 1,
+      "3": 0,
+      "4": 1,
+      "5": 4,
+      "6": 0
+    },
+    "b": {},
+    "_coverageSchema": "1a1c01bbd47fc00a2c39e90264f33305004495a9",
+    "hash": "7bf288eb0694338c8977cb0b026c1a6d48a49a38"
+  },
+  "/Users/soon/Desktop/project/project_A_working/Project_A/frontend/src/components/form/ProjectForm.tsx": {
+    "path": "/Users/soon/Desktop/project/project_A_working/Project_A/frontend/src/components/form/ProjectForm.tsx",
+    "statementMap": {
+      "0": {
+        "start": {
+          "line": 12,
+          "column": 30
+        },
+        "end": {
+          "line": 29,
+          "column": 3
+        }
+      },
+      "1": {
+        "start": {
+          "line": 31,
+          "column": 23
+        },
+        "end": {
+          "line": 31,
+          "column": 35
+        }
+      },
+      "2": {
+        "start": {
+          "line": 32,
+          "column": 21
+        },
+        "end": {
+          "line": 32,
+          "column": 33
+        }
+      },
+      "3": {
+        "start": {
+          "line": 34,
+          "column": 28
+        },
+        "end": {
+          "line": 34,
+          "column": 40
+        }
+      },
+      "4": {
+        "start": {
+          "line": 35,
+          "column": 26
+        },
+        "end": {
+          "line": 35,
+          "column": 38
+        }
+      },
+      "5": {
+        "start": {
+          "line": 38,
+          "column": 24
+        },
+        "end": {
+          "line": 40,
+          "column": 3
+        }
+      },
+      "6": {
+        "start": {
+          "line": 39,
+          "column": 4
+        },
+        "end": {
+          "line": 39,
+          "column": 22
+        }
+      },
+      "7": {
+        "start": {
+          "line": 42,
+          "column": 24
+        },
+        "end": {
+          "line": 42,
+          "column": 32
+        }
+      },
+      "8": {
+        "start": {
+          "line": 43,
+          "column": 22
+        },
+        "end": {
+          "line": 43,
+          "column": 30
+        }
+      },
+      "9": {
+        "start": {
+          "line": 45,
+          "column": 2
+        },
+        "end": {
+          "line": 45,
+          "column": 25
+        }
+      },
+      "10": {
+        "start": {
+          "line": 47,
+          "column": 2
+        },
+        "end": {
+          "line": 145,
+          "column": 3
+        }
+      },
+      "11": {
+        "start": {
+          "line": 55,
+          "column": 12
+        },
+        "end": {
+          "line": 60,
+          "column": 13
+        }
+      },
+      "12": {
+        "start": {
+          "line": 112,
+          "column": 12
+        },
+        "end": {
+          "line": 117,
+          "column": 13
+        }
+      }
+    },
+    "fnMap": {
+      "0": {
+        "name": "ProjectForm",
+        "decl": {
+          "start": {
+            "line": 10,
+            "column": 24
+          },
+          "end": {
+            "line": 10,
+            "column": 35
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 10,
+            "column": 38
+          },
+          "end": {
+            "line": 146,
+            "column": 1
+          }
+        },
+        "line": 10
+      },
+      "1": {
+        "name": "(anonymous_1)",
+        "decl": {
+          "start": {
+            "line": 38,
+            "column": 24
+          },
+          "end": {
+            "line": 38,
+            "column": 25
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 38,
+            "column": 47
+          },
+          "end": {
+            "line": 40,
+            "column": 3
+          }
+        },
+        "line": 38
+      },
+      "2": {
+        "name": "(anonymous_2)",
+        "decl": {
+          "start": {
+            "line": 42,
+            "column": 24
+          },
+          "end": {
+            "line": 42,
+            "column": 25
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 42,
+            "column": 30
+          },
+          "end": {
+            "line": 42,
+            "column": 32
+          }
+        },
+        "line": 42
+      },
+      "3": {
+        "name": "(anonymous_3)",
+        "decl": {
+          "start": {
+            "line": 43,
+            "column": 22
+          },
+          "end": {
+            "line": 43,
+            "column": 23
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 43,
+            "column": 28
+          },
+          "end": {
+            "line": 43,
+            "column": 30
+          }
+        },
+        "line": 43
+      },
+      "4": {
+        "name": "(anonymous_4)",
+        "decl": {
+          "start": {
+            "line": 45,
+            "column": 12
+          },
+          "end": {
+            "line": 45,
+            "column": 13
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 45,
+            "column": 18
+          },
+          "end": {
+            "line": 45,
+            "column": 20
+          }
+        },
+        "line": 45
+      },
+      "5": {
+        "name": "(anonymous_5)",
+        "decl": {
+          "start": {
+            "line": 54,
+            "column": 26
+          },
+          "end": {
+            "line": 54,
+            "column": 27
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 54,
+            "column": 41
+          },
+          "end": {
+            "line": 61,
+            "column": 11
+          }
+        },
+        "line": 54
+      },
+      "6": {
+        "name": "(anonymous_6)",
+        "decl": {
+          "start": {
+            "line": 111,
+            "column": 26
+          },
+          "end": {
+            "line": 111,
+            "column": 27
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 111,
+            "column": 41
+          },
+          "end": {
+            "line": 118,
+            "column": 11
+          }
+        },
+        "line": 111
+      },
+      "7": {
+        "name": "(anonymous_7)",
+        "decl": {
+          "start": {
+            "line": 123,
+            "column": 38
+          },
+          "end": {
+            "line": 123,
+            "column": 39
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 123,
+            "column": 49
+          },
+          "end": {
+            "line": 123,
+            "column": 51
+          }
+        },
+        "line": 123
+      }
+    },
+    "branchMap": {},
+    "s": {
+      "0": 1,
+      "1": 1,
+      "2": 1,
+      "3": 1,
+      "4": 1,
+      "5": 1,
+      "6": 0,
+      "7": 1,
+      "8": 1,
+      "9": 1,
+      "10": 1,
+      "11": 4,
+      "12": 4
+    },
+    "f": {
+      "0": 1,
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 4,
+      "6": 4,
+      "7": 0
+    },
+    "b": {},
+    "_coverageSchema": "1a1c01bbd47fc00a2c39e90264f33305004495a9",
+    "hash": "18b458c076d22ad848df71c0c50aad96774d0c9a"
+  },
+  "/Users/soon/Desktop/project/project_A_working/Project_A/frontend/src/components/form/SignupForm.tsx": {
+    "path": "/Users/soon/Desktop/project/project_A_working/Project_A/frontend/src/components/form/SignupForm.tsx",
+    "statementMap": {
+      "0": {
+        "start": {
+          "line": 4,
+          "column": 15
+        },
+        "end": {
+          "line": 4,
+          "column": 25
+        }
+      },
+      "1": {
+        "start": {
+          "line": 5,
+          "column": 19
+        },
+        "end": {
+          "line": 5,
+          "column": 29
+        }
+      },
+      "2": {
+        "start": {
+          "line": 6,
+          "column": 16
+        },
+        "end": {
+          "line": 6,
+          "column": 26
+        }
+      },
+      "3": {
+        "start": {
+          "line": 7,
+          "column": 23
+        },
+        "end": {
+          "line": 7,
+          "column": 33
+        }
+      },
+      "4": {
+        "start": {
+          "line": 8,
+          "column": 19
+        },
+        "end": {
+          "line": 8,
+          "column": 29
+        }
+      },
+      "5": {
+        "start": {
+          "line": 9,
+          "column": 26
+        },
+        "end": {
+          "line": 9,
+          "column": 36
+        }
+      },
+      "6": {
+        "start": {
+          "line": 12,
+          "column": 24
+        },
+        "end": {
+          "line": 14,
+          "column": 3
+        }
+      },
+      "7": {
+        "start": {
+          "line": 13,
+          "column": 4
+        },
+        "end": {
+          "line": 13,
+          "column": 22
+        }
+      },
+      "8": {
+        "start": {
+          "line": 16,
+          "column": 19
+        },
+        "end": {
+          "line": 18,
+          "column": 3
+        }
+      },
+      "9": {
+        "start": {
+          "line": 17,
+          "column": 4
+        },
+        "end": {
+          "line": 17,
+          "column": 33
+        }
+      },
+      "10": {
+        "start": {
+          "line": 20,
+          "column": 2
+        },
+        "end": {
+          "line": 89,
+          "column": 3
+        }
+      },
+      "11": {
+        "start": {
+          "line": 25,
+          "column": 58
+        },
+        "end": {
+          "line": 25,
+          "column": 75
+        }
+      },
+      "12": {
+        "start": {
+          "line": 36,
+          "column": 58
+        },
+        "end": {
+          "line": 36,
+          "column": 79
+        }
+      },
+      "13": {
+        "start": {
+          "line": 54,
+          "column": 58
+        },
+        "end": {
+          "line": 54,
+          "column": 76
+        }
+      },
+      "14": {
+        "start": {
+          "line": 59,
+          "column": 60
+        },
+        "end": {
+          "line": 59,
+          "column": 85
+        }
+      },
+      "15": {
+        "start": {
+          "line": 70,
+          "column": 58
+        },
+        "end": {
+          "line": 70,
+          "column": 79
+        }
+      },
+      "16": {
+        "start": {
+          "line": 80,
+          "column": 58
+        },
+        "end": {
+          "line": 80,
+          "column": 86
+        }
+      }
+    },
+    "fnMap": {
+      "0": {
+        "name": "SignupForm",
+        "decl": {
+          "start": {
+            "line": 3,
+            "column": 24
+          },
+          "end": {
+            "line": 3,
+            "column": 34
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 37
+          },
+          "end": {
+            "line": 90,
+            "column": 1
+          }
+        },
+        "line": 3
+      },
+      "1": {
+        "name": "(anonymous_1)",
+        "decl": {
+          "start": {
+            "line": 12,
+            "column": 24
+          },
+          "end": {
+            "line": 12,
+            "column": 25
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 12,
+            "column": 47
+          },
+          "end": {
+            "line": 14,
+            "column": 3
+          }
+        },
+        "line": 12
+      },
+      "2": {
+        "name": "(anonymous_2)",
+        "decl": {
+          "start": {
+            "line": 16,
+            "column": 19
+          },
+          "end": {
+            "line": 16,
+            "column": 20
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 16,
+            "column": 89
+          },
+          "end": {
+            "line": 18,
+            "column": 3
+          }
+        },
+        "line": 16
+      },
+      "3": {
+        "name": "(anonymous_3)",
+        "decl": {
+          "start": {
+            "line": 25,
+            "column": 20
+          },
+          "end": {
+            "line": 25,
+            "column": 21
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 25,
+            "column": 58
+          },
+          "end": {
+            "line": 25,
+            "column": 75
+          }
+        },
+        "line": 25
+      },
+      "4": {
+        "name": "(anonymous_4)",
+        "decl": {
+          "start": {
+            "line": 36,
+            "column": 20
+          },
+          "end": {
+            "line": 36,
+            "column": 21
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 36,
+            "column": 58
+          },
+          "end": {
+            "line": 36,
+            "column": 79
+          }
+        },
+        "line": 36
+      },
+      "5": {
+        "name": "(anonymous_5)",
+        "decl": {
+          "start": {
+            "line": 54,
+            "column": 20
+          },
+          "end": {
+            "line": 54,
+            "column": 21
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 54,
+            "column": 58
+          },
+          "end": {
+            "line": 54,
+            "column": 76
+          }
+        },
+        "line": 54
+      },
+      "6": {
+        "name": "(anonymous_6)",
+        "decl": {
+          "start": {
+            "line": 59,
+            "column": 22
+          },
+          "end": {
+            "line": 59,
+            "column": 23
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 59,
+            "column": 60
+          },
+          "end": {
+            "line": 59,
+            "column": 85
+          }
+        },
+        "line": 59
+      },
+      "7": {
+        "name": "(anonymous_7)",
+        "decl": {
+          "start": {
+            "line": 70,
+            "column": 20
+          },
+          "end": {
+            "line": 70,
+            "column": 21
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 70,
+            "column": 58
+          },
+          "end": {
+            "line": 70,
+            "column": 79
+          }
+        },
+        "line": 70
+      },
+      "8": {
+        "name": "(anonymous_8)",
+        "decl": {
+          "start": {
+            "line": 80,
+            "column": 20
+          },
+          "end": {
+            "line": 80,
+            "column": 21
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 80,
+            "column": 58
+          },
+          "end": {
+            "line": 80,
+            "column": 86
+          }
+        },
+        "line": 80
+      }
+    },
+    "branchMap": {},
+    "s": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 0,
+      "9": 0,
+      "10": 0,
+      "11": 0,
+      "12": 0,
+      "13": 0,
+      "14": 0,
+      "15": 0,
+      "16": 0
+    },
+    "f": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 0
+    },
+    "b": {},
+    "_coverageSchema": "1a1c01bbd47fc00a2c39e90264f33305004495a9",
+    "hash": "8cede0aa01d5768ade29884b3cb493c5f603f010"
+  },
+  "/Users/soon/Desktop/project/project_A_working/Project_A/frontend/src/components/form/FormContent.tsx": {
+    "path": "/Users/soon/Desktop/project/project_A_working/Project_A/frontend/src/components/form/FormContent.tsx",
+    "statementMap": {
+      "0": {
+        "start": {
+          "line": 10,
+          "column": 2
+        },
+        "end": {
+          "line": 16,
+          "column": 3
+        }
+      },
+      "1": {
+        "start": {
+          "line": 11,
+          "column": 4
+        },
+        "end": {
+          "line": 11,
+          "column": 25
+        }
+      },
+      "2": {
+        "start": {
+          "line": 12,
+          "column": 9
+        },
+        "end": {
+          "line": 16,
+          "column": 3
+        }
+      },
+      "3": {
+        "start": {
+          "line": 13,
+          "column": 4
+        },
+        "end": {
+          "line": 13,
+          "column": 26
+        }
+      },
+      "4": {
+        "start": {
+          "line": 14,
+          "column": 9
+        },
+        "end": {
+          "line": 16,
+          "column": 3
+        }
+      },
+      "5": {
+        "start": {
+          "line": 15,
+          "column": 4
+        },
+        "end": {
+          "line": 15,
+          "column": 25
+        }
+      },
+      "6": {
+        "start": {
+          "line": 17,
+          "column": 2
+        },
+        "end": {
+          "line": 17,
+          "column": 14
+        }
+      }
+    },
+    "fnMap": {
+      "0": {
+        "name": "FormContent",
+        "decl": {
+          "start": {
+            "line": 9,
+            "column": 24
+          },
+          "end": {
+            "line": 9,
+            "column": 35
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 9,
+            "column": 73
+          },
+          "end": {
+            "line": 18,
+            "column": 1
+          }
+        },
+        "line": 9
+      }
+    },
+    "branchMap": {
+      "0": {
+        "loc": {
+          "start": {
+            "line": 10,
+            "column": 2
+          },
+          "end": {
+            "line": 16,
+            "column": 3
+          }
+        },
+        "type": "if",
+        "locations": [
+          {
+            "start": {
+              "line": 10,
+              "column": 2
+            },
+            "end": {
+              "line": 16,
+              "column": 3
+            }
+          },
+          {
+            "start": {
+              "line": 12,
+              "column": 9
+            },
+            "end": {
+              "line": 16,
+              "column": 3
+            }
+          }
+        ],
+        "line": 10
+      },
+      "1": {
+        "loc": {
+          "start": {
+            "line": 12,
+            "column": 9
+          },
+          "end": {
+            "line": 16,
+            "column": 3
+          }
+        },
+        "type": "if",
+        "locations": [
+          {
+            "start": {
+              "line": 12,
+              "column": 9
+            },
+            "end": {
+              "line": 16,
+              "column": 3
+            }
+          },
+          {
+            "start": {
+              "line": 14,
+              "column": 9
+            },
+            "end": {
+              "line": 16,
+              "column": 3
+            }
+          }
+        ],
+        "line": 12
+      },
+      "2": {
+        "loc": {
+          "start": {
+            "line": 14,
+            "column": 9
+          },
+          "end": {
+            "line": 16,
+            "column": 3
+          }
+        },
+        "type": "if",
+        "locations": [
+          {
+            "start": {
+              "line": 14,
+              "column": 9
+            },
+            "end": {
+              "line": 16,
+              "column": 3
+            }
+          },
+          {
+            "start": {},
+            "end": {}
+          }
+        ],
+        "line": 14
+      }
+    },
+    "s": {
+      "0": 2,
+      "1": 1,
+      "2": 1,
+      "3": 1,
+      "4": 0,
+      "5": 0,
+      "6": 0
+    },
+    "f": {
+      "0": 2
+    },
+    "b": {
+      "0": [
+        1,
+        1
+      ],
+      "1": [
+        1,
+        0
+      ],
+      "2": [
+        0,
+        0
+      ]
+    },
+    "_coverageSchema": "1a1c01bbd47fc00a2c39e90264f33305004495a9",
+    "hash": "1393c07bf37f34154080e70cab99594ba37340cc"
+  }
+}
