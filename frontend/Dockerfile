@@ -1,13 +1,20 @@
 
 # Pull Node apline
-FROM node:17-alpine3.15
+FROM node:16-alpine
+
+WORKDIR /app
 
 # COPY [host machine] -> [conatiner] (path relative to  dockerfil)
-COPY package.json yarn.lock .
+COPY package.json yarn.lock ./
+
+# COPY all files in directory to Docker work directory
+COPY ./ .
 
 # will install all dependency in package.json
-RUN npm install
+RUN yarn install
 
-COPY . .
+COPY next.config.js ./next.config.js
 
-RUN npm run build
+CMD ["yarn", "dev"]
+
+EXPOSE 3000

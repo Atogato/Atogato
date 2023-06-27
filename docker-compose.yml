@@ -1,22 +1,36 @@
-backend:
-#  image: spring boot
-  build: ./backend
-  ports:
-    - 8080:7028
-  links:
-    - frontend
-    - db
+version: "3.8"
 
-db:
-  image: mysql
-  links:
-    - backend
+services:
+  mysqldb:
+    container_name: mysqldb
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: projecta
+      MYSQL_DATABASE: backend
+    networks:
+      mynetwork:
 
-frontend:
-#  image: react
-  build: ./frontend
-  ports:
-    - 8000: 7990
-  links:
-    - backend
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "7072:7072"
+    depends_on:
+      - mysqldb
+    networks:
+      mynetwork:
+    restart: on-failure
 
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+
+networks:
+  mynetwork:
