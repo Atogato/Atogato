@@ -1,6 +1,8 @@
 package portfolio.backend.api.auth.entity;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import portfolio.backend.api.auth.constant.UserType;
 
 import javax.persistence.*;
@@ -8,6 +10,7 @@ import javax.validation.constraints.Email;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class SiteUser {
 
     @Id
@@ -28,4 +31,19 @@ public class SiteUser {
     @Enumerated(EnumType.STRING)
     private UserType userType; //권한 - user, admin
 
+    private String provider;
+
+    private String providerId;
+
+    @Builder
+    public SiteUser(Long id, String username, String userId, String password, String artistType, UserType userType) {
+        this.id = id;
+        this.username = username;
+        this.userId = userId;
+        this.password = password;
+        this.artistType = artistType;
+        this.userType = (userType != null) ? userType : UserType.USER; // Set 'user' as default if userType is null
+        this.provider = provider;
+        this.providerId = providerId;
+    }
 }

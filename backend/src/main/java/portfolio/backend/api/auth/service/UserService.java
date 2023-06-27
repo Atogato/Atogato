@@ -36,9 +36,9 @@ public class UserService {
 
     //SiteUser 서비스를 통해 SiteUser를 조회할 수 있는 getUser 메서드
     public SiteUser getUser(String username) {
-        Optional<SiteUser> siteUser = this.userRepository.findByUsername(username);
-        if (siteUser.isPresent()) {
-            return siteUser.get();
+        SiteUser user = this.userRepository.findByUsername(username);
+        if (user != null) {
+            return user;
         } else {
             throw new DataNotFoundException("siteuser not found");
         }
