@@ -35,7 +35,6 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "users/signup_form";
         }
-
         if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
             //회원 가입시 비밀번호1과 비밀번호2가 동일한지를 검증하는 로직
             //만약 2개의 값이 일치하지 않을 경우에는 bindingResult.rejectValue를 사용하여 오류가 발생
@@ -46,20 +45,18 @@ public class UserController {
         }
 
         try {
-            userService.create(userCreateForm.getUsername(), userCreateForm.getUserId(),
-                    userCreateForm.getPassword1(),  userCreateForm.getArtistType());
+            userService.create(userCreateForm.getUsername(),
+                    userCreateForm.getPassword1());
         } catch (DataIntegrityViolationException e) {
             //이메일 주소가 동일할 경우에는 DataIntegrityViolationException이 발생
             e.printStackTrace();
             bindingResult.rejectValue("username","signupFailed", "이미 등록된 이메일입니다.");
             return "users/signup_form";
-
         } catch (Exception e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", e.getMessage());
             return "users/signup_form";
         }
-
         return "redirect:/";
     }
 

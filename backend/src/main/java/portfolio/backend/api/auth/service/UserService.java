@@ -7,7 +7,6 @@ import portfolio.backend.api.auth.Exception.DataNotFoundException;
 import portfolio.backend.api.auth.constant.UserType;
 import portfolio.backend.api.auth.entity.SiteUser;
 import portfolio.backend.api.auth.repository.UserRepository;
-
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -17,18 +16,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public SiteUser create(String username, String userId,
-                           String password, String artistType) {
+    public SiteUser create(String username,
+                           String password) {
         SiteUser user = new SiteUser();
         user.setUsername(username);
-        user.setUserId(userId);
-
-        //BCrypt hashing 함수를 사용해서 비밀번호를 암호화한다.
-        //PasswordEncoder는 BCryptPasswordEncoder의 인터페이스이다.
-//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); // 객체를 직접 new로 생성
 
         user.setPassword(passwordEncoder.encode(password)); //빈으로 등록한 PasswordEncoder 객체를 주입받아 사용
-        user.setArtistType(artistType);
         user.setUserType(UserType.USER);
         this.userRepository.save(user);
         return user;
