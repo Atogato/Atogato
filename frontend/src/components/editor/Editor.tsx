@@ -21,7 +21,7 @@ Quill.register(
 )
 
 type EdtiorProps = {
-  onEditorUpdated?: () => void
+  onEditorUpdated?: (value: string) => void
 }
 export default function Editor(props: EdtiorProps) {
   const { onEditorUpdated } = props
@@ -56,7 +56,7 @@ export default function Editor(props: EdtiorProps) {
 
   useEffect(() => {
     if (onEditorUpdated) {
-      onEditorUpdated()
+      onEditorUpdated(value)
     }
   }, [value])
 
