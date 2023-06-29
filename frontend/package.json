@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "prettier:check": "prettier --check \"./src/**/*.{js,jsx,ts,tsx}\"",
     "report": "npx nyc report --reporter=text-summary",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
