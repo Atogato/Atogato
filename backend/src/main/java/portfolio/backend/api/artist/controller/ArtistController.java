@@ -16,6 +16,7 @@ import portfolio.backend.api.project.entity.Project;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -31,6 +32,12 @@ public class ArtistController {
         this.userRepository = userRepository;
         this.userService = userService;
     }
+
+    @GetMapping
+    public List<Artist> getArtist() {
+        return artistRepository.findAll();
+    }
+
 
     @PostMapping("")
     public ResponseEntity<String> createArtist(@RequestParam(value = "mainImage") MultipartFile imageFile,
@@ -78,7 +85,7 @@ public class ArtistController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Artist> getArtist(@PathVariable Long id) {
+    public ResponseEntity<Artist> getArtistById(@PathVariable Long id) {
         Optional<Artist> optionalArtist = artistRepository.findById(id);
 
         return optionalArtist.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());

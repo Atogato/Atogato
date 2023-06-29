@@ -15,7 +15,7 @@ public class Artist {
 //    private byte[] portfolio;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "userId")
     private SiteUser siteUser;
 
     @Id
