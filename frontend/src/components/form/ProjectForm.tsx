@@ -1,6 +1,7 @@
 import ImageUploader from '@/components/uploader/ImageUploader'
 import Editor from '@/components/editor/Editor'
 import { SyntheticEvent, ChangeEvent, useState, useRef, MutableRefObject, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 // image file FormData 전송 테스트용
 async function toBase64(file: File) {
@@ -42,6 +43,7 @@ export default function ProjectForm() {
     },
   ]
 
+  const router = useRouter()
   // TODO: 여러 ref 객체 관리하는 util 함수 정의(refactoring)
   const projectGenre = useRef('')
   const projectName = useRef('')
@@ -87,11 +89,18 @@ export default function ProjectForm() {
     // })
     formData.append('images', JSON.stringify(imageFiles))
 
-    await fetch('/api/projects', {
+    const res = await fetch('/api/projects', {
       method: 'POST',
       body: formData,
     })
+    if (res.ok) {
+      router.replace('/project/list')
+    }
   }
+
+  useEffect(() => {
+    router.prefetch('/project/list')
+  }, [router])
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>, refObj: MutableRefObject<string>) => {
     refObj.current = e.target.value
