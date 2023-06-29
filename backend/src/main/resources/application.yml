@@ -1,6 +1,6 @@
 spring:
-  profiles:
-    active: docker
+#  profiles:
+#    active: docker
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -33,23 +33,23 @@ spring:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
             scope:
-            - email
-            - profile
+              - email
+              - profile
 
           facebook:
-            client-id : ${FACEBOOK_CLIENT_ID}
-            client-secret : ${FACEBOOK_CLIENT_SECRET}
+            client-id: ${FACEBOOK_CLIENT_ID}
+            client-secret: ${FACEBOOK_CLIENT_SECRET}
             scope:
-            - email
-            - public_profile
+              - email
+              - public_profile
 
           naver:
             client-id: ${NAVER_CLIENT_ID}
             client-secret: ${NAVER_CLIENT_SECRET}
             scope:
-            - email
-            - name
-            - profile_name
+              - email
+              - name
+              - profile_name
             client-name: Naver
             authorization-grant-type: authorization_code
             redirect-uri: http://localhost:7072/login/oauth2/code/naver
@@ -62,8 +62,8 @@ spring:
             client-authentication-method: POST
             client-name: Kakao
             scope:
-            - profile_nickname
-            - account_email
+              - profile_nickname
+              - account_email
 
         provider:
           naver:
