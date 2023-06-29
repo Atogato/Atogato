@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "cd .. && husky install frontend/.husky",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -12,6 +13,11 @@
     "build-storybook": "storybook build",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "prettier --check"
+    }
   },
   "dependencies": {
     "@types/node": "20.2.5",
@@ -42,6 +48,7 @@
     "cypress": "^12.15.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-storybook": "^0.6.12",
+    "husky": "^8.0.3",
     "postcss": "^8.4.24",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.3.0",
