@@ -80,7 +80,6 @@ public class ProjectController {
 //        SiteUser siteUser = this.userService.getUser(principal.getName());
 
         SiteUser siteUser = this.userService.getUser(principal.getName());
-
 //        Long userId = siteUser.getUserId();
         Project project = new Project();
 

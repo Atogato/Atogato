@@ -3,6 +3,7 @@ package portfolio.backend.api.auth.entity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import portfolio.backend.api.artist.entity.Artist;
 import portfolio.backend.api.auth.constant.UserType;
 import portfolio.backend.api.project.entity.Project;
 
@@ -35,6 +36,10 @@ public class SiteUser {
 
     @OneToMany(mappedBy = "siteUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Project> project;
+
+    @OneToOne(mappedBy = "siteUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Artist artist;
+
 
     @Builder
     public SiteUser(Long userId, String username, String password, UserType userType) {
