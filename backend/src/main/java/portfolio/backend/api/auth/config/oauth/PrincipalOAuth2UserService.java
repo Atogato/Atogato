@@ -26,9 +26,6 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
     // 소셜 로그인 이후 userRequest 후처리
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException{
-//        System.out.println("userRequest" + userRequest.getClientRegistration());
-//        System.out.println("userRequest" + userRequest.getAccessToken());
-//        System.out.println("userRequest" + super.loadUser(userRequest).getAttributes());
 
         OAuth2User oauth2User = super.loadUser(userRequest);
 
@@ -47,7 +44,6 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 
         String provider = oAuth2UserInfo.getProvider();
         String providerId = oAuth2UserInfo.getProviderId();
-        String userId = provider+"_"+providerId;
         String password = passwordEncoder.encode("encrypt");
         String username = oAuth2UserInfo.getEmail();
         UserType userType = UserType.USER;
@@ -59,7 +55,6 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
             userEntity = new SiteUser();
             userEntity.setUsername(username);
             userEntity.setPassword(password);
-            userEntity.setUserId(userId);
             userEntity.setProvider(provider);
             userEntity.setProviderId(providerId);
             userEntity.setUserType(userType);

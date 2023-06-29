@@ -4,29 +4,27 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import portfolio.backend.api.auth.constant.UserType;
+import portfolio.backend.api.project.entity.Project;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.List;
 
 @Data
 @Entity
 @NoArgsConstructor
+@Table(name = "SiteUser")
 public class SiteUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @Column(unique = true)
     @Email
     private String username; //login할 때 id, uq
 
-    @Column(unique = true)
-    private String userId; //창작자 고유 id, uq
-
     private String password;
-
-    private String artistType; //15가지 option 존재
 
     @Enumerated(EnumType.STRING)
     private UserType userType; //권한 - user, admin
@@ -35,13 +33,14 @@ public class SiteUser {
 
     private String providerId;
 
+    @OneToMany(mappedBy = "siteUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Project> project;
+
     @Builder
-    public SiteUser(Long id, String username, String userId, String password, String artistType, UserType userType) {
-        this.id = id;
-        this.username = username;
+    public SiteUser(Long userId, String username, String password, UserType userType) {
         this.userId = userId;
+        this.username = username;
         this.password = password;
-        this.artistType = artistType;
         this.userType = (userType != null) ? userType : UserType.USER; // Set 'user' as default if userType is null
         this.provider = provider;
         this.providerId = providerId;
