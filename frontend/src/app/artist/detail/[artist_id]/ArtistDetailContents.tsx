@@ -1,5 +1,9 @@
 'use client'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
+import { useState } from 'react'
+
+const PdfViewer = dynamic(() => import('@/components/pdf-viewer'), { ssr: false })
 
 export default function ArtistDetailContents() {
   const DUMMY = {
@@ -8,6 +12,12 @@ export default function ArtistDetailContents() {
     description: '안녕하세요. 저는 xx아티스트 입니다.',
     detail: ['무술', '액션', '웹드라마'],
     images: ['image', 'image', 'image', 'image', 'image', 'image'],
+  }
+
+  const [isOpen, setIsOpen] = useState(false)
+
+  function toggle() {
+    setIsOpen((status) => !status)
   }
 
   return (
@@ -86,8 +96,16 @@ export default function ArtistDetailContents() {
         </div>
       </section>
       <div className="text-center">
-        <h2 className="hide"> 포트폴리오 파일 다운로드 </h2>
-        <button className="border-2 hover:bg-sky-400 hover:text-blue-700"> 포트폴리오 보기 </button>
+        <h2 className="hide"> 포트폴리오 파일 조회 </h2>
+        <button
+          onClick={() => {
+            toggle()
+          }}
+          className="border-2 hover:bg-sky-400 hover:text-blue-700"
+        >
+          포트폴리오 보기
+        </button>
+        {isOpen ? <PdfViewer /> : <></>}
       </div>
       <div>
         <h2 className="hide">SNS 링크</h2>
