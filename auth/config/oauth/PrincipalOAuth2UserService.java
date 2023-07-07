@@ -32,7 +32,7 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2UserInfo oAuth2UserInfo = null;
         if (userRequest.getClientRegistration().getRegistrationId().equals("google")){
             oAuth2UserInfo = new GoogleUserInfo(oauth2User.getAttributes());
-        }else if(userRequest.getClientRegistration().getRegistrationId().equals("google")){
+        }else if(userRequest.getClientRegistration().getRegistrationId().equals("facebook")){
             oAuth2UserInfo = new FacebookUserInfo(oauth2User.getAttributes());
         }else if(userRequest.getClientRegistration().getRegistrationId().equals("naver")){
             oAuth2UserInfo = new NaverUserInfo((Map)oauth2User.getAttributes().get("response"));

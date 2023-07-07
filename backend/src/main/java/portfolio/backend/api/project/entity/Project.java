@@ -1,7 +1,8 @@
 package portfolio.backend.api.project.entity;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import portfolio.backend.api.auth.entity.SiteUser;
+import portfolio.backend.authentication.api.entity.user.User;
+//import portfolio.backend.api.auth.entity.SiteUser;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -53,7 +54,7 @@ public class Project {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
-    private SiteUser siteUser;
+    private User user;
     private Long participantId;
 
     public Long getProjectId() {
@@ -182,8 +183,8 @@ public class Project {
     }
 
 
-    public void setSiteUser(SiteUser siteUser) {
-        this.siteUser = siteUser;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getParticipantId() {

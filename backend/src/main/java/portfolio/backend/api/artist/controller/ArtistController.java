@@ -1,6 +1,5 @@
 package portfolio.backend.api.artist.controller;
 
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,10 +7,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import portfolio.backend.api.artist.entity.Artist;
 import portfolio.backend.api.artist.repository.ArtistRepostiroy;
-import portfolio.backend.api.auth.entity.SiteUser;
-import portfolio.backend.api.auth.repository.UserRepository;
-import portfolio.backend.api.auth.service.UserService;
+//import portfolio.backend.api.auth.entity.SiteUser;
+//import portfolio.backend.api.auth.repository.UserRepository;
+//import portfolio.backend.api.auth.service.UserService;
 import portfolio.backend.api.project.entity.Project;
+import portfolio.backend.authentication.api.entity.user.User;
+import portfolio.backend.authentication.api.repository.user.UserRepository;
+import portfolio.backend.authentication.api.service.UserService;
+import portfolio.backend.authentication.oauth.entity.UserPrincipal;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -54,8 +57,8 @@ public class ArtistController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You must be logged in to create an artist.");
         }
 
-        SiteUser siteUser = this.userService.getUser(principal.getName());
-
+//        SiteUser siteUser = this.userService.getUser(principal.getName());
+        User user = this.userService.getUser(principal.getName());
 
         try {
             Artist artist = new Artist();
@@ -75,7 +78,7 @@ public class ArtistController {
                 artist.setBirthdate(birthdateObj);
             }
 
-            artist.setSiteUser(siteUser);
+            artist.setUser(user);
             artistRepository.save(artist);
             return ResponseEntity.ok("Artist created successfully.");
 

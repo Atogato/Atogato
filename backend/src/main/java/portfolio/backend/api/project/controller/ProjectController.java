@@ -7,13 +7,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
-import portfolio.backend.api.auth.entity.SiteUser;
-import portfolio.backend.api.auth.repository.UserRepository;
-import portfolio.backend.api.auth.service.UserService;
+//import portfolio.backend.api.auth.entity.SiteUser;
+//import portfolio.backend.api.auth.repository.UserRepository;
+//import portfolio.backend.api.auth.service.UserService;
 import portfolio.backend.api.project.entity.Project;
 import portfolio.backend.api.project.repository.ProjectRepository;
 
 import portfolio.backend.api.project.exception.ResourceNotFoundException; // Import statement for ResourceNotFoundException
+import portfolio.backend.authentication.api.entity.user.User;
+import portfolio.backend.authentication.api.repository.user.UserRepository;
+import portfolio.backend.authentication.api.service.UserService;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,11 +82,11 @@ public class ProjectController {
 //        }
 //        SiteUser siteUser = this.userService.getUser(principal.getName());
 
-        SiteUser siteUser = this.userService.getUser(principal.getName());
+        User user = this.userService.getUser(principal.getName());
 //        Long userId = siteUser.getUserId();
         Project project = new Project();
 
-        project.setSiteUser(siteUser);
+        project.setUser(user);
         project.setProjectName(projectName);
         project.setCreatorArtCategory(creatorArtCategory);
         project.setLiked(liked);
