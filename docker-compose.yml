@@ -7,6 +7,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: projecta
       MYSQL_DATABASE: backend
+    volumes:
+      - mysqldb_data:/var/lib/mysql
     networks:
       mynetwork:
 
@@ -20,7 +22,7 @@ services:
     depends_on:
       - mysqldb
     networks:
-      mynetwork:
+      - mynetwork
     restart: on-failure
 
 
@@ -34,3 +36,6 @@ services:
 
 networks:
   mynetwork:
+
+volumes:
+  mysqldb_data:
