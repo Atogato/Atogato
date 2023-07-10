@@ -1,18 +1,5 @@
 package portfolio.backend.authentication.config.security;
 
-//import com.deeplify.tutorial.oauthlogin.api.repository.user.UserRefreshTokenRepository;
-//import com.deeplify.tutorial.oauthlogin.config.properties.AppProperties;
-//import com.deeplify.tutorial.oauthlogin.config.properties.CorsProperties;
-//import com.deeplify.tutorial.oauthlogin.oauth.entity.RoleType;
-//import com.deeplify.tutorial.oauthlogin.oauth.exception.RestAuthenticationEntryPoint;
-//import com.deeplify.tutorial.oauthlogin.oauth.filter.TokenAuthenticationFilter;
-//import com.deeplify.tutorial.oauthlogin.oauth.handler.OAuth2AuthenticationFailureHandler;
-//import com.deeplify.tutorial.oauthlogin.oauth.handler.OAuth2AuthenticationSuccessHandler;
-//import com.deeplify.tutorial.oauthlogin.oauth.handler.TokenAccessDeniedHandler;
-//import com.deeplify.tutorial.oauthlogin.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
-//import com.deeplify.tutorial.oauthlogin.oauth.service.CustomOAuth2UserService;
-//import com.deeplify.tutorial.oauthlogin.oauth.service.CustomUserDetailsService;
-//import com.deeplify.tutorial.oauthlogin.oauth.token.AuthTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
