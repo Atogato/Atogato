@@ -1,7 +1,8 @@
 package portfolio.backend.api.artist.entity;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import portfolio.backend.api.auth.entity.SiteUser;
+import portfolio.backend.authentication.api.entity.user.User;
+//import portfolio.backend.api.auth.entity.SiteUser;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -16,7 +17,7 @@ public class Artist {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
-    private SiteUser siteUser;
+    private User user;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,13 +47,8 @@ public class Artist {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthdate;
 
-
-    /////////////////////////////////////
-    //////// GETTER AND SETTER //////////
-    /////////////////////////////////////
-
-    public void setSiteUser(SiteUser siteUser) {
-        this.siteUser = siteUser;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getArtistId() {
