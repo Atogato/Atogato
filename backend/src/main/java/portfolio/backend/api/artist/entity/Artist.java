@@ -2,7 +2,6 @@ package portfolio.backend.api.artist.entity;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import portfolio.backend.authentication.api.entity.user.User;
-//import portfolio.backend.api.auth.entity.SiteUser;
 
 import javax.persistence.*;
 import java.time.LocalDate;
