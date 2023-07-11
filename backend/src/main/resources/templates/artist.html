@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create Artist</title>
+</head>
+<body>
+<h1>Create Artist</h1>
+<form method="post" action="/api/artists" enctype="multipart/form-data">
+  <label for="mainImage">Main Image:</label>
+  <input type="file" name="mainImage" id="mainImage" required><br><br>
+
+  <label for="projectName">Project Name:</label>
+  <input type="text" name="projectName" id="projectName" required><br><br>
+
+  <label for="description">Description:</label>
+  <textarea name="description" id="description" required></textarea><br><br>
+
+  <label for="liked">Liked:</label>
+  <input type="number" name="liked" id="liked" value="0"><br><br>
+
+  <label for="creatorArtCategory">Creator Art Category:</label>
+  <input type="text" name="creatorArtCategory" id="creatorArtCategory" required><br><br>
+
+  <label for="interestCategory">Interest Category:</label>
+  <input type="text" name="interestCategory" id="interestCategory"><br><br>
+
+  <label for="snsLink">SNS Link:</label>
+  <input type="text" name="snsLink" id="snsLink"><br><br>
+
+  <label for="birthdate">Birthdate:</label>
+  <input type="date" name="birthdate" id="birthdate"><br><br>
+
+  <button type="submit">Create Artist</button>
+</form>
+
+<hr>
+
+<h1>Artist Details</h1>
+<div id="artistDetails"></div>
+
+<script>
+        async function fetchArtistDetails(artistId) {
+            const response = await fetch(`/api/artists/${artistId}`);
+            const artist = await response.json();
+
+            const artistDetailsDiv = document.getElementById('artistDetails');
+            artistDetailsDiv.innerHTML = `
+                <h2>${artist.projectName}</h2>
+                <p>Description: ${artist.description}</p>
+                <p>Liked: ${artist.liked}</p>
+                <p>Creator Art Category: ${artist.creatorArtCategory}</p>
+                <p>Interest Category: ${artist.interestCategory}</p>
+                <p>SNS Link: ${artist.snsLink}</p>
+                <p>Birthdate: ${artist.birthdate}</p>
+            `;
+        }
+
+        // You can call the fetchArtistDetails function with the desired artist ID
+        // e.g., fetchArtistDetails(1);
+    </script>
+</body>
+</html>

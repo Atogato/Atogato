@@ -48,7 +48,49 @@ git status
 
 ```
 
-### 3. 생각하는 추가 기능, 이슈, 발전사항
+### 3. Docker 환경 구축
+```
+# docker-compose.yml있는 directory로 이동
+
+docker compose build
+
+# 실행
+docker compose up
+
+# dettached mode 실행
+docker compose up -d
+
+# 중단
+docker compose down
+
+# 주기적으로 사용하지 않는 image들 제거하기
+docker image prune
+
+######################################
+### docker compose 없이 개별 실행 필요시 ###
+######################################
+
+# 백엔드
+docker pull mysql
+docker run --name backend -e MYSQL_ROOT_PASSWORD=projecta -d mysql
+docker run --name mysqldb --network mynetwork  -e MYSQL_ROOT_PASSWORD=projecta -e MYSQL_DATABASE=backend -d mysql
+docker exec -it mysqldb bash
+-> mysql -u root -p
+docker build -t backend .
+docker run --network mynetwork --name backend_run -p 7072:7072 -d backend
+
+
+# 프론트
+docker build -t frontend ./
+docker run -i -p 3000:3000 frontend
+
+
+```
+
+
+
+
+### 4. 생각하는 추가 기능, 이슈, 발전사항
 - 만약 당장 구현을 못하거나 장기적인 이슈가 있을때 Github Issues 에 추가하기
 
-### 4. 푸쉬할때 쓸때없는 파일 푸쉬안하게 .gitignore 관리
+### 5. 푸쉬할때 쓸때없는 파일 푸쉬안하게 .gitignore 관리

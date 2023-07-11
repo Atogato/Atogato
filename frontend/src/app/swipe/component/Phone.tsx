@@ -41,6 +41,7 @@ export default function Phone({ user }: DataProps): JSX.Element {
       <Image alt="name" width={400} height={400} src="/images/sample/image.png" className="mb-2" />
       <Image alt="name" width={400} height={400} src="/images/sample/image.png" className="mb-2" />
       <Image alt="name" width={400} height={400} src="/images/sample/image.png" className="rounded-b-2xl" />
+
     </div>
   )
 }

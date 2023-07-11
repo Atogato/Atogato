@@ -15,11 +15,6 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "prettier --check"
-    }
-  },
   "dependencies": {
     "@types/node": "20.2.5",
     "@types/react": "18.2.9",
@@ -32,6 +27,7 @@
     "react-calendar": "^4.3.0",
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
+    "react-pdf": "^7.1.2",
     "react-quill": "^2.0.0",
     "typescript": "5.1.3"
   },

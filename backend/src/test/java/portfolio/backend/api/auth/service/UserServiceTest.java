@@ -26,9 +26,7 @@ class UserServiceTest {
     void signTest() {
         SiteUser user = new SiteUser();
         user.setUsername("longlee@naver.com");
-        user.setUserId("성구랍니다");
         user.setPassword("12345678");
-        user.setArtistType("악기연주");
         user.setUserType(UserType.USER);
         this.userRepository.save(user); //회원가입 저장
 
@@ -38,9 +36,7 @@ class UserServiceTest {
 
         SiteUser s = all.get(0);
         assertEquals("longlee@naver.com", s.getUsername());
-        assertEquals("성구랍니다", s.getUserId());
         assertEquals("12345678", s.getPassword());
-        assertEquals("악기연주", s.getArtistType());
 
     }
 

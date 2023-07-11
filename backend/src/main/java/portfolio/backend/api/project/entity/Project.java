@@ -1,18 +1,20 @@
 package portfolio.backend.api.project.entity;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import portfolio.backend.authentication.api.entity.user.User;
+//import portfolio.backend.api.auth.entity.SiteUser;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
+@Table(name="Project")
 public class Project {
 
-    // PK
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long projectId;
-
 
     private Boolean ongoingStatus;
 
@@ -39,7 +41,8 @@ public class Project {
     private Long requiredPeople;
 
     @Column(nullable=false)
-    private String requiredCategory;
+    @ElementCollection
+    private List<String> requiredCategory;
     private Boolean swipeAlgorithm;
 
     @Column(nullable=true)
@@ -47,13 +50,13 @@ public class Project {
     private Long liked;
 
     @Column(columnDefinition = "TEXT")
-
     private String description;
-    private Long userId;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
     private Long participantId;
 
-    // Getters & setters...
     public Long getProjectId() {
         return projectId;
     }
@@ -121,11 +124,11 @@ public class Project {
         this.requiredPeople = requiredPeople;
     }
 
-    public String getRequiredCategory() {
+    public List<String> getRequiredCategory() {
         return requiredCategory;
     }
 
-    public void setRequiredCategory(String requiredCategory) {
+    public void setRequiredCategory(List<String> requiredCategory) {
         this.requiredCategory = requiredCategory;
     }
 
@@ -180,12 +183,8 @@ public class Project {
     }
 
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getParticipantId() {
