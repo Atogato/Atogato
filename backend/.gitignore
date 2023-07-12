@@ -41,3 +41,5 @@ src/main/resources/.env
 backend/src/main/resources/.env
 
 /backend/.env
+
+*.idea
