@@ -18,8 +18,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableWebMvc //이것도 함께 작성
 public class SwaggerConfig implements WebMvcConfigurer {
 
-    //swagger 2.9.2 버전 리소스 등록
 
+    //swagger 2.9.2 버전 리소스 등록
 
     //end-point
     //localhost:7072/swagger-ui.html
