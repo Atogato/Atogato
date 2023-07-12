@@ -8,14 +8,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import portfolio.backend.api.artist.entity.Artist;
-import portfolio.backend.api.artist.repository.ArtistRepostiroy;
+import portfolio.backend.api.artist.entity.ArtistRepository;
 import portfolio.backend.authentication.api.entity.user.User;
 import portfolio.backend.authentication.api.repository.user.UserRepository;
 import portfolio.backend.authentication.api.service.UserService;
-import portfolio.backend.authentication.oauth.entity.UserPrincipal;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -24,12 +22,12 @@ import java.util.Optional;
 @RequestMapping("/api/artists")
 //@RequiredArgsConstructor
 public class ArtistController {
-    private final ArtistRepostiroy artistRepository;
+    private final ArtistRepository artistRepository;
     private final UserRepository userRepository;
     private final UserService userService;
 
     @Autowired
-    public ArtistController(ArtistRepostiroy artistRepository, UserRepository userRepository, UserService userService) {
+    public ArtistController(ArtistRepository artistRepository, UserRepository userRepository, UserService userService) {
         this.artistRepository = artistRepository;
         this.userRepository = userRepository;
         this.userService = userService;

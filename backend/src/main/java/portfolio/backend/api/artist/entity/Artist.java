@@ -1,18 +1,22 @@
 package portfolio.backend.api.artist.entity;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 import portfolio.backend.authentication.api.entity.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@Getter
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name="artists")
 public class Artist {
-//    @Lob
-//    private byte[] additionalImage;
-//    @Lob
-//    private byte[] portfolio;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
