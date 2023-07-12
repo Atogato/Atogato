@@ -8,10 +8,17 @@ import org.springframework.transaction.annotation.Transactional;
 import portfolio.backend.api.artist.dto.FavoriteRequestDTO;
 import portfolio.backend.api.artist.entity.Artist;
 import portfolio.backend.api.artist.entity.ArtistFavorite;
+<<<<<<< HEAD
 import portfolio.backend.api.artist.entity.ArtistRepository;
 import portfolio.backend.api.artist.exception.DuplicateResourceException;
 import portfolio.backend.api.artist.exception.NotFoundException;
 import portfolio.backend.api.artist.repository.ArtistFavoriteRepository;
+=======
+import portfolio.backend.api.artist.exception.DuplicateResourceException;
+import portfolio.backend.api.artist.exception.NotFoundException;
+import portfolio.backend.api.artist.repository.ArtistFavoriteRepository;
+import portfolio.backend.api.artist.repository.ArtistRepository;
+>>>>>>> 875fa295654b6b6edf6aeea850c13e61153075fe
 import portfolio.backend.authentication.api.entity.user.User;
 import portfolio.backend.authentication.api.repository.user.UserRepository;
 import portfolio.backend.authentication.api.service.UserService;
@@ -30,7 +37,11 @@ public class ArtistFavoriteService {
 
         User user = userService.getUser(principal.getUsername());
         Artist artist = artistRepository.findById(favoriteRequestDTO.getArtistId())
+<<<<<<< HEAD
             .orElseThrow(() -> new NotFoundException("아티스트 찾을 수 없음" + favoriteRequestDTO.getArtistId()));
+=======
+                .orElseThrow(() -> new NotFoundException("아티스트 찾을 수 없음" + favoriteRequestDTO.getArtistId()));
+>>>>>>> 875fa295654b6b6edf6aeea850c13e61153075fe
 
         if (artistFavoriteRepository.findByUserAndArtist(user, artist).isPresent()){
 
@@ -60,4 +71,8 @@ public class ArtistFavoriteService {
 
 
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 875fa295654b6b6edf6aeea850c13e61153075fe

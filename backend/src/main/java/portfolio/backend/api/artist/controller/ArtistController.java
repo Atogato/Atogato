@@ -8,7 +8,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import portfolio.backend.api.artist.entity.Artist;
+<<<<<<< HEAD
 import portfolio.backend.api.artist.entity.ArtistRepository;
+=======
+import portfolio.backend.api.artist.repository.ArtistRepository;
+import portfolio.backend.api.project.entity.Project;
+import portfolio.backend.api.project.exception.ResourceNotFoundException;
+>>>>>>> 875fa295654b6b6edf6aeea850c13e61153075fe
 import portfolio.backend.authentication.api.entity.user.User;
 import portfolio.backend.authentication.api.repository.user.UserRepository;
 import portfolio.backend.authentication.api.service.UserService;
@@ -20,7 +26,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/artists")
-//@RequiredArgsConstructor
 public class ArtistController {
     private final ArtistRepository artistRepository;
     private final UserRepository userRepository;
@@ -34,14 +39,22 @@ public class ArtistController {
     }
 
     @GetMapping
-    public List<Artist> getArtist() {
+    public List<Artist> getAllArtist() {
         return artistRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public Artist getArtistById(@PathVariable Long id) {
+//        Optional<Artist> optionalArtist = artistRepository.findById(id);
+//        return optionalArtist.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        return artistRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
+
+    }
 
     @PostMapping("")
     public ResponseEntity<String> createArtist(@RequestParam(value = "mainImage") MultipartFile imageFile,
-                                               @RequestParam(value = "projectName") String projectName,
+                                               @RequestParam(value = "artistName") String artistName,
                                                @RequestParam(value = "description") String description,
                                                @RequestParam(value = "liked", defaultValue = "0") int liked,
                                                @RequestParam(value = "creatorArtCategory") String creatorArtCategory,
@@ -57,7 +70,7 @@ public class ArtistController {
         try {
             Artist artist = new Artist();
             artist.setMainImage(imageFile.getBytes());
-            artist.setProjectName(projectName);
+            artist.setArtistName(artistName);
             artist.setDescription(description);
             artist.setLiked(liked);
             artist.setCreatorArtCategory(creatorArtCategory);
@@ -80,11 +93,25 @@ public class ArtistController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create artist.");
         }
     }
+    @PutMapping("/{id}")
+    public Artist updateArtist(@PathVariable Long id, @RequestBody Artist updateArtist) {
+        Artist existingArtist = artistRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Artist> getArtistById(@PathVariable Long id) {
-        Optional<Artist> optionalArtist = artistRepository.findById(id);
-
-        return optionalArtist.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        existingArtist.setCreatorArtCategory(updateArtist.getCreatorArtCategory());
+        existingArtist.setArtistName(updateArtist.getArtistName());
+        existingArtist.setDescription(updateArtist.getDescription());
+        existingArtist.setBirthdate(updateArtist.getBirthdate());
+        existingArtist.setInterestCategory(updateArtist.getInterestCategory());
+        existingArtist.setSnsLink(updateArtist.getSnsLink());
+        return artistRepository.save(existingArtist);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteArtist(@PathVariable Long id) {
+        Artist artist = artistRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
+        artistRepository.delete(artist);
+    }
+
 }

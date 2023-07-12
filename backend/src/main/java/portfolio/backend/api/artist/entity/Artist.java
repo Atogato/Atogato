@@ -12,6 +12,11 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Getter
+<<<<<<< HEAD
+=======
+@DynamicUpdate
+@DynamicInsert
+>>>>>>> 875fa295654b6b6edf6aeea850c13e61153075fe
 @Entity
 @DynamicInsert
 @DynamicUpdate
@@ -27,7 +32,7 @@ public class Artist {
     private Long artistId;
 
     @Column(nullable=false)
-    private String projectName;
+    private String artistName;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -62,12 +67,12 @@ public class Artist {
         this.artistId = artistId;
     }
 
-    public String getProjectName() {
-        return projectName;
+    public String getArtistName() {
+        return artistName;
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public void setArtistName(String artistName) {
+        this.artistName = artistName;
     }
 
     public String getDescription() {
