@@ -2,16 +2,10 @@ package portfolio.backend.api.project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
-//import portfolio.backend.api.auth.entity.SiteUser;
-//import portfolio.backend.api.auth.repository.UserRepository;
-//import portfolio.backend.api.auth.service.UserService;
 import portfolio.backend.api.project.entity.Project;
 import portfolio.backend.api.project.repository.ProjectRepository;
 
@@ -33,8 +27,6 @@ import java.util.UUID;
 @RequestMapping("/api/projects")
 public class ProjectController {
     private final ProjectRepository projectRepository;
-
-    // inject both userService-> 로그인후 프로젝트 생성시 관계성 구축
     private final UserService userService;
     private final UserRepository userRepository;
 
@@ -81,15 +73,9 @@ public class ProjectController {
             @RequestParam(defaultValue = "0") Long participantId,
             Authentication authentication) {
 
-//        if (principal == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You must be logged in to create an artist.");
-//        }
-//        SiteUser siteUser = this.userService.getUser(principal.getName());
-
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         User user = userService.getUser(principal.getUsername());
-//        Long userId = siteUser.getUserId();
         Project project = new Project();
 
         project.setUser(user);

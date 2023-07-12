@@ -36,3 +36,5 @@ next-env.d.ts
 
 # cypress video
 /cypress/videos/*
+
+../.idea/*

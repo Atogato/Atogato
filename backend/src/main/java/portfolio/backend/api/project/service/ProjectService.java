@@ -18,5 +18,4 @@ public class ProjectService {
         project.setCreatedDate(LocalDate.now()); // created date = today
         return projectRepository.save(project);
     }
-
 }
