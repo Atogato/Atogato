@@ -13,7 +13,7 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/project/favorite")
+@RequestMapping("api/projects/favorite")
 public class ProjectFavoriteController {
 
     private final ProjectFavoriteService projectFavoriteService;
