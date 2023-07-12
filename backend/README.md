@@ -3,18 +3,24 @@
 
 
 ### Endpoint
+
 ```agsl
-# 회원가입
-/api/auth/login
-/api/auth/signup
 
-# test html
-/create-project
-/create-artist
-/artists
+# 현재 로그인 유저 정보
+/api/v1/users      - GET
+ 
+# 프로젝트 api
+/api/projects      - GET, POST
+/api/projects/{id} - GET, POST, PUT, DELETE 
+/api/projects      - GET, POST
+/api/projects/{id} - GET, POST, PUT, DELETE 
+/api/projects/favorite - POST, DELETE
 
-# 프로젝트 api + 아티스트 특정 api
-/api/projects
-/api/artists/{id}
+# 아티스트 api
+/api/artists      - GET, POST
+/api/artists/{id} - GET, POST, PUT, DELETE 
+/api/artists      - GET, POST
+/api/artists/{id} - GET, POST, PUT, DELETE 
+/api/artists/favorite - POST, DELETE
 
 ```
