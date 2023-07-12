@@ -31,6 +31,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
+
     @Bean
     public Docket api() { //swagger를 연결하기 위한 Bean 작성
         return new Docket(DocumentationType.SWAGGER_2)

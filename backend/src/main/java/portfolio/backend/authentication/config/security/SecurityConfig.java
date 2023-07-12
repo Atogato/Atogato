@@ -128,6 +128,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new OAuth2AuthorizationRequestBasedOnCookieRepository();
     }
 
+    
     /*
      * Oauth 인증 성공 핸들러
      * */
