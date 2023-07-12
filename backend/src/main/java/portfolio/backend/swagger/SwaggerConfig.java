@@ -41,6 +41,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .apiInfo(apiInfo());
     }
 
+
     private ApiInfo apiInfo() { //선택
         return new ApiInfoBuilder()
                 .title("Omoolen Release") //자신에게 맞는 타이틀을 작성해준다.
