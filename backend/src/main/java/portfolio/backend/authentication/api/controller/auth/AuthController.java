@@ -18,7 +18,6 @@ import portfolio.backend.authentication.oauth.token.AuthToken;
 import portfolio.backend.authentication.oauth.token.AuthTokenProvider;
 import portfolio.backend.authentication.utils.CookieUtil;
 import portfolio.backend.authentication.utils.HeaderUtil;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
