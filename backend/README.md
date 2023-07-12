@@ -17,4 +17,7 @@
 /api/projects
 /api/artists/{id}
 
+# swagger-ui
+localhost:7072/swagger-ui.html
+
 ```

@@ -1,4 +1,4 @@
-package portfolio.backend.swagger;
+package portfolio.backend.api.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -34,6 +34,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    
     private final CorsProperties corsProperties;
     private final AppProperties appProperties;
     private final AuthTokenProvider tokenProvider;
