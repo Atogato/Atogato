@@ -19,7 +19,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig implements WebMvcConfigurer {
 
     //swagger 2.9.2 버전 리소스 등록
-    //localhost:7072/swagger-ui/html
+    //end-point
+    //localhost:7072/swagger-ui.html
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) { //spring-security와 연결할 때 이 부분을 작성하지 않으면 404에러가 뜬다.
         registry.addResourceHandler("swagger-ui.html")
