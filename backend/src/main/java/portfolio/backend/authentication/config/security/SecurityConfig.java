@@ -52,6 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder());
     }
 
+    //swagger-ui 설정
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
