@@ -23,4 +23,7 @@
 /api/artists/{id} - GET, POST, PUT, DELETE 
 /api/artists/favorite - POST, DELETE
 
+# swagger-ui
+localhost:7072/swagger-ui.html
+
 ```
