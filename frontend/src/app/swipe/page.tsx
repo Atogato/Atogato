@@ -1,7 +1,5 @@
-
 import SwipeArtist from './component/SwipeArtist'
 export default function Swipe() {
-
   return (
     <div className="h-screen">
       <div className="my-4 text-center">
