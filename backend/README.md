@@ -24,6 +24,6 @@
 /api/artists/favorite - POST, DELETE
 
 # swagger-ui
-localhost:7072/swagger-ui.html
+/swagger-ui.html
 
 ```

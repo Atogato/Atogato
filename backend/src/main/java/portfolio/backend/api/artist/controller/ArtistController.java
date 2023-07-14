@@ -41,8 +41,6 @@ public class ArtistController {
 
     @GetMapping("/{id}")
     public Artist getArtistById(@PathVariable Long id) {
-//        Optional<Artist> optionalArtist = artistRepository.findById(id);
-//        return optionalArtist.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
         return artistRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
 

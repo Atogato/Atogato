@@ -1,6 +1,7 @@
 package portfolio.backend.authentication.api.controller.auth;
 
 import io.jsonwebtoken.Claims;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,12 +19,15 @@ import portfolio.backend.authentication.oauth.token.AuthToken;
 import portfolio.backend.authentication.oauth.token.AuthTokenProvider;
 import portfolio.backend.authentication.utils.CookieUtil;
 import portfolio.backend.authentication.utils.HeaderUtil;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
+
+@ApiIgnore
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor

@@ -43,4 +43,6 @@ backend/src/main/resources/.env
 
 /backend/.env
 
-backend/.idea/
+.idea/
+*.idea
+*.vscode
