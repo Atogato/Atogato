@@ -1,8 +1,6 @@
 package portfolio.backend.api.artist.entity;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,7 +16,7 @@ import java.time.LocalDate;
 @Table(name="artists")
 public class Artist {
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
     private User user;
 

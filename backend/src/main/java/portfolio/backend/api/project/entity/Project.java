@@ -2,7 +2,6 @@ package portfolio.backend.api.project.entity;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import portfolio.backend.authentication.api.entity.user.User;
-//import portfolio.backend.api.auth.entity.SiteUser;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -52,7 +51,7 @@ public class Project {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
     private User user;
     private Long participantId;

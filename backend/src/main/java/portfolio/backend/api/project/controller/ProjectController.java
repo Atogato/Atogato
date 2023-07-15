@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import portfolio.backend.api.project.entity.Project;
 import portfolio.backend.api.project.repository.ProjectRepository;
@@ -13,14 +12,10 @@ import portfolio.backend.api.project.exception.ResourceNotFoundException; // Imp
 import portfolio.backend.authentication.api.entity.user.User;
 import portfolio.backend.authentication.api.repository.user.UserRepository;
 import portfolio.backend.authentication.api.service.UserService;
-import portfolio.backend.authentication.config.properties.AppProperties;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.Principal;
+
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 
 @RestController
