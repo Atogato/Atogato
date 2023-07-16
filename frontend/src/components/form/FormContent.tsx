@@ -1,12 +1,9 @@
-'use client'
-
 import ArtistForm from './ArtistForm'
 import ProjectForm from './ProjectForm'
 import SignupForm from './SignupForm'
+import { EntireFormTypes } from './Form'
 
-type FormContentType = 'project' | 'artist' | 'signup' | 'login'
-
-export default function FormContent({ type }: { type: FormContentType }) {
+export default function FormContent({ type }: { type: Omit<EntireFormTypes, 'user'> }) {
   if (type === 'artist') {
     return <ArtistForm />
   } else if (type === 'project') {

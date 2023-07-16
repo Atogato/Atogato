@@ -1,9 +1,6 @@
 import { ProfileImage, ProfileGroup, ProjectGroup, ProjectCard } from './components/Group'
-
-export function Line({ className }: { className?: string }) {
-  const customClassName = `w-full h-px border-none bg-black ${className}`
-  return <div className={customClassName} />
-}
+import Link from 'next/link'
+import Button from './components/Button'
 
 export function UserInfo() {
   const user = {
@@ -19,7 +16,9 @@ export function UserInfo() {
           <li> 이메일: {user.email} </li>
         </ul>
       </div>
-      <button className="bg-gray-200 px-3"> 개인정보 수정 </button>
+      <Link href="user/1/update">
+        <Button className="bg-gray-200 px-3" text="개인정보 수정" />
+      </Link>
     </div>
   )
 }
