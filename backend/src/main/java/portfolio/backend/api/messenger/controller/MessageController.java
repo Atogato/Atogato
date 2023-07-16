@@ -23,6 +23,7 @@ import java.security.Principal;
 @RequestMapping("/api/messages")
 public class MessageController {
 
+
     private final MessageService messageService;
     private final UserRepository userRepository;
     private final UserService userService;

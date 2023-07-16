@@ -9,6 +9,7 @@ import portfolio.backend.api.messenger.entity.Message;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MessageDto {
+
     private int id;
     private String title;
     private String content;
