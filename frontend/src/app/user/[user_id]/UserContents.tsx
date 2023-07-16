@@ -52,7 +52,7 @@ export default function UserContents() {
   ]
   // TODO: 각 그룹의 컴포넌트 내부에서 데이터 패칭(관심사 분리) Refactoring
   return (
-    <div className="mx-auto max-w-5xl divide-y">
+    <div className="divide-y">
       <UserInfo />
       <div className="mt-4 pb-5">
         <h1 className="my-2 text-left text-2xl"> 매치된 아티스트 </h1>
