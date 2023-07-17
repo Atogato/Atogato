@@ -20,6 +20,7 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
 
+
     @Transactional
     public MessageDto write(MessageDto messageDto) {
         User receiver = userRepository.findByEmail(messageDto.getReceiverName());
@@ -28,8 +29,6 @@ public class MessageService {
         Message message = new Message();
         message.setReceiver(receiver);
         message.setSender(sender);
-
-//        message.setTitle(messageDto.getTitle());
         message.setContent(messageDto.getContent());
         message.setDeletedByReceiver(false);
         message.setDeletedBySender(false);
