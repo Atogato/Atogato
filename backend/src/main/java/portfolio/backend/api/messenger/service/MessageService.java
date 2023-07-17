@@ -9,6 +9,7 @@ import portfolio.backend.api.messenger.repository.MessageRepository;
 import portfolio.backend.authentication.api.entity.user.User;
 import portfolio.backend.authentication.api.repository.user.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +29,11 @@ public class MessageService {
         message.setReceiver(receiver);
         message.setSender(sender);
 
-        message.setTitle(messageDto.getTitle());
+//        message.setTitle(messageDto.getTitle());
         message.setContent(messageDto.getContent());
         message.setDeletedByReceiver(false);
         message.setDeletedBySender(false);
+        message.setCreateDate(LocalDateTime.now());
         messageRepository.save(message);
 
         return MessageDto.toDto(message);

@@ -16,6 +16,7 @@ import portfolio.backend.authentication.api.repository.user.UserRepository;
 import portfolio.backend.authentication.api.service.UserService;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,15 +33,12 @@ public class MessageController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Response<?> sendMessage(@RequestBody MessageDto messageDto, Authentication authentication) {
-        // 임의로 유저 정보를 넣었지만, JWT 도입하고 현재 로그인 된 유저의 정보를 넘겨줘야함
-        // PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.getUser(principal.getUsername());
-        System.out.println("메시지 1" + principal);
-        System.out.println("메시지 2" + user);
 
         messageDto.setSenderName(user.getEmail());
+        messageDto.setCreateDate(LocalDateTime.now());
 
         return new Response<>("성공", "쪽지를 보냈습니다.", messageService.write(messageDto));
     }
@@ -50,10 +48,6 @@ public class MessageController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/received")
     public Response<?> getReceivedMessage(Authentication authentication) {
-        // 임의로 유저 정보를 넣었지만, JWT 도입하고 현재 로그인 된 유저의 정보를 넘겨줘야함
-//        User user = userRepository.findById(14).orElseThrow(() -> {
-//            return new IllegalArgumentException("유저를 찾을 수 없습니다.");
-//        });
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.getUser(principal.getUsername());
@@ -66,10 +60,6 @@ public class MessageController {
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/received/{id}")
     public Response<?> deleteReceivedMessage(@PathVariable("id") Integer id, Authentication authentication) {
-        // 임의로 유저 정보를 넣었지만, JWT 도입하고 현재 로그인 된 유저의 정보를 넘겨줘야함
-//        User user = userRepository.findById(1).orElseThrow(() -> {
-//            return new IllegalArgumentException("유저를 찾을 수 없습니다.");
-//        });
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.getUser(principal.getUsername());
@@ -89,10 +79,6 @@ public class MessageController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/sent")
     public Response<?> getSentMessage(Authentication authentication) {
-        // 임의로 유저 정보를 넣었지만, JWT 도입하고 현재 로그인 된 유저의 정보를 넘겨줘야함
-//        User user = userRepository.findById(1).orElseThrow(() -> {
-//            return new IllegalArgumentException("유저를 찾을 수 없습니다.");
-//        });
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.getUser(principal.getUsername());
@@ -105,10 +91,6 @@ public class MessageController {
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/sent/{id}")
     public Response<?> deleteSentMessage(@PathVariable("id") Integer id, Authentication authentication) {
-        // 임의로 유저 정보를 넣었지만, JWT 도입하고 현재 로그인 된 유저의 정보를 넘겨줘야함
-//        User user = userRepository.findById(1).orElseThrow(() -> {
-//            return new IllegalArgumentException("유저를 찾을 수 없습니다.");
-//        });
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.getUser(principal.getUsername());
@@ -122,5 +104,32 @@ public class MessageController {
         }
     }
 
+    @ApiOperation(value = "(특정)받은 편지함 읽기", notes = "(특정)받은 편지함 확인")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/received/detail/{id}")
+    public Response<?> getReceivedMessageDetail(@PathVariable("id") Integer id, Authentication authentication) {
+
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.getUser(principal.getUsername());
+
+        MessageDto messageDto = messageService.findMessageById(id);
+
+
+        return new Response("성공", "특정 쪽지를 불러왔습니다.", messageService.findMessageById(id));
+    }
+
+
+    @ApiOperation(value = "(특정)보낸 편지함 읽기", notes = "(특정)보낸 편지함 확인")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/sent/detail/{id}")
+    public Response<?> getSentMessageDetail(@PathVariable("id") Integer id, Authentication authentication) {
+
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.getUser(principal.getUsername());
+
+        MessageDto messageDto = messageService.findMessageById(id);
+
+        return new Response("성공", "특정 쪽지를 불러왔습니다.", messageService.findMessageById(id));
+    }
 
 }
