@@ -44,3 +44,6 @@ backend/src/main/resources/.env
 /backend/.env
 
 backend/.idea/
+
+### sql ###
+*.sql

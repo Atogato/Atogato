@@ -56,25 +56,6 @@ public class MessageController {
         return new Response("성공", "받은 쪽지를 불러왔습니다.", messageService.receivedMessages(user));
     }
 
-    @ApiOperation(value = "받은 쪽지 삭제하기", notes = "받은 쪽지를 삭제합니다.")
-    @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/received/{id}")
-    public Response<?> deleteReceivedMessage(@PathVariable("id") Integer id, Authentication authentication) {
-
-        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.getUser(principal.getUsername());
-
-        MessageDto messageDto = messageService.findMessageById(id);
-
-        if (messageDto.getReceiverName().equals(user.getEmail())) {
-            return new Response<>("삭제 성공", "받은 쪽지인, " + id + "번 쪽지를 삭제했습니다.", messageService.deleteMessageByReceiver(messageDto, user));
-        } else {
-            return new Response<>("삭제 실패", "사용자 정보가 다릅니다.", null);
-        }
-
-    }
-
-
     @ApiOperation(value = "보낸 편지함 읽기", notes = "보낸 편지함 확인")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/sent")
@@ -86,23 +67,6 @@ public class MessageController {
         return new Response("성공", "보낸 쪽지를 불러왔습니다.", messageService.sentMessage(user));
     }
 
-
-    @ApiOperation(value = "보낸 쪽지 삭제하기", notes = "보낸 쪽지를 삭제합니다.")
-    @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/sent/{id}")
-    public Response<?> deleteSentMessage(@PathVariable("id") Integer id, Authentication authentication) {
-
-        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.getUser(principal.getUsername());
-
-        MessageDto messageDto = messageService.findMessageById(id);
-
-        if (messageDto.getSenderName().equals(user.getEmail())) {
-            return new Response<>("삭제 성공", "보낸 쪽지인, " + id + "번 쪽지를 삭제했습니다.", messageService.deleteMessageBySender(messageDto, user));
-        } else {
-            return new Response<>("삭제 실패", "사용자 정보가 다릅니다.", null);
-        }
-    }
 
     @ApiOperation(value = "(특정)받은 편지함 읽기", notes = "(특정)받은 편지함 확인")
     @ResponseStatus(HttpStatus.OK)

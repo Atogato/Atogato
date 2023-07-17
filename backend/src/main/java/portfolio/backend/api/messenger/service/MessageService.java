@@ -64,20 +64,6 @@ public class MessageService {
         return messageDtos;
     }
 
-    // 받은 편지 삭제
-    @Transactional
-    public Object deleteMessageByReceiver(MessageDto messageDto, User user) {
-
-        Message message = messageRepository.findById(messageDto.getId()).get();
-        message.deleteByReceiver(); // 받은 사람에게 메시지 삭제
-        if (message.isDeleted()) {
-            // 받은사람과 보낸 사람 모두 삭제했으면, 데이터베이스에서 삭제요청
-            messageRepository.delete(message);
-            return "양쪽 모두 삭제";
-        }
-        return "한쪽만 삭제";
-    }
-
 
     @Transactional(readOnly = true)
     public List<MessageDto> sentMessage(User user) {
@@ -97,16 +83,4 @@ public class MessageService {
     }
 
 
-    // 보낸 편지 삭제
-    @Transactional
-    public Object deleteMessageBySender(MessageDto messageDto, User user) {
-        Message message = messageRepository.findById(messageDto.getId()).get();
-        message.deleteBySender(); // 받은 사람에게 메시지 삭제
-        if (message.isDeleted()) {
-            // 받은사람과 보낸 사람 모두 삭제했으면, 데이터베이스에서 삭제요청
-            messageRepository.delete(message);
-            return "양쪽 모두 삭제";
-        }
-        return "한쪽만 삭제";
-    }
 }
