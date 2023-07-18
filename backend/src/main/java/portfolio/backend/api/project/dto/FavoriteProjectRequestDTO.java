@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FavoriteProjectRequestDTO {
 
-    private Long userId;
+    private String userId;
     private Long projectId;
 
-    public FavoriteProjectRequestDTO(Long userId, Long projectId){
+    public FavoriteProjectRequestDTO(String userId, Long projectId){
         this.userId = userId;
         this.projectId = projectId;
     }

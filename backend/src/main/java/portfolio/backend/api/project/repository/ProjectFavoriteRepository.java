@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface ProjectFavoriteRepository extends JpaRepository<ProjectFavorite, Long> {
 
-    Optional<ProjectFavorite> findByUserAndProject(User user, Project project);
+    Optional<ProjectFavorite> findByUserIdAndProject(String userId, Project project);
 
 }

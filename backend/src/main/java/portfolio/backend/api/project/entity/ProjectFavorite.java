@@ -19,9 +19,10 @@ public class ProjectFavorite {
     @Column(name = "project_favorites_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
-    private User user;
+    @Column(name = "userId")
+    private String userId;
+
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projectId")
@@ -29,8 +30,8 @@ public class ProjectFavorite {
 
 
     @Builder
-    public ProjectFavorite(User user, Project project){
-        this.user = user;
+    public ProjectFavorite(String userId, Project project){
+        this.userId = userId;
         this.project = project;
     }
 

@@ -1,5 +1,8 @@
 package portfolio.backend.api.artist.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +17,7 @@ import portfolio.backend.api.project.exception.ResourceNotFoundException;
 import portfolio.backend.authentication.api.entity.user.User;
 import portfolio.backend.authentication.api.repository.user.UserRepository;
 import portfolio.backend.authentication.api.service.UserService;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -22,6 +26,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/artists")
+@Api(tags = "Artist")
 public class ArtistController {
     private final ArtistRepository artistRepository;
     private final UserRepository userRepository;
@@ -52,14 +57,16 @@ public class ArtistController {
                                                @RequestParam(value = "description") String description,
                                                @RequestParam(value = "liked", defaultValue = "0") int liked,
                                                @RequestParam(value = "creatorArtCategory") String creatorArtCategory,
-                                               @RequestParam(value = "interestCategory", required = false) String interestCategory,
+                                               @RequestParam(value = "interestCategory") String interestCategory,
                                                @RequestParam(value = "snsLink", required = false) String snsLink,
                                                @RequestParam(value = "birthdate", required = false) String birthdate,
-                                               Authentication authentication) {
+                                               @ApiIgnore Authentication authentication) {
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        User user = userService.getUser(principal.getUsername());
+//        User user = userService.getUser(principal.getUsername());
+//        Long userId = getUserId(principal);
+        String userId = authentication.getName();
 
         try {
             Artist artist = new Artist();
@@ -78,8 +85,8 @@ public class ArtistController {
                 LocalDate birthdateObj = LocalDate.parse(birthdate);
                 artist.setBirthdate(birthdateObj);
             }
-
-            artist.setUser(user);
+            artist.setUserId(userId);
+//            artist.setUser(user);
             artistRepository.save(artist);
             return ResponseEntity.ok("Artist created successfully.");
 
@@ -88,7 +95,10 @@ public class ArtistController {
         }
     }
     @PutMapping("/{id}")
-    public Artist updateArtist(@PathVariable Long id, @RequestBody Artist updateArtist) {
+    @ApiOperation(value = "아티스트 업데이트")
+    public Artist updateArtist(@ApiParam(value = "업데이트 하려는 유저", required = true)@PathVariable Long id,
+                               @RequestBody Artist updateArtist) {
+
         Artist existingArtist = artistRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
 
@@ -99,6 +109,7 @@ public class ArtistController {
         existingArtist.setInterestCategory(updateArtist.getInterestCategory());
         existingArtist.setSnsLink(updateArtist.getSnsLink());
         return artistRepository.save(existingArtist);
+
     }
 
     @DeleteMapping("/{id}")
