@@ -1,5 +1,6 @@
 package portfolio.backend.api.artist.entity;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -16,12 +17,13 @@ import java.time.LocalDate;
 @Table(name="artists")
 public class Artist {
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "userId")
-    private User user;
+
+    @Column(nullable = false)
+    private String userId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(hidden = true)
     private Long artistId;
 
     @Column(nullable=false)
@@ -35,7 +37,7 @@ public class Artist {
     @Column(nullable=false)
     private String creatorArtCategory;
 
-    @Column(nullable=true)
+    @Column(nullable=false)
     private String interestCategory;
 
     @Column(nullable=true)
@@ -48,8 +50,12 @@ public class Artist {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthdate;
 
-    public void setUser(User user) {
-        this.user = user;
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public Long getArtistId() {

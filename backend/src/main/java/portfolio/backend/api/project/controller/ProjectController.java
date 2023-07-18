@@ -12,6 +12,7 @@ import portfolio.backend.api.project.exception.ResourceNotFoundException; // Imp
 import portfolio.backend.authentication.api.entity.user.User;
 import portfolio.backend.authentication.api.repository.user.UserRepository;
 import portfolio.backend.authentication.api.service.UserService;
+import springfox.documentation.annotations.ApiIgnore;
 
 
 import java.time.LocalDate;
@@ -31,7 +32,6 @@ public class ProjectController {
         this.projectRepository = projectRepository;
         this.userService = userService;
         this.userRepository = userRepository;
-
     }
 
     // 전체 프로젝트 GET
@@ -50,7 +50,6 @@ public class ProjectController {
 
 
     // 새로운 프로젝트 POST
-//    @PreAuthorize("isAuthenticated()")
     @PostMapping
     public Project createProject(
             @RequestParam String projectName,
@@ -66,14 +65,16 @@ public class ProjectController {
             @RequestParam(defaultValue = "both") String remoteStatus,
             @RequestParam(defaultValue = "0") List<Long> requiredPeople,
             @RequestParam(defaultValue = "0") Long participantId,
-            Authentication authentication) {
+            @ApiIgnore Authentication authentication) {
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        User user = userService.getUser(principal.getUsername());
+//        User user = userService.getUser(principal.getUsername());
+        String userId = authentication.getName();
+
         Project project = new Project();
 
-        project.setUser(user);
+        project.setUserId(userId);
         project.setProjectName(projectName);
         project.setCreatorArtCategory(creatorArtCategory);
         project.setLiked(liked);

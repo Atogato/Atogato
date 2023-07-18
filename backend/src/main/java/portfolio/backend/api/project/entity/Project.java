@@ -11,6 +11,9 @@ import java.util.List;
 @Table(name="Project")
 public class Project {
 
+    @Column(nullable = false)
+    private String userId;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long projectId;
@@ -51,9 +54,6 @@ public class Project {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "userId")
-    private User user;
     private Long participantId;
 
     public Long getProjectId() {
@@ -182,10 +182,13 @@ public class Project {
     }
 
 
-    public void setUser(User user) {
-        this.user = user;
+    public String getUserId() {
+        return userId;
     }
 
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
     public Long getParticipantId() {
         return participantId;
     }

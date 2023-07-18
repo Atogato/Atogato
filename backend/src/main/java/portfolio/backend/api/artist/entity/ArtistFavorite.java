@@ -19,9 +19,8 @@ public class ArtistFavorite {
     @Column(name = "artist_favorites_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
-    private User user;
+    @Column(name = "userId")
+    private String userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artistId")
@@ -29,8 +28,8 @@ public class ArtistFavorite {
 
 
     @Builder
-    public ArtistFavorite(User user, Artist artist){
-        this.user = user;
+    public ArtistFavorite(String userId, Artist artist){
+        this.userId = userId;
         this.artist = artist;
     }
 

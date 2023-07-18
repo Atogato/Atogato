@@ -19,7 +19,6 @@ import portfolio.backend.authentication.api.service.UserService;
 @Service
 @RequiredArgsConstructor
 public class ArtistFavoriteService {
-    private final UserRepository userRepository;
     private final UserService userService;
     private final ArtistFavoriteRepository artistFavoriteRepository;
     private final ArtistRepository artistRepository;
@@ -27,17 +26,17 @@ public class ArtistFavoriteService {
     @Transactional
     public void insert(FavoriteRequestDTO favoriteRequestDTO) throws Exception{
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        User user = userService.getUser(principal.getUsername());
+        String userId = principal.getUsername();
+//        User user = userService.getUser(principal.getUsername());
         Artist artist = artistRepository.findById(favoriteRequestDTO.getArtistId())
                 .orElseThrow(() -> new NotFoundException("아티스트 찾을 수 없음" + favoriteRequestDTO.getArtistId()));
 
-        if (artistFavoriteRepository.findByUserAndArtist(user, artist).isPresent()){
+        if (artistFavoriteRepository.findByUserIdAndArtist(userId, artist).isPresent()){
 
             throw new DuplicateResourceException("이미 좋아요를 한 아티스트입니다" );
         }
         ArtistFavorite artistFavorite = ArtistFavorite.builder()
-                .user(user)
+                .userId(userId)
                 .artist(artist)
                 .build();
         artistFavoriteRepository.save(artistFavorite);
@@ -47,12 +46,13 @@ public class ArtistFavoriteService {
     public void delete(FavoriteRequestDTO favoriteRequestDTO){
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        User user = userService.getUser(principal.getUsername());
+//        User user = userService.getUser(principal.getUsername());
+        String userId = principal.getUsername();
 
         Artist artist = artistRepository.findById(favoriteRequestDTO.getArtistId())
                 .orElseThrow(() -> new NotFoundException("아티스트 찾을 수 없음" + favoriteRequestDTO.getArtistId()));
 
-        ArtistFavorite artistFavorite = artistFavoriteRepository.findByUserAndArtist(user, artist)
+        ArtistFavorite artistFavorite = artistFavoriteRepository.findByUserIdAndArtist(userId, artist)
                 .orElseThrow(() -> new NotFoundException("즐겨찾기 찾을 수 없음"));
 
         artistFavoriteRepository.delete(artistFavorite);
