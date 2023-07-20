@@ -15,16 +15,16 @@ export const ModalStateContext = createContext<ModalState | null>(null)
 export const ModalSetterContext = createContext<ToggleDispatch | null>(null)
 
 // reducer
-function reducer(ModalState: ModalState, action: Action): ModalState {
+function reducer(state: ModalState, action: Action): ModalState {
   switch (action.type) {
     case 'OPEN':
       return {
-        ...ModalState,
+        ...state,
         isOpen: true,
       }
     case 'CLOSE':
       return {
-        ...ModalState,
+        ...state,
         isOpen: false,
       }
     default:
@@ -33,10 +33,10 @@ function reducer(ModalState: ModalState, action: Action): ModalState {
 }
 
 export function ModalProvider({ children }: { children: ReactNode }) {
-  const [ModalState, dispatch] = useReducer(reducer, { type: 'default', isOpen: false })
+  const [state, dispatch] = useReducer(reducer, { type: 'default', isOpen: false })
 
   return (
-    <ModalStateContext.Provider value={ModalState}>
+    <ModalStateContext.Provider value={state}>
       <ModalSetterContext.Provider value={dispatch}>{children}</ModalSetterContext.Provider>
     </ModalStateContext.Provider>
   )
