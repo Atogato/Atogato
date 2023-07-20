@@ -64,8 +64,6 @@ public class ArtistController {
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-//        User user = userService.getUser(principal.getUsername());
-//        Long userId = getUserId(principal);
         String userId = authentication.getName();
 
         try {
