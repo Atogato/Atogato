@@ -1,20 +1,17 @@
 'use client'
-import Filter from './components/Filter';
-import { useEffect, useState } from 'react';
+import Filter from './components/Filter'
+import { useEffect, useState } from 'react'
 
 export type Artists = {
-    artistId: number, 
-    artistName: string, 
-    location: string, 
-    description: string,
-    creatorArtCategory: string, 
-  }
+  artistId: number
+  artistName: string
+  location: string
+  description: string
+  creatorArtCategory: string
+}
 
-  
-export default function List(){
-    const [result, setResult] = useState<Artists[]>([])
-
-
+export default function List() {
+  const [result, setResult] = useState<Artists[]>([])
 
   useEffect(() => {
     const api = async () => {
@@ -28,15 +25,12 @@ export default function List(){
     api()
   }, [])
   console.log(result)
-return (
-  <div>
-      <div className="max-w-5xl mx-auto my-5">
-          <div className="text-2xl text-left my-2">
-              Filters
-          </div>
-          <Filter data={result}/>
+  return (
+    <div>
+      <div className="mx-auto my-5 max-w-5xl">
+        <div className="my-2 text-left text-2xl">Filters</div>
+        <Filter data={result} />
       </div>
-  </div>
-);
-};
-
+    </div>
+  )
+}
