@@ -55,7 +55,7 @@ public class ArtistController {
     public ResponseEntity<String> createArtist(@RequestParam(value = "mainImage") MultipartFile imageFile,
                                                @RequestParam(value = "artistName") String artistName,
                                                @RequestParam(value = "description") String description,
-                                               @RequestParam(value = "liked", defaultValue = "0") int liked,
+                                               @RequestParam(value = "location", required = false) String location,
                                                @RequestParam(value = "creatorArtCategory") String creatorArtCategory,
                                                @RequestParam(value = "interestCategory") String interestCategory,
                                                @RequestParam(value = "snsLink", required = false) String snsLink,
@@ -71,7 +71,7 @@ public class ArtistController {
             artist.setMainImage(imageFile.getBytes());
             artist.setArtistName(artistName);
             artist.setDescription(description);
-            artist.setLiked(liked);
+            artist.setLocation(location);
             artist.setCreatorArtCategory(creatorArtCategory);
             artist.setSnsLink(snsLink);
 
@@ -84,7 +84,6 @@ public class ArtistController {
                 artist.setBirthdate(birthdateObj);
             }
             artist.setUserId(userId);
-//            artist.setUser(user);
             artistRepository.save(artist);
             return ResponseEntity.ok("Artist created successfully.");
 
@@ -102,6 +101,7 @@ public class ArtistController {
 
         existingArtist.setCreatorArtCategory(updateArtist.getCreatorArtCategory());
         existingArtist.setArtistName(updateArtist.getArtistName());
+        existingArtist.setLocation(updateArtist.getLocation());
         existingArtist.setDescription(updateArtist.getDescription());
         existingArtist.setBirthdate(updateArtist.getBirthdate());
         existingArtist.setInterestCategory(updateArtist.getInterestCategory());

@@ -5,24 +5,27 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import portfolio.backend.api.messenge.dto.MessageDto;
+import portfolio.backend.api.messenge.exception.UnauthorizedAccessException;
 import portfolio.backend.api.messenge.response.Response;
 import portfolio.backend.api.messenge.service.MessageService;
 import portfolio.backend.authentication.api.entity.user.User;
 import portfolio.backend.authentication.api.repository.user.UserRepository;
 import portfolio.backend.authentication.api.service.UserService;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/messages")
 public class MessageController {
-
 
     private final MessageService messageService;
     private final UserRepository userRepository;
@@ -31,68 +34,29 @@ public class MessageController {
     @ApiOperation(value = "쪽지 보내기", notes = "쪽지 보내기")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Response<?> sendMessage(@RequestBody MessageDto messageDto, Authentication authentication) {
-
+    public Response<?> sendMessage(@RequestBody String content, @RequestParam String receiverId, @ApiIgnore Authentication authentication) {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.getUser(principal.getUsername());
+        String userId = authentication.getName();
 
-        messageDto.setSenderName(user.getEmail());
+        MessageDto messageDto = new MessageDto();
+        messageDto.setSenderName(userId);
+        messageDto.setReceiverName(receiverId);
+        messageDto.setContent(content);
         messageDto.setCreateDate(LocalDateTime.now());
 
         return new Response<>("성공", "쪽지를 보냈습니다.", messageService.write(messageDto));
     }
 
-
-    @ApiOperation(value = "받은 편지함 읽기", notes = "받은 편지함 확인")
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/received")
-    public Response<?> getReceivedMessage(Authentication authentication) {
-
-        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.getUser(principal.getUsername());
-
-
-        return new Response("성공", "받은 쪽지를 불러왔습니다.", messageService.receivedMessages(user));
+    @ApiOperation(value = "메시지 읽기", notes = "특정 방 ID를 가진 모든 메시지 읽기")
+    @GetMapping("/{roomId}")
+    public Response<?> getMessagesByRoomId(@PathVariable Long roomId, @ApiIgnore Authentication authentication) {
+        String userId = authentication.getName();
+        List<MessageDto> messages = messageService.getMessagesByRoomIdAndUser(roomId, userId);
+        return new Response<>("성공", "메시지를 불러왔습니다.", messages);
     }
 
-    @ApiOperation(value = "보낸 편지함 읽기", notes = "보낸 편지함 확인")
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/sent")
-    public Response<?> getSentMessage(Authentication authentication) {
-
-        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.getUser(principal.getUsername());
-
-        return new Response("성공", "보낸 쪽지를 불러왔습니다.", messageService.sentMessage(user));
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    public ResponseEntity<?> handleUnauthorizedAccess(UnauthorizedAccessException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Error(e.getMessage()));
     }
-
-
-    @ApiOperation(value = "(특정)받은 편지함 읽기", notes = "(특정)받은 편지함 확인")
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/received/detail/{id}")
-    public Response<?> getReceivedMessageDetail(@PathVariable("id") Integer id, Authentication authentication) {
-
-        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.getUser(principal.getUsername());
-
-        MessageDto messageDto = messageService.findMessageById(id);
-
-
-        return new Response("성공", "특정 쪽지를 불러왔습니다.", messageService.findMessageById(id));
-    }
-
-
-    @ApiOperation(value = "(특정)보낸 편지함 읽기", notes = "(특정)보낸 편지함 확인")
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/sent/detail/{id}")
-    public Response<?> getSentMessageDetail(@PathVariable("id") Integer id, Authentication authentication) {
-
-        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.getUser(principal.getUsername());
-
-        MessageDto messageDto = messageService.findMessageById(id);
-
-        return new Response("성공", "특정 쪽지를 불러왔습니다.", messageService.findMessageById(id));
-    }
-
 }

@@ -29,9 +29,13 @@ public class Artist {
     @Column(nullable=false)
     private String artistName;
 
+    @Column(nullable = true) // location can be null
+    private String location;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(nullable = false, columnDefinition = "integer default 0")
     private Integer liked;
 
     @Column(nullable=false)
@@ -74,6 +78,13 @@ public class Artist {
         this.artistName = artistName;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
     public String getDescription() {
         return description;
     }

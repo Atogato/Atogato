@@ -12,19 +12,20 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MessageDto {
 
-
-    private int id;
+    private Long id;
     private String content;
     private String senderName;
     private String receiverName;
+    private Long roomId;
     private LocalDateTime createDate;
 
     public static MessageDto toDto(Message message) {
         return new MessageDto(
                 message.getId(),
                 message.getContent(),
-                message.getSender().getEmail(),
-                message.getReceiver().getEmail(),
+                message.getSender(),
+                message.getReceiver(),
+                message.getRoomId(),
                 message.getCreateDate()
         );
     }
