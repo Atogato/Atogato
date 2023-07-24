@@ -1,6 +1,10 @@
 import ImageUploader from '@/components/uploader/ImageUploader'
 import Editor from '@/components/editor/Editor'
-import { SyntheticEvent, useEffect } from 'react'
+import { SyntheticEvent, ChangeEvent, useEffect, useRef, MutableRefObject, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { localStorage } from '@/app/storage'
+
+const BACKEND_API = 'http://localhost:7072/api/artists'
 
 type Genre = {
   genre: string
@@ -28,27 +32,72 @@ export default function ArtistForm() {
     },
   ]
 
+  const router = useRouter()
+  // TODO: 여러 ref 객체 관리하는 util 함수 정의(refactoring)
+  const artistGenre = useRef('')
+  const artistName = useRef('')
+  const artistContent = useRef('')
+  const artistInterestGenre = useRef('')
+
+  const [imageFile, setImageFile] = useState<File>()
+  const [token, setToken] = useState<string | null>(null)
+
   // TODO: 서버로 FormData 전송
-  const submitHandler = (e: SyntheticEvent) => {
+  const submitHandler = async (e: SyntheticEvent) => {
     e.preventDefault()
+    const formData = new FormData()
+    formData.append('creatorArtCategory', artistGenre.current)
+    formData.append('artistName', artistName.current)
+    formData.append('description', artistContent.current)
+    formData.append('interestCategory', artistInterestGenre.current)
+    if (imageFile) {
+      formData.append('mainImage', imageFile)
+    }
+
+    const res = await fetch(BACKEND_API, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    })
+    if (res.ok) {
+      router.replace('/project/list')
+    }
   }
 
-  const editorHandler = () => {}
-  const dateHandler = () => {}
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>, refObj: MutableRefObject<string>) => {
+    refObj.current = e.target.value
+  }
 
-  useEffect(() => {}, [])
+  const editorHandler = (value: string) => {
+    artistContent.current = value
+  }
+  useEffect(() => {
+    const user = localStorage.getItem('token')
+    setToken(user)
+    router.prefetch('/project/list')
+  }, [router, token])
 
   return (
     // TODO: 일반 문자로 처리한 부분을 next-translate 사용해서 t()형태로 변환
     // TODO: 반복되는 input label 컴포넌트화 및 재활용
-    <form className="flex flex-col space-y-4 pb-10" onSubmit={submitHandler}>
+    <form className="flex flex-col space-y-4 pb-10" encType="multipart/form-data" onSubmit={submitHandler}>
       <div>
         <h2> 아티스트 장르 </h2>
         <div>
           {genreRange.map((elem, idx) => {
             return (
               <div key={`artist-${idx}`}>
-                <input className="mr-1.5" type="radio" id={`artist-${elem.genre}`} name="genre" />
+                <input
+                  className="mr-1.5"
+                  type="radio"
+                  id={`artist-${elem.genre}`}
+                  name="genre"
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    onChangeHandler(e, artistGenre)
+                  }}
+                />
                 <label htmlFor={`artist-${elem.genre}`}>{elem.label}</label>
               </div>
             )
@@ -56,30 +105,37 @@ export default function ArtistForm() {
         </div>
       </div>
       <div>
-        <h2> 프로젝트 이름 </h2>
-        <input className="w-full border-2" type="text" />
+        <h2> 관심 세부 분야 </h2>
+        <input
+          type="text"
+          id="artist-interest-genre"
+          name="artist-interest-genre"
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            onChangeHandler(e, artistInterestGenre)
+          }}
+        />
+      </div>
+      <div>
+        <h2> 아티스트 이름 </h2>
+        <input
+          className="w-full border-2"
+          type="text"
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            onChangeHandler(e, artistName)
+          }}
+        />
       </div>
       <div className="h-52">
-        <h2> 프로젝트 소개 </h2>
+        <h2> 아티스트 소개 </h2>
         <Editor onEditorUpdated={editorHandler} />
       </div>
       <div>
-        <h2> 모집 인원 </h2>
-        <input className="w-5 border-2" type="text" name="people" id="people" />
-        <label htmlFor="people"> 명 </label>
-      </div>
-      <div>
-        <h2> 활동 지역</h2>
-        <select className="border-2" name="area">
-          <option value="seoul">서울</option>
-          <option value="busan">부산</option>
-          <option value="goyang">고양</option>
-          <option value="incheon">인천</option>
-        </select>
-      </div>
-      <div>
-        <h2> 소개 이미지 </h2>
-        <ImageUploader onImageUpload={(image) => {}} />
+        <h2> 메인 이미지 </h2>
+        <ImageUploader
+          onImageUpload={(image) => {
+            setImageFile(image)
+          }}
+        />
       </div>
       <div>
         <h2> 참고 링크 </h2>
