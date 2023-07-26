@@ -44,11 +44,19 @@ public class ArtistController {
         return artistRepository.findAll();
     }
 
+    // 아티스트id 일치 아티스트 GET
     @GetMapping("/{id}")
     public Artist getArtistById(@PathVariable Long id) {
         return artistRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
 
+    }
+
+    // userId 일치 아티스트 GET
+    @GetMapping("users/{id}")
+    public Artist getArtistByUserId(@PathVariable String userId) {
+        return artistRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("user does not have an artist: "));
     }
 
     @PostMapping("")

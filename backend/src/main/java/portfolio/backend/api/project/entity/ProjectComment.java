@@ -16,7 +16,7 @@ public class ProjectComment {
     private Long projectId;
 
     @Column(nullable = false)
-    private String artistId;
+    private String commentUserId;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String comment;
@@ -40,12 +40,12 @@ public class ProjectComment {
         this.projectId = projectId;
     }
 
-    public String getArtistId() {
-        return artistId;
+    public String getCommentUserId() {
+        return commentUserId;
     }
 
-    public void setArtistId(String artistId) {
-        this.artistId = artistId;
+    public void setCommentUserId(String commentUserId) {
+        this.commentUserId = commentUserId;
     }
 
     public String getComment() {
