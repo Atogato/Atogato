@@ -2,6 +2,9 @@ import ImageUploader from '@/components/uploader/ImageUploader'
 import Editor from '@/components/editor/Editor'
 import { SyntheticEvent, ChangeEvent, useState, useRef, MutableRefObject, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { localStorage } from '@/app/storage'
+
+const BACKEND_API = 'http://localhost:7072/api/projects'
 
 // image file FormData 전송 테스트용
 async function toBase64(file: File) {
@@ -24,6 +27,7 @@ type Genre = {
 
 export default function ProjectForm() {
   // TODO: data fetching으로 장르 정보 불러오기
+  const [token, setToken] = useState<string | null>()
   const genreRange: Genre[] = [
     {
       genre: 'acting',
@@ -66,31 +70,26 @@ export default function ProjectForm() {
   const submitHandler = async (e: SyntheticEvent) => {
     e.preventDefault()
     const formData = new FormData()
-    const jsonData = {
-      userId: '1',
-      genre: projectGenre.current,
-      projectName: projectName.current,
-      location: selectedArea.current,
-      deadline: endRequiredDate.current,
-      requiredPeople: requiredPeople.current,
-      description: projectContent.current,
-    }
-    formData.append('info', JSON.stringify(jsonData))
-    // formData.append('genre', projectGenre.current)
-    // formData.append('projectName', projectName.current)
-    // formData.append('location', selectedArea.current)
-    // formData.append('deadline', endRequiredDate.current)
-    // formData.append('requiredPeople', requiredPeople.current)
-    // formData.append('description', projectContent.current)
+
+    formData.append('creatorArtCategory', projectGenre.current)
+    formData.append('projectName', projectName.current)
+    formData.append('location', selectedArea.current)
+    formData.append('deadline', endRequiredDate.current)
+    formData.append('requiredPeople', requiredPeople.current)
+    formData.append('description', projectContent.current)
+    formData.append('requiredCategory', requiredGenre.current)
 
     // TODO: image file을 실제로 보낼 때에는 File 객체 형태로 보내야 함
     // imageFiles.forEach((image, idx) => {
     //   formData.append('files', image, `pjtImage${idx}`)
     // })
-    formData.append('images', JSON.stringify(imageFiles))
+    // formData.append('images', JSON.stringify(imageFiles))
 
-    const res = await fetch('/api/projects', {
+    const res = await fetch(BACKEND_API, {
       method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: formData,
     })
     if (res.ok) {
@@ -99,8 +98,10 @@ export default function ProjectForm() {
   }
 
   useEffect(() => {
+    const user = localStorage.getItem('token')
+    setToken(user)
     router.prefetch('/project/list')
-  }, [router])
+  }, [router, token])
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>, refObj: MutableRefObject<string>) => {
     refObj.current = e.target.value
