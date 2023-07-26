@@ -1,24 +1,18 @@
 import Link from 'next/link'
-type ProjectType = {
-  id: number
-  projectName: string
-  poster: string
-  location: string
-  requiredCategory: string
-  description: string
-}
-interface ProjectProps {
-  project: ProjectType
+import { Projects } from '../page'
+
+type projectsProps = {
+  project: Projects
 }
 
-export default function ProjectCard({ project }: ProjectProps): JSX.Element {
+export default function ProjectCard({ project }: projectsProps): JSX.Element {
   return (
     <div className="flex rounded-lg bg-slate-100">
       <img className="md:w-40 md:rounded-l-lg" src="/images/sample/image.png" width="300" height="300" />
       <div className="relative space-y-2 text-center md:p-3 md:text-left">
         <figcaption className="font-medium">
           <div className="mr-4 text-sky-500 dark:text-sky-400">{project.projectName}</div>
-          <div className="text-sm text-slate-700 dark:text-slate-500">{project.poster}</div>
+          <div className="text-sm text-slate-700 dark:text-slate-500">{project.projectId}</div>
         </figcaption>
         <div className="absolute right-2 top-1">
           <svg
@@ -39,7 +33,7 @@ export default function ProjectCard({ project }: ProjectProps): JSX.Element {
         <p className="text-sm text-slate-700 dark:text-slate-500">{project.description}</p>
         <div className="absolute bottom-3 left-3 text-sm text-slate-700 dark:text-slate-500">모집인원 분야</div>
         <div className="absolute bottom-2 right-2">
-          <Link prefetch={false} href={`/project/detail/${project.id}`}>
+          <Link prefetch={false} href={`/project/detail/${project.projectId}`}>
             <button className="rounded border border-blue-500 bg-transparent px-2 py-1 text-sm text-blue-700 hover:border-transparent hover:bg-blue-500 hover:text-white">
               더보기
             </button>
