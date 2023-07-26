@@ -6,6 +6,7 @@ import portfolio.backend.api.project.entity.ProjectComment;
 import portfolio.backend.api.project.repository.ProjectCommentRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 public class ProjectCommentService {
@@ -16,7 +17,7 @@ public class ProjectCommentService {
     }
 
     public ProjectComment createComment(ProjectComment projectComment){
-        projectComment.setCreatedDate(LocalDate.now());
+        projectComment.setCreatedDate(LocalDateTime.now());
         return projectCommentRepository.save(projectComment);
     }
 }

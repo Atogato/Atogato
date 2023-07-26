@@ -53,7 +53,7 @@ public class ArtistController {
     }
 
     // userId 일치 아티스트 GET
-    @GetMapping("users/{id}")
+    @GetMapping("users/{userId}")
     public Artist getArtistByUserId(@PathVariable String userId) {
         return artistRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("user does not have an artist: "));

@@ -1,8 +1,11 @@
 package portfolio.backend.api.project.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Comment")
@@ -21,7 +24,8 @@ public class ProjectComment {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String comment;
 
-    private LocalDate createdDate;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdDate;
 
 
     public Long getCommentId() {
@@ -56,11 +60,11 @@ public class ProjectComment {
         this.comment = comment;
     }
 
-    public LocalDate getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDate createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 }

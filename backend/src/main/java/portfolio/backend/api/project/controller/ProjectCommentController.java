@@ -42,7 +42,6 @@ public class ProjectCommentController {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userId = authentication.getName();
 
-
         ProjectComment newProjectComment = new ProjectComment();
         newProjectComment.setProjectId(projectId);
         newProjectComment.setCommentUserId(userId);
