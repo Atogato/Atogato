@@ -1,40 +1,26 @@
-export default function Newproject() {
-  const projects = [
-    {
-      id: 1,
-      projectName: 'Project 1',
-      poster: 'name1',
-      description: 'This is the description for Project 1',
-    },
-    {
-      id: 2,
-      projectName: 'Project 2',
-      poster: 'name2',
-      description: 'This is the description for Project 2',
-    },
-    {
-      id: 3,
-      projectName: 'Project 3',
-      poster: 'name3',
-      description: 'This is the description for Project 3',
-    },
-  ]
+import { Projects } from '../page'
+
+type filteredListProps = {
+  data: Projects[]
+}
+export default function Newproject({ data }: filteredListProps): JSX.Element {
+  console.log(data)
   return (
     <div className="mx-auto max-w-5xl">
       <div className="my-2 text-left text-2xl">NEW</div>
       <div className="grid grid-cols-3 place-content-center gap-4">
-        {projects.map((project) => {
+        {data.map((project) => {
           return (
             <div
               className="relative h-80 bg-cover bg-center"
               style={{ backgroundImage: `url('/images/sample/image.png')` }}
-              key={project.id}
+              key={project.projectId}
             >
               <div className="absolute inset-x-0 bottom-0 space-y-2 text-center md:p-3 md:text-left">
                 <div className="absolute left-0 top-0 h-full w-full bg-white opacity-70"></div>
                 <div className="font-medium ">
                   <div className="relative z-10 mr-4 text-sky-500 dark:text-sky-400">{project.projectName}</div>
-                  <div className="relative z-10 text-sm text-slate-700 dark:text-slate-500">{project.poster}</div>
+                  <div className="relative z-10 text-sm text-slate-700 dark:text-slate-500">name</div>
                 </div>
                 <div className="absolute right-2 top-1">
                   <svg
