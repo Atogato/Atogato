@@ -44,7 +44,7 @@ public class ProjectApplicationController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMyApplication(@PathVariable Long id, Authentication authentication) {
+    public void deleteMyApplication(@PathVariable Long id, @ApiIgnore Authentication authentication) {
         String currentUserId = authentication.getName();
         projectApplicationService.deleteMyApplication(id, currentUserId);
     }
