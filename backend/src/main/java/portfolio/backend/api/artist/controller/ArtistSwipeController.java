@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/artists/swipe")
-@Api(tags = "ArtistSwipe")
+@Api(value = "아티스트 스와이프 API")
 public class ArtistSwipeController {
     private final ArtistSwipeService artistSwipeService;
 
