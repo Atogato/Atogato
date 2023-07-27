@@ -21,7 +21,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 
-@Api(value = "프로젝트 API", description = "프로젝트 생성, 정렬, 업데이트, 삭제 등의 REST API")
+@Api(value = "Project", description = "프로젝트 생성, 정렬, 업데이트, 삭제 등의 REST API")
 @RestController
 @RequestMapping("/api/projects")
 public class ProjectController {
@@ -37,12 +37,6 @@ public class ProjectController {
         this.userRepository = userRepository;
     }
 
-    // 전체 프로젝트 GET
-    @GetMapping
-    public List<Project> getAllProjects() {
-        return projectRepository.findAll();
-    }
-
 
     // 특정 프로젝트 PK Param GET
     @GetMapping("/{id}")
@@ -51,14 +45,14 @@ public class ProjectController {
                 .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
     }
 
-    // GET all projects sorted by createdDate
-    @GetMapping("/recently_created")
+    // GET 프로젝트 시간순
+    @GetMapping()
     public List<Project> getAllProjectsByCreatedDate() {
         return projectRepository.findAllByOrderByCreatedDateDesc();
     }
 
-    // GET all projects sorted by projectDeadline and liked
-    @GetMapping("/soon_closing_deadline")
+    // GET 프로젝트 데드라인 정렬
+    @GetMapping("/sorted")
     public List<Project> getAllProjectsByApplicationDeadline() {
         Sort sort = Sort.by(Sort.Order.asc("applicationDeadline"), Sort.Order.desc("liked"));
         return projectRepository.findByApplicationDeadlineAfter(LocalDate.now(), sort);
