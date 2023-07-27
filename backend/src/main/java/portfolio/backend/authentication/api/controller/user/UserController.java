@@ -13,7 +13,7 @@ import portfolio.backend.authentication.common.ApiResponse;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
-@Api(value = "로그인 유저 정보 API")
+@Api(value = "CurrentUser")
 public class UserController {
 
     private final UserService userService;

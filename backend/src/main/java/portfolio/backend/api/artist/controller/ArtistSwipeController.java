@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/artists/swipe")
-@Api(value = "아티스트 스와이프 API")
+@Api(value = "ArtistSwipe")
 public class ArtistSwipeController {
     private final ArtistSwipeService artistSwipeService;
 
@@ -27,10 +27,16 @@ public class ArtistSwipeController {
         return artistSwipeService.getMatchesWhereUserIsInvolved();
     }
 
-    @GetMapping("/received")
-    public List<Artist> getArtistsWhoLikedUser() {
-        return artistSwipeService.getArtistsWhoLikedUser();
+//    @GetMapping("/received")
+//    public List<Artist> getArtistsWhoLikedUser() {
+//        return artistSwipeService.getArtistsWhoLikedUser();
+//    }
+
+    @GetMapping("/sorted")
+    public List<ArtistSwipe> getSwipesSortedByLikedReceiver() {
+        return artistSwipeService.getSwipesSortedByLikedReceiver();
     }
+
 
     @PostMapping("/like")
     public ResponseEntity<String> like(@RequestParam String receiverId) {

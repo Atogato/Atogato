@@ -25,7 +25,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@Api(value = "메세지 API")
+@Api(value = "Message")
 @RequestMapping("/api/messages")
 public class MessageController {
 

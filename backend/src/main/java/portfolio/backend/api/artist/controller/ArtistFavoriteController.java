@@ -15,7 +15,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/artists/favorite")
-@Api(value = "아티스트 즐겨찾기 API")
+@Api(value = "ArtistFavorite")
 public class ArtistFavoriteController {
 
     private final ArtistFavoriteService artistFavoriteService;

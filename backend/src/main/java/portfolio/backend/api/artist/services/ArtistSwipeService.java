@@ -47,6 +47,8 @@ public class ArtistSwipeService {
         }
     }
 
+
+
     public void reject(String receiverId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String senderId = authentication.getName();
@@ -68,6 +70,23 @@ public class ArtistSwipeService {
             artistSwipe.setMatched(false);
             artistSwipeRepository.save(artistSwipe);
         }
+    }
+
+    public List<ArtistSwipe> getSwipesSortedByLikedReceiver() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserId = auth.getName();
+
+        List<ArtistSwipe> swipes = artistSwipeRepository.findAll();
+        swipes.sort((a, b) -> {
+            if (a.getLikedReceiverId().equals(currentUserId) && !b.getLikedReceiverId().equals(currentUserId)) {
+                return -1;
+            } else if (!a.getLikedReceiverId().equals(currentUserId) && b.getLikedReceiverId().equals(currentUserId)) {
+                return 1;
+            }
+            return 0;
+        });
+
+        return swipes;
     }
 
     @Scheduled(cron = "0 0 0 * * ?", zone="Asia/Seoul")
