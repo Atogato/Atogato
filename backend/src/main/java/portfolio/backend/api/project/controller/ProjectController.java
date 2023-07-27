@@ -1,6 +1,8 @@
 package portfolio.backend.api.project.controller;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +21,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 
+@Api(value = "프로젝트 API", description = "프로젝트 생성, 정렬, 업데이트, 삭제 등의 REST API")
 @RestController
 @RequestMapping("/api/projects")
 public class ProjectController {
@@ -48,43 +51,55 @@ public class ProjectController {
                 .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
     }
 
+    // GET all projects sorted by createdDate
+    @GetMapping("/recently_created")
+    public List<Project> getAllProjectsByCreatedDate() {
+        return projectRepository.findAllByOrderByCreatedDateDesc();
+    }
+
+    // GET all projects sorted by projectDeadline and liked
+    @GetMapping("/soon_closing_deadline")
+    public List<Project> getAllProjectsByApplicationDeadline() {
+        Sort sort = Sort.by(Sort.Order.asc("applicationDeadline"), Sort.Order.desc("liked"));
+        return projectRepository.findByApplicationDeadlineAfter(LocalDate.now(), sort);
+    }
+
 
     // 새로운 프로젝트 POST
     @PostMapping
     public Project createProject(
             @RequestParam String projectName,
-            @RequestParam String creatorArtCategory,
-            @RequestParam(defaultValue="0") Long liked,
+            @RequestParam Project.ProjectCategory projectArtCategory,
             @RequestParam(defaultValue="Unknown") String location,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate deadline,
-            @RequestParam List<String> requiredCategory,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate projectDeadline,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate applicationDeadline,
+            @RequestParam List<Project.RequiredCategory> requiredCategory,
             @RequestParam(defaultValue = "true") Boolean swipeAlgorithm,
             @RequestParam(defaultValue = "None") String image,
             @RequestParam String description,
             @RequestParam(defaultValue = "true") Boolean ongoingStatus,
             @RequestParam(defaultValue = "both") String remoteStatus,
-            @RequestParam(defaultValue = "0") List<Long> requiredPeople,
+            @RequestParam(defaultValue = "0") Long requiredPeople,
             @RequestParam(defaultValue = "0") Long participantId,
             @ApiIgnore Authentication authentication) {
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-//        User user = userService.getUser(principal.getUsername());
         String userId = authentication.getName();
 
         Project project = new Project();
 
         project.setUserId(userId);
         project.setProjectName(projectName);
-        project.setCreatorArtCategory(creatorArtCategory);
-        project.setLiked(liked);
+        project.setProjectArtCategory(projectArtCategory);
         project.setLocation(location);
         project.setCreatedDate(LocalDate.now());
         project.setOngoingStatus(ongoingStatus);
         project.setRemoteStatus(remoteStatus);
-        project.setDeadline(deadline);
+        project.setProjectDeadline(projectDeadline);
+        project.setApplicationDeadline(applicationDeadline);
         project.setRequiredCategory(requiredCategory);
-        project.setRequiredPeople((long) requiredCategory.size()); // Calculate the length of the requiredPeople list
+        project.setRequiredPeople(requiredPeople);
         project.setSwipeAlgorithm(swipeAlgorithm);
         project.setImage(image);
         project.setDescription(description);
@@ -101,14 +116,14 @@ public class ProjectController {
 
         existingProject.setProjectName(updatedProject.getProjectName());
         existingProject.setCreatedDate(updatedProject.getCreatedDate());
-        existingProject.setCreatorArtCategory(updatedProject.getCreatorArtCategory());
+        existingProject.setProjectArtCategory(updatedProject.getProjectArtCategory());
         existingProject.setLocation(updatedProject.getLocation());
         existingProject.setSwipeAlgorithm(updatedProject.getSwipeAlgorithm());
-        existingProject.setLiked(updatedProject.getLiked());
         existingProject.setImage(updatedProject.getImage());
         existingProject.setRequiredCategory(updatedProject.getRequiredCategory());
-        existingProject.setRequiredPeople((long) updatedProject.getRequiredCategory().size()); // Calculate the length of the requiredPeople list
-        existingProject.setDeadline(updatedProject.getDeadline());
+        existingProject.setRequiredPeople(updatedProject.getRequiredPeople());
+        existingProject.setProjectDeadline(updatedProject.getProjectDeadline());
+        existingProject.setApplicationDeadline(updatedProject.getApplicationDeadline());
         existingProject.setOngoingStatus(updatedProject.getOngoingStatus());
         existingProject.setRemoteStatus(updatedProject.getRemoteStatus());
         existingProject.setDescription(updatedProject.getDescription());

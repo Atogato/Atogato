@@ -11,6 +11,13 @@ import java.util.List;
 @Table(name="Project")
 public class Project {
 
+    public enum ProjectCategory{
+        공연, 전시, 제작, 기획, 취미
+    }
+
+    public enum RequiredCategory{
+        연기, 노래, 제작, 춤, 작곡
+    }
     @Column(nullable = false)
     private String userId;
 
@@ -29,27 +36,34 @@ public class Project {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate createdDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable=false)
-    private String creatorArtCategory;
+    private ProjectCategory projectArtCategory;
 
     @Column(nullable=true)
     private String location;
 
     @Column(nullable=false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate deadline;
+    private LocalDate projectDeadline;
+
+    @Column(nullable=false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate applicationDeadline;
 
     @Column(nullable=false)
     private Long requiredPeople;
 
     @Column(nullable=false)
-    @ElementCollection
-    private List<String> requiredCategory;
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass=RequiredCategory.class)
+    private List<RequiredCategory> requiredCategory;
     private Boolean swipeAlgorithm;
 
     @Column(nullable=true)
     private String image;
-    private Long liked;
+    @Column(nullable=false)
+    private Integer liked = 0;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -85,14 +99,14 @@ public class Project {
         this.createdDate = createdDate;
     }
 
-    public String getCreatorArtCategory() {
+    public ProjectCategory getProjectArtCategory() {
 
-        return creatorArtCategory;
+        return projectArtCategory;
     }
 
-    public void setCreatorArtCategory(String creatorArtCategory) {
+    public void setProjectArtCategory(ProjectCategory projectArtCategory) {
 
-        this.creatorArtCategory = creatorArtCategory;
+        this.projectArtCategory = projectArtCategory;
     }
 
 
@@ -106,14 +120,24 @@ public class Project {
         this.location = location;
     }
 
-    public LocalDate getDeadline() {
+    public LocalDate getProjectDeadline() {
 
-        return deadline;
+        return projectDeadline;
     }
 
-    public void setDeadline(LocalDate deadline) {
-        this.deadline = deadline;
+    public void setProjectDeadline(LocalDate projectDeadline) {
+        this.projectDeadline = projectDeadline;
     }
+
+    public LocalDate getApplicationDeadline() {
+
+        return applicationDeadline;
+    }
+
+    public void setApplicationDeadline(LocalDate applicationDeadline) {
+        this.applicationDeadline = applicationDeadline;
+    }
+
 
     public Long getRequiredPeople() {
         return requiredPeople;
@@ -123,11 +147,11 @@ public class Project {
         this.requiredPeople = requiredPeople;
     }
 
-    public List<String> getRequiredCategory() {
+    public List<RequiredCategory> getRequiredCategory() {
         return requiredCategory;
     }
 
-    public void setRequiredCategory(List<String> requiredCategory) {
+    public void setRequiredCategory(List<RequiredCategory> requiredCategory) {
         this.requiredCategory = requiredCategory;
     }
 
@@ -157,11 +181,11 @@ public class Project {
     }
 
 
-    public Long getLiked() {
+    public Integer getLiked() {
         return liked;
     }
 
-    public void setLiked(Long liked) {
+    public void setLiked(Integer liked) {
         this.liked = liked;
     }
 

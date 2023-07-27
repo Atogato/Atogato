@@ -1,5 +1,6 @@
 package portfolio.backend.authentication.api.controller.user;
 
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import portfolio.backend.authentication.common.ApiResponse;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
+@Api(value = "로그인 유저 정보 API")
 public class UserController {
 
     private final UserService userService;

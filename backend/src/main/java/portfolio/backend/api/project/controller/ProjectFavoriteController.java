@@ -1,5 +1,6 @@
 package portfolio.backend.api.project.controller;
 
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/projects/favorite")
+@Api(value = "프로젝트 즐겨찾기 API")
 public class ProjectFavoriteController {
 
     private final ProjectFavoriteService projectFavoriteService;

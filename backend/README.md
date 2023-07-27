@@ -16,6 +16,7 @@
 /api/projects/{id} - GET, POST, PUT, DELETE 
 /api/projects/favorite - POST, DELETE
 
+
 # 아티스트 api
 /api/artists      - GET, POST
 /api/artists/{id} - GET, POST, PUT, DELETE 
