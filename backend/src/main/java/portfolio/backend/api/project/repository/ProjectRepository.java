@@ -13,6 +13,6 @@ import java.util.List;
 public interface ProjectRepository extends JpaRepository<Project, Long>, JpaSpecificationExecutor<Project> {
     List<Project> findAllByOrderByCreatedDateDesc();
     List<Project> findByApplicationDeadlineAfter(LocalDate date, Sort sort);
-
+    List<Project> findByUserId(String userId);
 
 }
