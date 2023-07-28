@@ -26,6 +26,13 @@ public class ArtistFavorite {
     @JoinColumn(name = "artistId")
     private Artist artist;
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     @Builder
     public ArtistFavorite(String userId, Artist artist){

@@ -11,7 +11,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/projects_apply_api")
+@RequestMapping("api/projects-apply")
 public class ProjectApplicationController {
     private final ProjectApplicationService projectApplicationService;
 
@@ -25,13 +25,13 @@ public class ProjectApplicationController {
         return projectApplicationService.apply(projectId, currentUserId);
     }
 
-    @GetMapping("/my_projects_applications")
+    @GetMapping("/recieved")
     public List<ProjectApplication> getApplicationsForMyProjects(@ApiIgnore Authentication authentication) {
         String currentUserId = authentication.getName();
         return projectApplicationService.getApplicationsForMyProjects(currentUserId);
     }
 
-    @GetMapping("/my_applications")
+    @GetMapping("/submitted")
     public List<ProjectApplication> getMyApplications(@ApiIgnore Authentication authentication) {
         String currentUserId = authentication.getName();
         return projectApplicationService.getMyApplications(currentUserId);
