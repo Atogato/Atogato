@@ -1,13 +1,10 @@
 'use client'
 import dynamic from 'next/dynamic'
-import { FormTypes, FormUpdateTypes } from '@/types/formTypes'
-
-// TODO: Form type 관련 리펙토링 필요
-export type EntireFormTypes = FormTypes | FormUpdateTypes
+import { FormType, FormUpdateType } from '@/types/form'
 
 type FormProps = {
   classes?: string
-  type: EntireFormTypes
+  type: FormType | FormUpdateType
   children?: React.ReactNode
   contentType?: 'create' | 'update'
 }
@@ -25,7 +22,11 @@ export function Form(props: FormProps) {
 
   return (
     <FormContainer>
-      {contentType === 'update' ? <FormUpdateContent type={type} /> : <FormContent type={type} />}
+      {contentType === 'update' ? (
+        <FormUpdateContent type={type as FormUpdateType} />
+      ) : (
+        <FormContent type={type as FormType} />
+      )}
     </FormContainer>
   )
 }
