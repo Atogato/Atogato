@@ -1,0 +1,64 @@
+name: Build on DockerHub and Deploy to AWS
+on:
+  push:
+    branches:
+      - main
+env:
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  AWS_PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push Docker image (BE)
+        uses: docker/build-push-action@v2
+        with:
+          context: ./backend
+          push: true
+          dockerfile: ./backend/Dockerfile
+          tags: 9907daniel/project_atogato-backend:latest
+      - name: Build and push Docker image (FE)
+        uses: docker/build-push-action@v2
+        with:
+          context: ./frontend
+          push: true
+          dockerfile: ./frontend/Dockerfile
+          tags: 9907daniel/project_atogato-frontend:latest
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_TOKEN }}
+      - name: Set permissions for private key
+        run: |
+          echo "${{ env.AWS_PRIVATE_KEY }}" > key.pem
+          chmod 600 key.pem
+      - name: Pull Docker images and run containers
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@your-ec2-instance-ip <<EOF
+          sudo docker pull 9907daniel/project_atogato-backend:latest
+          sudo docker pull 9907daniel/project_atogato-frontend:latest
+          sudo docker stop project_atogato-backend || true
+          sudo docker rm project_atogato-backend || true
+          sudo docker stop project_atogato-frontend || true
+          sudo docker rm project_atogato-frontend || true
+          sudo docker run -d --name backend -p 7072:7072 9907daniel/project_atogato-backend:latest
+          sudo docker run -d --name frontend -p 3000:3000 9907daniel/project_atogato-frontend:latest
+          EOF
