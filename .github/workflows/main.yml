@@ -23,12 +23,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push Docker Compose services
-        uses: docker-compose-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          file: docker-compose.build.yml
-          push: true
+        run: |
+          docker-compose -f docker-compose.build.yml build
+          docker-compose -f docker-compose.build.yml push
           
 #      - name: Build and push Docker image (BE)
 #        uses: docker/build-push-action@v2
