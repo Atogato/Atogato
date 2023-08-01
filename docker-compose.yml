@@ -17,9 +17,9 @@ services:
   backend:
     container_name: backend
     image : 9907daniel/project_atogato-backend:latest
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    # build:
+    #  context: ./backend
+    #  dockerfile: Dockerfile
     ports:
       - "7072:7072"
     depends_on:
