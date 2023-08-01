@@ -56,10 +56,10 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@43.202.42.114 <<EOF
           sudo docker pull 9907daniel/project_atogato-backend:latest
           sudo docker pull 9907daniel/project_atogato-frontend:latest
-          sudo docker stop project_atogato-backend || true
-          sudo docker rm project_atogato-backend || true
-          sudo docker stop project_atogato-frontend || true
-          sudo docker rm project_atogato-frontend || true
+          sudo docker stop backend || true
+          sudo docker rm backend || true
+          sudo docker stop frontend || true
+          sudo docker rm frontend || true
           sudo docker run -d --name backend -p 7072:7072 9907daniel/project_atogato-backend:latest
           sudo docker run -d --name frontend -p 3000:3000 9907daniel/project_atogato-frontend:latest
           EOF
