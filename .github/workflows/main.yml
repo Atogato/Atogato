@@ -53,7 +53,7 @@ jobs:
           chmod 600 key.pem
       - name: Pull Docker images and run containers
         run: |
-          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@43.202.42.114 <<EOF
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@13.124.171.5 <<EOF
           sudo docker pull 9907daniel/project_atogato-backend:latest
           sudo docker pull 9907daniel/project_atogato-frontend:latest
           sudo docker stop backend || true
