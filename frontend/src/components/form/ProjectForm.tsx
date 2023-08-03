@@ -30,20 +30,24 @@ export default function ProjectForm() {
   const [token, setToken] = useState<string | null>()
   const genreRange: Genre[] = [
     {
-      genre: 'acting',
-      label: '연기',
+      genre: '공연',
+      label: '공연',
     },
     {
-      genre: 'making',
+      genre: '전시',
+      label: '전시',
+    },
+    {
+      genre: '제작',
       label: '제작',
     },
     {
-      genre: 'singing',
-      label: '노래',
+      genre: '기획',
+      label: '기획',
     },
     {
-      genre: 'dancing',
-      label: '춤',
+      genre: '취미',
+      label: '취미',
     },
   ]
 
@@ -71,10 +75,11 @@ export default function ProjectForm() {
     e.preventDefault()
     const formData = new FormData()
 
-    formData.append('creatorArtCategory', projectGenre.current)
+    formData.append('projectArtCategory', projectGenre.current)
     formData.append('projectName', projectName.current)
     formData.append('location', selectedArea.current)
-    formData.append('deadline', endRequiredDate.current)
+    formData.append('projectDeadline', endPjtDate.current)
+    formData.append('applicationDeadline', endRequiredDate.current)
     formData.append('requiredPeople', requiredPeople.current)
     formData.append('description', projectContent.current)
     formData.append('requiredCategory', requiredGenre.current)
@@ -94,6 +99,20 @@ export default function ProjectForm() {
     })
     if (res.ok) {
       router.replace('/project/list')
+    } else if (res.status === 401) {
+      console.log('Unauthorized!')
+      const refreshed = await fetch('/api/auth/refresh', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      if (!refreshed) {
+        throw new Error('No refreshed data from API')
+      }
+      const refreshData = await refreshed.json()
+      console.log('refresh: ', refreshData)
+      localStorage.setItem('token', refreshData.token)
+      setToken(refreshData.token)
     }
   }
 
