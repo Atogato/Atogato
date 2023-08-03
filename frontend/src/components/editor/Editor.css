@@ -19,7 +19,18 @@
   color: darkgray;
 }
 
+.quill {
+  display: flex;
+  flex-direction: column;
+}
+
+.ql-toolbar {
+  min-height: fit-content;
+}
+
+.ql-container {
+  max-height: 80%;
+}
 .ql-editor {
-  height: 150px;
   overflow-y: scroll;
 }

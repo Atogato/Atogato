@@ -60,5 +60,5 @@ export default function Editor(props: EdtiorProps) {
     }
   }, [value])
 
-  return <ReactQuill modules={modules} formats={formats} value={value} onChange={setValue} />
+  return <ReactQuill className="h-96" modules={modules} formats={formats} value={value} onChange={setValue} />
 }
