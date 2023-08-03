@@ -54,6 +54,12 @@ dependencies {
 		exclude group: "org.hamcrest", module: "hamcrest-core"
 	}
 
+	//s3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	//file io
+	implementation 'commons-io:commons-io:2.6'
+
 }
 configurations {
 	all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'

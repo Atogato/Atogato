@@ -1,8 +1,10 @@
 package portfolio.backend.api.artist.controller;
 
+import com.amazonaws.services.s3.AmazonS3;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,18 +14,21 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import portfolio.backend.api.artist.entity.Artist;
 import portfolio.backend.api.artist.repository.ArtistRepository;
-import portfolio.backend.api.project.entity.Project;
+import portfolio.backend.api.imageupload.service.S3Service;
 import portfolio.backend.api.project.exception.ResourceNotFoundException;
-import portfolio.backend.authentication.api.entity.user.User;
 import portfolio.backend.authentication.api.repository.user.UserRepository;
 import portfolio.backend.authentication.api.service.UserService;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/artists")
 @Api(value = "Artist", description = "아티스트 생성, 업데이트, 삭제 등의 REST API")
@@ -31,12 +36,16 @@ public class ArtistController {
     private final ArtistRepository artistRepository;
     private final UserRepository userRepository;
     private final UserService userService;
+    private final AmazonS3 s3Client;
+    private final S3Service s3Service;
 
     @Autowired
-    public ArtistController(ArtistRepository artistRepository, UserRepository userRepository, UserService userService) {
+    public ArtistController(ArtistRepository artistRepository, UserRepository userRepository, UserService userService, AmazonS3 s3Client, S3Service s3Service) {
         this.artistRepository = artistRepository;
         this.userRepository = userRepository;
         this.userService = userService;
+        this.s3Client = s3Client;
+        this.s3Service = s3Service;
     }
 
     @GetMapping
@@ -47,6 +56,9 @@ public class ArtistController {
     // 아티스트id 일치 아티스트 GET
     @GetMapping("/{id}")
     public Artist getArtistById(@PathVariable Long id) {
+
+
+
         return artistRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
 
@@ -68,15 +80,38 @@ public class ArtistController {
                                                @RequestParam(value = "interestCategory") String interestCategory,
                                                @RequestParam(value = "snsLink", required = false) String snsLink,
                                                @RequestParam(value = "birthdate", required = false) String birthdate,
-                                               @ApiIgnore Authentication authentication) {
+                                               @ApiIgnore Authentication authentication) throws IOException {
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String userId = authentication.getName();
 
+        String key = s3Service.saveUploadFile(imageFile);
+        URL imageUrl = s3Client.getUrl("atogatobucket", key);
+
+        //TODO: 이미지 여러 장 access
+//        List<String> imageUrls = new ArrayList<String>();
+//
+//        for (MultipartFile imageFile: imageFiles) {
+//            String key = s3Service.saveUploadFile(imageFile);
+//            URL imageUrl = s3Client.getUrl("atogatobucket", key);
+//            imageUrls.add(String.valueOf(imageUrl));
+//
+//        }
+//
+//        System.out.println("image URL: " + imageUrls);
+
+
+
         try {
             Artist artist = new Artist();
-            artist.setMainImage(imageFile.getBytes());
+
+            //TODO: 이미지 여러 장 저장
+            //artist.setMainImage(imageUrls.get(0));
+
+            //이미지 한 장 저장
+            artist.setMainImage(String.valueOf(imageUrl));
+
             artist.setArtistName(artistName);
             artist.setDescription(description);
             artist.setLocation(location);
@@ -95,7 +130,7 @@ public class ArtistController {
             artistRepository.save(artist);
             return ResponseEntity.ok("Artist created successfully.");
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create artist.");
         }
     }

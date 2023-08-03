@@ -8,6 +8,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import portfolio.backend.authentication.api.entity.user.User;
 
 import javax.persistence.*;
+import java.net.URI;
+import java.net.URL;
 import java.time.LocalDate;
 
 @Getter
@@ -48,11 +50,20 @@ public class Artist {
     private String snsLink;
 
     @Lob
-    private byte[] mainImage;
+    private String mainImage;
 
     @Column(nullable=true)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthdate;
+
+
+    public String getMainImage() {
+        return mainImage;
+    }
+
+    public void setMainImage(String mainImage) {
+        this.mainImage = mainImage;
+    }
 
     public String getUserId() {
         return userId;
@@ -125,13 +136,7 @@ public class Artist {
         this.snsLink = snsLink;
     }
 
-    public byte[] getMainImage() {
-        return mainImage;
-    }
 
-    public void setMainImage(byte[] mainImage) {
-        this.mainImage = mainImage;
-    }
 
     public LocalDate getBirthdate() {
         return birthdate;
