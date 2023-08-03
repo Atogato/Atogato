@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/projects/comments")
-@Api(value = "ProjectComment")
+@Api(tags = {"Project Comment"})
 public class ProjectCommentController {
     private final ProjectCommentRepository projectCommentRepository;
     private final ProjectCommentService projectCommentService;

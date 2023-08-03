@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/projects/favorite")
-@Api(value = "ProjectFavorite")
+@Api(tags = {"Project Likes"})
 public class ProjectFavoriteController {
 
     private final ProjectFavoriteService projectFavoriteService;

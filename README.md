@@ -52,16 +52,16 @@ git status
 ```
 # docker-compose.yml있는 directory로 이동
 
-docker compose build
+docker compose -f docker-compose.dev.yml build
 
 # 실행
-docker compose up
+docker compose -f docker-compose.dev.yml up
 
 # dettached mode 실행
-docker compose up -d
+docker compose -f docker-compose.dev.yml up -d
 
 # 중단
-docker compose down
+docker compose -f docker-compose.dev.yml down
 
 # 주기적으로 사용하지 않는 image들 제거하기
 docker image prune

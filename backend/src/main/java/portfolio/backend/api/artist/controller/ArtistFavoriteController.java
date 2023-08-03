@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/artists/favorite")
-@Api(value = "ArtistFavorite")
+@Api(tags = {"Artist Likes"})
 public class ArtistFavoriteController {
 
     private final ArtistFavoriteService artistFavoriteService;
@@ -36,7 +36,6 @@ public class ArtistFavoriteController {
     public HttpResponseEntity.ResponseResult<?> insert(@RequestBody @Valid FavoriteRequestDTO favoriteRequestDTO,
                                                        @ApiIgnore Authentication authentication) throws Exception {
 //        String currentUserId = authentication.getName();
-//
 //        favoriteRequestDTO.setUserId(currentUserId);
 
         artistFavoriteService.insert(favoriteRequestDTO);

@@ -30,6 +30,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Api(tags = {"User Refresh Token"})
 public class AuthController {
 
     private final AppProperties appProperties;

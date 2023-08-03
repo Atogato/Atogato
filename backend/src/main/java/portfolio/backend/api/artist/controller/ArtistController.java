@@ -26,7 +26,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/artists")
-@Api(value = "Artist", description = "아티스트 생성, 업데이트, 삭제 등의 REST API")
+@Api(tags = {"Artist"}, description = "아티스트 생성, 업데이트, 삭제 등의 REST API")
 public class ArtistController {
     private final ArtistRepository artistRepository;
     private final UserRepository userRepository;

@@ -1,5 +1,6 @@
 package portfolio.backend.api.project.controller;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,6 +13,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/projects-apply")
+@Api(tags = {"Project Application"})
+
 public class ProjectApplicationController {
     private final ProjectApplicationService projectApplicationService;
 
