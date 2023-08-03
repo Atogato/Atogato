@@ -10,15 +10,12 @@ interface ImageUploaderProps {
 export default function ImageUploader(props: ImageUploaderProps) {
   const { onImageUpload, className } = props
 
-  const handleDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      if (acceptedFiles.length > 0) {
-        const imageFile = acceptedFiles[0]
-        onImageUpload(imageFile)
-      }
-    },
-    [onImageUpload],
-  )
+  const handleDrop = (acceptedFiles: File[]) => {
+    if (acceptedFiles.length > 0) {
+      const imageFile = acceptedFiles[0]
+      onImageUpload(imageFile)
+    }
+  }
 
   const handleRejected = useCallback((fileRejections: FileRejection[]) => {
     alert('jpg, png, webp 확장자 이미지만 업로드 가능합니다!')
