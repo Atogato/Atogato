@@ -21,7 +21,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 
-@Api(value = "Project", description = "프로젝트 생성, 정렬, 업데이트, 삭제 등의 REST API")
+@Api(tags = {"Project"})
 @RestController
 @RequestMapping("/api/projects")
 public class ProjectController {

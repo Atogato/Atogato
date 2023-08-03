@@ -29,8 +29,11 @@ public class Artist {
     @Column(nullable=false)
     private String artistName;
 
-    @Column(nullable = true) // location can be null
+    @Column(nullable = true)
     private String location;
+
+    @Column(nullable = true)
+    private String selfIntroduction;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -80,6 +83,14 @@ public class Artist {
 
     public String getLocation() {
         return location;
+    }
+
+    public String getSelfIntroduction() {
+        return selfIntroduction;
+    }
+
+    public void setSelfIntroduction(String selfIntroduction) {
+        this.selfIntroduction = selfIntroduction;
     }
 
     public void setLocation(String location) {

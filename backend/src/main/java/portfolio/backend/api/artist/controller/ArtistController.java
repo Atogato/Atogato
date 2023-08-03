@@ -26,7 +26,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/artists")
-@Api(value = "Artist", description = "아티스트 생성, 업데이트, 삭제 등의 REST API")
+@Api(tags = {"Artist"}, description = "아티스트 생성, 업데이트, 삭제 등의 REST API")
 public class ArtistController {
     private final ArtistRepository artistRepository;
     private final UserRepository userRepository;
@@ -64,6 +64,7 @@ public class ArtistController {
                                                @RequestParam(value = "artistName") String artistName,
                                                @RequestParam(value = "description") String description,
                                                @RequestParam(value = "location", required = false) String location,
+                                               @RequestParam(value = "selfIntroduction", required = false) String selfIntroduction,
                                                @RequestParam(value = "creatorArtCategory") String creatorArtCategory,
                                                @RequestParam(value = "interestCategory") String interestCategory,
                                                @RequestParam(value = "snsLink", required = false) String snsLink,
@@ -77,6 +78,7 @@ public class ArtistController {
         try {
             Artist artist = new Artist();
             artist.setMainImage(imageFile.getBytes());
+            artist.setSelfIntroduction(selfIntroduction);
             artist.setArtistName(artistName);
             artist.setDescription(description);
             artist.setLocation(location);
@@ -109,6 +111,7 @@ public class ArtistController {
 
         existingArtist.setCreatorArtCategory(updateArtist.getCreatorArtCategory());
         existingArtist.setArtistName(updateArtist.getArtistName());
+        existingArtist.setSelfIntroduction(updateArtist.getSelfIntroduction());
         existingArtist.setLocation(updateArtist.getLocation());
         existingArtist.setDescription(updateArtist.getDescription());
         existingArtist.setBirthdate(updateArtist.getBirthdate());

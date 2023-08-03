@@ -16,6 +16,8 @@ import portfolio.backend.authentication.api.entity.user.User;
 import portfolio.backend.authentication.api.repository.user.UserRepository;
 import portfolio.backend.authentication.api.service.UserService;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ArtistFavoriteService {
@@ -23,11 +25,16 @@ public class ArtistFavoriteService {
     private final ArtistFavoriteRepository artistFavoriteRepository;
     private final ArtistRepository artistRepository;
 
+
+    public List<ArtistFavorite> findAllByUserId(String userId) {
+        return artistFavoriteRepository.findAllByUserId(userId);
+    }
+
     @Transactional
     public void insert(FavoriteRequestDTO favoriteRequestDTO) throws Exception{
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userId = principal.getUsername();
-//        User user = userService.getUser(principal.getUsername());
+
         Artist artist = artistRepository.findById(favoriteRequestDTO.getArtistId())
                 .orElseThrow(() -> new NotFoundException("아티스트 찾을 수 없음" + favoriteRequestDTO.getArtistId()));
 
@@ -40,6 +47,9 @@ public class ArtistFavoriteService {
                 .artist(artist)
                 .build();
         artistFavoriteRepository.save(artistFavorite);
+
+        artist.setLiked(artist.getLiked() + 1);
+        artistRepository.save(artist);
     }
 
     @Transactional
@@ -56,6 +66,9 @@ public class ArtistFavoriteService {
                 .orElseThrow(() -> new NotFoundException("즐겨찾기 찾을 수 없음"));
 
         artistFavoriteRepository.delete(artistFavorite);
+
+        artist.setLiked(artist.getLiked() - 1);
+        artistRepository.save(artist);
     }
 
 
