@@ -1,5 +1,6 @@
 package portfolio.backend.api.imageupload.service;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -9,8 +10,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import portfolio.backend.api.artist.repository.ArtistRepository;
+import portfolio.backend.api.imageupload.entity.ExtraUploadFile;
 import portfolio.backend.api.imageupload.entity.UploadFile;
+import portfolio.backend.api.imageupload.repository.ExtraUploadFileRepository;
 import portfolio.backend.api.imageupload.repository.UploadFileRepository;
+
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,13 +26,19 @@ import java.util.UUID;
 public class S3Service {
 
     private final AmazonS3Client amazonS3Client;
+    private final ArtistRepository artistRepository;
     private final UploadFileRepository uploadFileRepository;
+    private final ExtraUploadFileRepository extraUploadFileRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    private final AmazonS3 amazonS3;
+
+    //artist api mainImage 저장
     @Transactional
     public String saveUploadFile(MultipartFile multipartFile) throws IOException {
+
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());
         objectMetadata.setContentLength(multipartFile.getSize());
@@ -37,7 +48,7 @@ public class S3Service {
         String ext = originalFilename.substring(index + 1);
 
         String storeFileName = UUID.randomUUID() + "." + ext;
-        String key = "test/" + storeFileName;
+        String key = "mainImage/" + storeFileName;
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
             amazonS3Client.putObject(new PutObjectRequest(bucket, key, inputStream, objectMetadata)
@@ -50,5 +61,32 @@ public class S3Service {
 
         return key;
     }
+
+    //artist api addtionalImage 저장
+    @Transactional
+    public String extraSaveUploadFile(MultipartFile ExtraMultipartFile) throws IOException {
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType(ExtraMultipartFile.getContentType());
+        objectMetadata.setContentLength(ExtraMultipartFile.getSize());
+
+        String ExtraOriginalFilename = ExtraMultipartFile.getOriginalFilename();
+        int ExtraIndex = ExtraOriginalFilename.lastIndexOf(".");
+        String ExtraExt = ExtraOriginalFilename.substring(ExtraIndex + 1);
+
+        String ExtraStoreFileName = UUID.randomUUID() + "." + ExtraExt;
+        String ExtraKey = "extraImage/" + ExtraStoreFileName;
+
+        try (InputStream inputStream = ExtraMultipartFile.getInputStream()) {
+            amazonS3Client.putObject(new PutObjectRequest(bucket, ExtraKey, inputStream, objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+        }
+
+        String ExtraStoreFileUrl = amazonS3Client.getUrl(bucket, ExtraKey).toString();
+        ExtraUploadFile extraUploadFile = new ExtraUploadFile(ExtraOriginalFilename, ExtraStoreFileUrl);
+        extraUploadFileRepository.save(extraUploadFile);
+
+        return ExtraKey;
+    }
+
 
 }

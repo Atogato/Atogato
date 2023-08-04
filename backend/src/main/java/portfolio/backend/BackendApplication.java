@@ -3,8 +3,8 @@ package portfolio.backend;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -17,6 +17,7 @@ import portfolio.backend.authentication.config.properties.CorsProperties;
 		CorsProperties.class,
 		AppProperties.class
 })
+@PropertySource("classpath:/aws.properties")
 public class BackendApplication {
 
 

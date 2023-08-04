@@ -58,7 +58,6 @@ public class ArtistController {
     public Artist getArtistById(@PathVariable Long id) {
 
 
-
         return artistRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
 
@@ -73,6 +72,7 @@ public class ArtistController {
 
     @PostMapping("")
     public ResponseEntity<String> createArtist(@RequestParam(value = "mainImage") MultipartFile imageFile,
+                                               @RequestParam(value = "extraImage") List<MultipartFile> extraImageFiles,
                                                @RequestParam(value = "artistName") String artistName,
                                                @RequestParam(value = "description") String description,
                                                @RequestParam(value = "location", required = false) String location,
@@ -101,16 +101,25 @@ public class ArtistController {
 //
 //        System.out.println("image URL: " + imageUrls);
 
+        List<String> extraImageUrls = new ArrayList<String>();
+
+        for (MultipartFile extraImageFile : extraImageFiles) {
+            String extraKey = s3Service.extraSaveUploadFile(extraImageFile);
+            URL extraImageUrl = s3Client.getUrl("atogatobucket", extraKey);
+            extraImageUrls.add(String.valueOf(extraImageUrl));
+
+        }
 
 
         try {
             Artist artist = new Artist();
 
-            //TODO: 이미지 여러 장 저장
-            //artist.setMainImage(imageUrls.get(0));
-
             //이미지 한 장 저장
             artist.setMainImage(String.valueOf(imageUrl));
+
+            //TODO: 이미지 여러 장 저장
+            //artist.setMainImage(imageUrls.get(0));
+            artist.setExtraImage(extraImageUrls.toString());
 
             artist.setArtistName(artistName);
             artist.setDescription(description);
@@ -134,9 +143,10 @@ public class ArtistController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create artist.");
         }
     }
+
     @PutMapping("/{id}")
     @ApiOperation(value = "아티스트 업데이트")
-    public Artist updateArtist(@ApiParam(value = "업데이트 하려는 유저", required = true)@PathVariable Long id,
+    public Artist updateArtist(@ApiParam(value = "업데이트 하려는 유저", required = true) @PathVariable Long id,
                                @RequestBody Artist updateArtist) {
 
         Artist existingArtist = artistRepository.findById(id)

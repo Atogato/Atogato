@@ -52,6 +52,9 @@ public class Artist {
     @Lob
     private String mainImage;
 
+    @Lob
+    private String extraImage;
+
     @Column(nullable=true)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthdate;
@@ -63,6 +66,14 @@ public class Artist {
 
     public void setMainImage(String mainImage) {
         this.mainImage = mainImage;
+    }
+
+    public String getExtraImage() {
+        return extraImage;
+    }
+
+    public void setExtraImage(String extraImage) {
+        this.extraImage = extraImage;
     }
 
     public String getUserId() {

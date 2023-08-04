@@ -44,3 +44,5 @@ backend/src/main/resources/.env
 /backend/.env
 
 backend/.idea/
+
+**/aws.properties

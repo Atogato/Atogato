@@ -60,8 +60,9 @@ public class Project {
     private List<RequiredCategory> requiredCategory;
     private Boolean swipeAlgorithm;
 
-    @Column(nullable=true)
+    @Lob
     private String image;
+
     @Column(nullable=false)
     private Integer liked = 0;
 
