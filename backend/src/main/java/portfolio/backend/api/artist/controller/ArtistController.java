@@ -31,7 +31,7 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/api/artists")
-@Api(value = "Artist", description = "아티스트 생성, 업데이트, 삭제 등의 REST API")
+@Api(tags = {"Artist"}, description = "아티스트 생성, 업데이트, 삭제 등의 REST API")
 public class ArtistController {
     private final ArtistRepository artistRepository;
     private final UserRepository userRepository;
@@ -76,6 +76,7 @@ public class ArtistController {
                                                @RequestParam(value = "artistName") String artistName,
                                                @RequestParam(value = "description") String description,
                                                @RequestParam(value = "location", required = false) String location,
+                                               @RequestParam(value = "selfIntroduction", required = false) String selfIntroduction,
                                                @RequestParam(value = "creatorArtCategory") String creatorArtCategory,
                                                @RequestParam(value = "interestCategory") String interestCategory,
                                                @RequestParam(value = "snsLink", required = false) String snsLink,
@@ -89,17 +90,6 @@ public class ArtistController {
         String key = s3Service.saveUploadFile(imageFile);
         URL imageUrl = s3Client.getUrl("atogatobucket", key);
 
-        //TODO: 이미지 여러 장 access
-//        List<String> imageUrls = new ArrayList<String>();
-//
-//        for (MultipartFile imageFile: imageFiles) {
-//            String key = s3Service.saveUploadFile(imageFile);
-//            URL imageUrl = s3Client.getUrl("atogatobucket", key);
-//            imageUrls.add(String.valueOf(imageUrl));
-//
-//        }
-//
-//        System.out.println("image URL: " + imageUrls);
 
         List<String> extraImageUrls = new ArrayList<String>();
 
@@ -120,7 +110,7 @@ public class ArtistController {
             //TODO: 이미지 여러 장 저장
             //artist.setMainImage(imageUrls.get(0));
             artist.setExtraImage(extraImageUrls.toString());
-
+            artist.setSelfIntroduction(selfIntroduction);
             artist.setArtistName(artistName);
             artist.setDescription(description);
             artist.setLocation(location);
@@ -154,6 +144,7 @@ public class ArtistController {
 
         existingArtist.setCreatorArtCategory(updateArtist.getCreatorArtCategory());
         existingArtist.setArtistName(updateArtist.getArtistName());
+        existingArtist.setSelfIntroduction(updateArtist.getSelfIntroduction());
         existingArtist.setLocation(updateArtist.getLocation());
         existingArtist.setDescription(updateArtist.getDescription());
         existingArtist.setBirthdate(updateArtist.getBirthdate());

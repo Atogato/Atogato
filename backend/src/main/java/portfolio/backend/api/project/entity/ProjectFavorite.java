@@ -23,11 +23,17 @@ public class ProjectFavorite {
     private String userId;
 
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projectId")
     private Project project;
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     @Builder
     public ProjectFavorite(String userId, Project project){

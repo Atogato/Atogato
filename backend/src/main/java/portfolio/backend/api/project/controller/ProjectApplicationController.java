@@ -1,5 +1,6 @@
 package portfolio.backend.api.project.controller;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,7 +12,9 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/projects_apply_api")
+@RequestMapping("api/projects-apply")
+@Api(tags = {"Project Application"})
+
 public class ProjectApplicationController {
     private final ProjectApplicationService projectApplicationService;
 
@@ -25,13 +28,13 @@ public class ProjectApplicationController {
         return projectApplicationService.apply(projectId, currentUserId);
     }
 
-    @GetMapping("/my_projects_applications")
+    @GetMapping("/recieved")
     public List<ProjectApplication> getApplicationsForMyProjects(@ApiIgnore Authentication authentication) {
         String currentUserId = authentication.getName();
         return projectApplicationService.getApplicationsForMyProjects(currentUserId);
     }
 
-    @GetMapping("/my_applications")
+    @GetMapping("/submitted")
     public List<ProjectApplication> getMyApplications(@ApiIgnore Authentication authentication) {
         String currentUserId = authentication.getName();
         return projectApplicationService.getMyApplications(currentUserId);

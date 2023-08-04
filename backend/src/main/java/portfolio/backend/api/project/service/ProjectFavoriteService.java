@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import portfolio.backend.api.artist.entity.ArtistFavorite;
 import portfolio.backend.api.artist.exception.DuplicateResourceException;
 import portfolio.backend.api.artist.exception.NotFoundException;
 import portfolio.backend.api.project.dto.FavoriteProjectRequestDTO;
@@ -15,6 +16,8 @@ import portfolio.backend.api.project.repository.ProjectRepository;
 //import portfolio.backend.authentication.api.entity.user.User;
 import portfolio.backend.authentication.api.service.UserService;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProjectFavoriteService {
@@ -22,12 +25,17 @@ public class ProjectFavoriteService {
     private final ProjectFavoriteRepository projectFavoriteRepository;
     private final ProjectRepository projectRepository;
 
+
+    public List<ProjectFavorite> findAllByUserId(String userId) {
+        return projectFavoriteRepository.findAllByUserId(userId);
+    }
+
     @Transactional
     public void insert(FavoriteProjectRequestDTO favoriteProjectRequestDTO) throws Exception{
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         String userId = principal.getUsername();
-//        User user = userService.getUser(principal.getUsername());
+
+
         Project project = projectRepository.findById(favoriteProjectRequestDTO.getProjectId())
                 .orElseThrow(() -> new NotFoundException("프로젝트를 찾을 수 없음" + favoriteProjectRequestDTO.getProjectId()));
 
@@ -40,6 +48,9 @@ public class ProjectFavoriteService {
                 .project(project)
                 .build();
         projectFavoriteRepository.save(projectFavorite);
+
+        project.setLiked(project.getLiked() + 1);
+        projectRepository.save(project);
     }
 
     @Transactional
@@ -57,6 +68,10 @@ public class ProjectFavoriteService {
                 .orElseThrow(() -> new NotFoundException("즐겨찾기 찾을 수 없음"));
 
         projectFavoriteRepository.delete(projectFavorite);
+
+
+        project.setLiked(project.getLiked() + 1);
+        projectRepository.save(project);
     }
 
 }
