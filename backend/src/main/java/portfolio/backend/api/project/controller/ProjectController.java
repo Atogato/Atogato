@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import portfolio.backend.api.imageupload.service.ProjectS3Service;
 import portfolio.backend.api.project.entity.Project;
+import portfolio.backend.api.project.entity.ProjectImages;
 import portfolio.backend.api.project.repository.ProjectRepository;
 
 import portfolio.backend.api.project.exception.ResourceNotFoundException; // Import statement for ResourceNotFoundException
-import portfolio.backend.authentication.api.entity.user.User;
 import portfolio.backend.authentication.api.repository.user.UserRepository;
 import portfolio.backend.authentication.api.service.UserService;
 import springfox.documentation.annotations.ApiIgnore;
@@ -23,10 +23,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @Api(tags = {"Project"})
@@ -53,14 +50,16 @@ public class ProjectController {
     // 특정 프로젝트 PK Param GET
     @GetMapping("/{id}")
     public Project getProjectById(@PathVariable Long id) {
-        return projectRepository.findById(id)
+        Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
+        return project;
     }
 
     // GET 프로젝트 시간순
     @GetMapping()
     public List<Project> getAllProjectsByCreatedDate() {
-        return projectRepository.findAllByOrderByCreatedDateDesc();
+        List<Project> projects = projectRepository.findAllByOrderByCreatedDateDesc();
+        return projects;
     }
 
     // GET 프로젝트 데드라인 정렬
@@ -69,7 +68,6 @@ public class ProjectController {
         Sort sort = Sort.by(Sort.Order.asc("applicationDeadline"), Sort.Order.desc("liked"));
         return projectRepository.findByApplicationDeadlineAfter(LocalDate.now(), sort);
     }
-
 
     // 새로운 프로젝트 POST
     @PostMapping
@@ -86,9 +84,7 @@ public class ProjectController {
             @RequestParam(defaultValue = "true") Boolean ongoingStatus,
             @RequestParam(defaultValue = "both") String remoteStatus,
             @RequestParam(defaultValue = "0") Long requiredPeople,
-            @RequestParam(defaultValue = "0") Long participantId,
-            @ApiIgnore Authentication authentication) throws IOException {
-
+            @ApiIgnore Authentication authentication) {
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -109,6 +105,20 @@ public class ProjectController {
 
         Project project = new Project();
 
+        Set<ProjectImages> projectImages = new HashSet<>();
+
+        for (MultipartFile projectImageFile : projectImageFiles) {
+            String extraKey = projectS3Service.projectSaveUploadFile(projectImageFile);
+            URL projectImageUrl = s3Client.getUrl("atogato", extraKey);
+
+            ProjectImages projectImage = new ProjectImages();
+            projectImage.setImageUrl(projectImageUrl.toString());
+            projectImage.setProject(project);
+
+            projectImages.add(projectImage);
+        }
+
+
         project.setUserId(userId);
         project.setProjectName(projectName);
         project.setProjectArtCategory(projectArtCategory);
@@ -121,7 +131,7 @@ public class ProjectController {
         project.setRequiredCategory(requiredCategory);
         project.setRequiredPeople(requiredPeople);
         project.setSwipeAlgorithm(swipeAlgorithm);
-        project.setImage(projectImageUrlList.toString());
+        project.setImage(image);
         project.setDescription(description);
 
         return projectRepository.save(project);
@@ -138,7 +148,7 @@ public class ProjectController {
         existingProject.setProjectArtCategory(updatedProject.getProjectArtCategory());
         existingProject.setLocation(updatedProject.getLocation());
         existingProject.setSwipeAlgorithm(updatedProject.getSwipeAlgorithm());
-        existingProject.setImage(updatedProject.getImage());
+//        existingProject.setImage(updatedProject.getImage());
         existingProject.setRequiredCategory(updatedProject.getRequiredCategory());
         existingProject.setRequiredPeople(updatedProject.getRequiredPeople());
         existingProject.setProjectDeadline(updatedProject.getProjectDeadline());

@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import portfolio.backend.api.artist.entity.Artist;
+import portfolio.backend.api.artist.entity.ExtraImage;
 import portfolio.backend.api.artist.repository.ArtistRepository;
 import portfolio.backend.api.imageupload.service.S3Service;
 import portfolio.backend.api.project.exception.ResourceNotFoundException;
@@ -81,19 +82,24 @@ public class ArtistController {
 
         String userId = authentication.getName();
 
-        String key = s3Service.saveUploadFile(imageFile);
-        URL imageUrl = s3Client.getUrl("atogatobucket", key);
 
-        List<Map<String, Object>> extraImageUrlsList = new ArrayList<>();
+
+        Optional<Artist> existingArtist = artistRepository.findByUserId(userId);
+        if (existingArtist.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("계정의 아티스트가 이미 등록 되어 있습니다.");
+        }
+
+        String key = s3Service.saveUploadFile(imageFile);
+        URL imageUrl = s3Client.getUrl("atogato", key);
+
+        List<ExtraImage> extraImageEntities = new ArrayList<>();
+
 
         for (MultipartFile extraImageFile : extraImageFiles) {
-            //업로드된 파일 정보 저장: [1] Map에 저장
-            Map<String, Object> extraImageUrls = new HashMap<>();
-            String extraKey = s3Service.extraSaveUploadFile(extraImageFile);
-            URL extraImageUrl = s3Client.getUrl("atogatobucket", extraKey);
-            extraImageUrls.put("extraImageUrl", extraImageUrl);
-            //[2] 여러 개의 Map을 List에 저장
-            extraImageUrlsList.add(extraImageUrls);
+            String extraImageUrl = s3Service.extraSaveUploadFile(extraImageFile);
+            ExtraImage extraImageEntity = new ExtraImage();
+            extraImageEntity.setImageUrl(extraImageUrl);
+            extraImageEntities.add(extraImageEntity);
         }
 
         String portfolioKey = s3Service.portfolioSaveUploadFile(portfolioFile);
@@ -106,7 +112,10 @@ public class ArtistController {
             //이미지 한 장 저장
             artist.setMainImage(String.valueOf(imageUrl));
             //이미지 여러 장 저장
-            artist.setExtraImage(extraImageUrlsList.toString());
+
+            artist.setExtraImages(extraImageEntities);
+
+
             //portfolio file 첨부
             artist.setPortfolio(String.valueOf(portfolioUrl));
             artist.setSelfIntroduction(selfIntroduction);
@@ -125,6 +134,11 @@ public class ArtistController {
                 artist.setBirthdate(birthdateObj);
             }
             artist.setUserId(userId);
+
+            for (ExtraImage extraImage : extraImageEntities) {
+                extraImage.setArtist(artist);
+            }
+
             artistRepository.save(artist);
             return ResponseEntity.ok("Artist created successfully.");
 

@@ -113,9 +113,10 @@ cloud:
     credentials:
       accessKey: ${accessKey}
       secretKey: ${secretKey}
+
     region:
       static: ap-northeast-2
     stack:
       auto: false
     s3:
-      bucket: atogatobucket
+      bucket: atogato

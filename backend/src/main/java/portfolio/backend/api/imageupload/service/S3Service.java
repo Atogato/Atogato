@@ -67,29 +67,32 @@ public class S3Service {
 
     //artist api addtionalImage 저장
     @Transactional
-    public String extraSaveUploadFile(MultipartFile ExtraMultipartFile) throws IOException {
+
+    public String extraSaveUploadFile(MultipartFile extraMultipartFile) throws IOException {
         ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentType(ExtraMultipartFile.getContentType());
-        objectMetadata.setContentLength(ExtraMultipartFile.getSize());
+        objectMetadata.setContentType(extraMultipartFile.getContentType());
+        objectMetadata.setContentLength(extraMultipartFile.getSize());
 
-        String ExtraOriginalFilename = ExtraMultipartFile.getOriginalFilename();
-        int ExtraIndex = ExtraOriginalFilename.lastIndexOf(".");
-        String ExtraExt = ExtraOriginalFilename.substring(ExtraIndex + 1);
+        String extraOriginalFilename = extraMultipartFile.getOriginalFilename();
+        int extraIndex = extraOriginalFilename.lastIndexOf(".");
+        String extraExt = extraOriginalFilename.substring(extraIndex + 1);
 
-        String ExtraStoreFileName = UUID.randomUUID() + "." + ExtraExt;
-        String ExtraKey = "extraImage/" + ExtraStoreFileName;
+        String extraStoreFileName = UUID.randomUUID() + "." + extraExt;
+        String extraKey = "extraImage/" + extraStoreFileName;
 
-        try (InputStream inputStream = ExtraMultipartFile.getInputStream()) {
-            amazonS3Client.putObject(new PutObjectRequest(bucket, ExtraKey, inputStream, objectMetadata)
+        try (InputStream inputStream = extraMultipartFile.getInputStream()) {
+            amazonS3Client.putObject(new PutObjectRequest(bucket, extraKey, inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         }
 
-        String ExtraStoreFileUrl = amazonS3Client.getUrl(bucket, ExtraKey).toString();
-        ExtraUploadFile extraUploadFile = new ExtraUploadFile(ExtraOriginalFilename, ExtraStoreFileUrl);
+        String extraStoreFileUrl = amazonS3Client.getUrl(bucket, extraKey).toString();
+        ExtraUploadFile extraUploadFile = new ExtraUploadFile(extraOriginalFilename, extraStoreFileUrl);
         extraUploadFileRepository.save(extraUploadFile);
 
-        return ExtraKey;
+//        return ExtraKey;
+        return extraStoreFileUrl;
     }
+
 
     //artist api portfolio 저장
     @Transactional

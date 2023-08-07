@@ -1,7 +1,9 @@
 package portfolio.backend.api.artist.entity;
 
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.License;
 import lombok.Getter;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -9,6 +11,9 @@ import portfolio.backend.authentication.api.entity.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Getter
 @DynamicUpdate
@@ -16,7 +21,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name="artists")
 public class Artist {
-
 
     @Column(nullable = false, unique = true)
     private String userId;
@@ -53,8 +57,9 @@ public class Artist {
     @Lob
     private String mainImage;
 
-    @Lob
-    private String extraImage;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist", cascade = CascadeType.ALL)
+    private List<ExtraImage> extraImages = new ArrayList<>();
+
 
     @Lob
     private String portfolio;
@@ -150,12 +155,13 @@ public class Artist {
         this.mainImage = mainImage;
     }
 
-    public String getExtraImage() {
-        return extraImage;
+
+    public List<ExtraImage> getExtraImage() {
+        return extraImages;
     }
 
-    public void setExtraImage(String extraImage) {
-        this.extraImage = extraImage;
+    public void setExtraImages(List<ExtraImage> extraImage) {
+        this.extraImages = extraImage;
     }
 
     public String getPortfolio() {

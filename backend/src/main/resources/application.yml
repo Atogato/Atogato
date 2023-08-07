@@ -126,4 +126,4 @@ cloud:
     stack:
       auto: false
     s3:
-      bucket: atogatobucket
+      bucket: atogato
