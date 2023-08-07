@@ -1,5 +1,6 @@
 package portfolio.backend.api.artist.controller;
 
+import com.amazonaws.services.s3.AmazonS3;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -12,17 +13,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import portfolio.backend.api.artist.entity.Artist;
 import portfolio.backend.api.artist.repository.ArtistRepository;
-import portfolio.backend.api.project.entity.Project;
+import portfolio.backend.api.imageupload.service.S3Service;
 import portfolio.backend.api.project.exception.ResourceNotFoundException;
-import portfolio.backend.authentication.api.entity.user.User;
 import portfolio.backend.authentication.api.repository.user.UserRepository;
 import portfolio.backend.authentication.api.service.UserService;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/artists")
@@ -31,12 +31,16 @@ public class ArtistController {
     private final ArtistRepository artistRepository;
     private final UserRepository userRepository;
     private final UserService userService;
+    private final AmazonS3 s3Client;
+    private final S3Service s3Service;
 
     @Autowired
-    public ArtistController(ArtistRepository artistRepository, UserRepository userRepository, UserService userService) {
+    public ArtistController(ArtistRepository artistRepository, UserRepository userRepository, UserService userService, AmazonS3 s3Client, S3Service s3Service) {
         this.artistRepository = artistRepository;
         this.userRepository = userRepository;
         this.userService = userService;
+        this.s3Client = s3Client;
+        this.s3Service = s3Service;
     }
 
     @GetMapping
@@ -61,6 +65,8 @@ public class ArtistController {
 
     @PostMapping("")
     public ResponseEntity<String> createArtist(@RequestParam(value = "mainImage") MultipartFile imageFile,
+                                               @RequestParam(value = "extraImage") List<MultipartFile> extraImageFiles,
+                                               @RequestParam(value = "portfolio") MultipartFile portfolioFile,
                                                @RequestParam(value = "artistName") String artistName,
                                                @RequestParam(value = "description") String description,
                                                @RequestParam(value = "location", required = false) String location,
@@ -69,15 +75,39 @@ public class ArtistController {
                                                @RequestParam(value = "interestCategory") String interestCategory,
                                                @RequestParam(value = "snsLink", required = false) String snsLink,
                                                @RequestParam(value = "birthdate", required = false) String birthdate,
-                                               @ApiIgnore Authentication authentication) {
+                                               @ApiIgnore Authentication authentication) throws IOException {
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String userId = authentication.getName();
 
+        String key = s3Service.saveUploadFile(imageFile);
+        URL imageUrl = s3Client.getUrl("atogatobucket", key);
+
+        List<Map<String, Object>> extraImageUrlsList = new ArrayList<>();
+
+        for (MultipartFile extraImageFile : extraImageFiles) {
+            //업로드된 파일 정보 저장: [1] Map에 저장
+            Map<String, Object> extraImageUrls = new HashMap<>();
+            String extraKey = s3Service.extraSaveUploadFile(extraImageFile);
+            URL extraImageUrl = s3Client.getUrl("atogatobucket", extraKey);
+            extraImageUrls.put("extraImageUrl", extraImageUrl);
+            //[2] 여러 개의 Map을 List에 저장
+            extraImageUrlsList.add(extraImageUrls);
+        }
+
+        String portfolioKey = s3Service.portfolioSaveUploadFile(portfolioFile);
+        URL portfolioUrl = s3Client.getUrl("atogatobucket", portfolioKey);
+
+
         try {
             Artist artist = new Artist();
-            artist.setMainImage(imageFile.getBytes());
+            //이미지 한 장 저장
+            artist.setMainImage(String.valueOf(imageUrl));
+            //이미지 여러 장 저장
+            artist.setExtraImage(extraImageUrlsList.toString());
+            //portfolio file 첨부
+            artist.setPortfolio(String.valueOf(portfolioUrl));
             artist.setSelfIntroduction(selfIntroduction);
             artist.setArtistName(artistName);
             artist.setDescription(description);
@@ -97,7 +127,7 @@ public class ArtistController {
             artistRepository.save(artist);
             return ResponseEntity.ok("Artist created successfully.");
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create artist.");
         }
     }

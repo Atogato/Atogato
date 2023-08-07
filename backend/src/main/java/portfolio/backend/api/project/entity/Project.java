@@ -60,6 +60,7 @@ public class Project {
     private List<RequiredCategory> requiredCategory;
     private Boolean swipeAlgorithm;
 
+    @Lob
     @Column(nullable=true)
     private String image;
     @Column(nullable=false)

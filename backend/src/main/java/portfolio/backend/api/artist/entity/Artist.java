@@ -51,7 +51,13 @@ public class Artist {
     private String snsLink;
 
     @Lob
-    private byte[] mainImage;
+    private String mainImage;
+
+    @Lob
+    private String extraImage;
+
+    @Lob
+    private String portfolio;
 
     @Column(nullable=true)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -136,12 +142,28 @@ public class Artist {
         this.snsLink = snsLink;
     }
 
-    public byte[] getMainImage() {
+    public String getMainImage() {
         return mainImage;
     }
 
-    public void setMainImage(byte[] mainImage) {
+    public void setMainImage(String mainImage) {
         this.mainImage = mainImage;
+    }
+
+    public String getExtraImage() {
+        return extraImage;
+    }
+
+    public void setExtraImage(String extraImage) {
+        this.extraImage = extraImage;
+    }
+
+    public String getPortfolio() {
+        return portfolio;
+    }
+
+    public void setPortfolio(String portfolio) {
+        this.portfolio = portfolio;
     }
 
     public LocalDate getBirthdate() {

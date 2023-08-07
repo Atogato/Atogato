@@ -1,5 +1,6 @@
 package portfolio.backend.api.project.controller;
 
+import com.amazonaws.services.s3.AmazonS3;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -7,6 +8,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import portfolio.backend.api.imageupload.service.ProjectS3Service;
 import portfolio.backend.api.project.entity.Project;
 import portfolio.backend.api.project.repository.ProjectRepository;
 
@@ -17,8 +20,13 @@ import portfolio.backend.authentication.api.service.UserService;
 import springfox.documentation.annotations.ApiIgnore;
 
 
+import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Api(tags = {"Project"})
@@ -28,13 +36,17 @@ public class ProjectController {
     private final ProjectRepository projectRepository;
     private final UserService userService;
     private final UserRepository userRepository;
+    private final AmazonS3 s3Client;
+    private final ProjectS3Service projectS3Service;
 
 
     @Autowired // project Parameter 생성
-    public ProjectController(ProjectRepository projectRepository, UserRepository userRepository, UserService userService) {
+    public ProjectController(ProjectRepository projectRepository, UserRepository userRepository, UserService userService, AmazonS3 s3Client, ProjectS3Service projectS3Service) {
         this.projectRepository = projectRepository;
         this.userService = userService;
         this.userRepository = userRepository;
+        this.s3Client = s3Client;
+        this.projectS3Service = projectS3Service;
     }
 
 
@@ -69,17 +81,30 @@ public class ProjectController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate applicationDeadline,
             @RequestParam List<Project.RequiredCategory> requiredCategory,
             @RequestParam(defaultValue = "true") Boolean swipeAlgorithm,
-            @RequestParam(defaultValue = "None") String image,
+            @RequestParam(value = "image") List<MultipartFile> projectImageFiles,
             @RequestParam String description,
             @RequestParam(defaultValue = "true") Boolean ongoingStatus,
             @RequestParam(defaultValue = "both") String remoteStatus,
             @RequestParam(defaultValue = "0") Long requiredPeople,
             @RequestParam(defaultValue = "0") Long participantId,
-            @ApiIgnore Authentication authentication) {
+            @ApiIgnore Authentication authentication) throws IOException {
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String userId = authentication.getName();
+
+        List<Map<String, Object>> projectImageUrlList = new ArrayList<>();
+
+        for (MultipartFile projectImageFile : projectImageFiles) {
+            //업로드된 파일 정보 저장: [1] Map에 저장
+            Map<String, Object> projectImageUrls = new HashMap<>();
+            String extraKey = projectS3Service.projectSaveUploadFile(projectImageFile);
+            URL projectImageUrl = s3Client.getUrl("atogatobucket", extraKey);
+            projectImageUrls.put("projectImageUrl", projectImageUrl);
+            //[2] 여러 개의 Map을 List에 저장
+            projectImageUrlList.add(projectImageUrls);
+        }
+
 
         Project project = new Project();
 
@@ -95,7 +120,7 @@ public class ProjectController {
         project.setRequiredCategory(requiredCategory);
         project.setRequiredPeople(requiredPeople);
         project.setSwipeAlgorithm(swipeAlgorithm);
-        project.setImage(image);
+        project.setImage(projectImageUrlList.toString());
         project.setDescription(description);
         project.setParticipantId(participantId);
 
