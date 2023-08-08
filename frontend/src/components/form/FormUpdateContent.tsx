@@ -1,9 +1,13 @@
 import UserUpdateForm from './UserUpdateForm'
-import { EntireFormTypes } from './Form'
+import { FormUpdateType } from '@/types/form'
 
-export default function FormUpdateContent({ type }: { type: Omit<EntireFormTypes, 'login' | 'signup'> }) {
-  if (type === 'user') {
-    return <UserUpdateForm />
-  }
-  return <></>
+const FORM_UPDATE_CONTENT_TYPES = {
+  user: UserUpdateForm,
+  artist: () => <></>,
+  project: () => <></>,
+}
+
+export default function FormUpdateContent({ type }: { type: FormUpdateType }) {
+  const Content = FORM_UPDATE_CONTENT_TYPES[type]
+  return <Content />
 }
