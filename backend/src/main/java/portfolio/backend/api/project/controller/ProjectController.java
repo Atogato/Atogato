@@ -89,6 +89,7 @@ public class ProjectController {
             @RequestParam(defaultValue = "0") Long participantId,
             @ApiIgnore Authentication authentication) throws IOException {
 
+
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String userId = authentication.getName();
@@ -122,7 +123,6 @@ public class ProjectController {
         project.setSwipeAlgorithm(swipeAlgorithm);
         project.setImage(projectImageUrlList.toString());
         project.setDescription(description);
-        project.setParticipantId(participantId);
 
         return projectRepository.save(project);
     }
@@ -146,7 +146,6 @@ public class ProjectController {
         existingProject.setOngoingStatus(updatedProject.getOngoingStatus());
         existingProject.setRemoteStatus(updatedProject.getRemoteStatus());
         existingProject.setDescription(updatedProject.getDescription());
-        existingProject.setParticipantId(updatedProject.getParticipantId());
         return projectRepository.save(existingProject);
     }
 
@@ -157,6 +156,5 @@ public class ProjectController {
                 .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
         projectRepository.delete(project);
     }
-
 
 }

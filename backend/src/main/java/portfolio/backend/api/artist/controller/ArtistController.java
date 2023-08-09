@@ -70,7 +70,7 @@ public class ArtistController {
                                                @RequestParam(value = "artistName") String artistName,
                                                @RequestParam(value = "description") String description,
                                                @RequestParam(value = "location", required = false) String location,
-                                               @RequestParam(value = "selfIntroduction", required = false) String selfIntroduction,
+                                               @RequestParam(value = "selfIntroduction") String selfIntroduction,
                                                @RequestParam(value = "creatorArtCategory") String creatorArtCategory,
                                                @RequestParam(value = "interestCategory") String interestCategory,
                                                @RequestParam(value = "snsLink", required = false) String snsLink,
@@ -98,6 +98,7 @@ public class ArtistController {
 
         String portfolioKey = s3Service.portfolioSaveUploadFile(portfolioFile);
         URL portfolioUrl = s3Client.getUrl("atogatobucket", portfolioKey);
+
 
 
         try {

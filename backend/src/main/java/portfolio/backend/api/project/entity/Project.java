@@ -5,7 +5,9 @@ import portfolio.backend.authentication.api.entity.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="Project")
@@ -69,7 +71,10 @@ public class Project {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    private Long participantId;
+//    private Long participantId;
+
+    @ElementCollection
+    private Set<String> participantArtistIds = new HashSet<>();
 
     public Long getProjectId() {
         return projectId;
@@ -88,6 +93,14 @@ public class Project {
     public void setProjectName(String projectName) {
 
         this.projectName = projectName;
+    }
+
+    public Set<String> getParticipantArtistIds() {
+        return participantArtistIds;
+    }
+
+    public void setParticipantArtistIds(Set<String> participantArtistIds) {
+        this.participantArtistIds = participantArtistIds;
     }
 
     public LocalDate getCreatedDate() {
@@ -214,12 +227,12 @@ public class Project {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-    public Long getParticipantId() {
-        return participantId;
-    }
+//    public Long getParticipantId() {
+//        return participantId;
+//    }
 
-    public void setParticipantId(Long participantId) {
-        this.participantId = participantId;
-    }
+//    public void setParticipantId(Long participantId) {
+//        this.participantId = participantId;
+//    }
 
 }
