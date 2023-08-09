@@ -27,10 +27,6 @@ public class ArtistSwipeController {
         return artistSwipeService.getMatchesWhereUserIsInvolved();
     }
 
-//    @GetMapping("/received")
-//    public List<Artist> getArtistsWhoLikedUser() {
-//        return artistSwipeService.getArtistsWhoLikedUser();
-//    }
 
     @GetMapping("/sorted")
     public List<ArtistSwipe> getSwipesSortedByLikedReceiver() {

@@ -75,6 +75,9 @@ public class User {
     @NotNull
     private LocalDateTime modifiedAt;
 
+    @Column(name = "IS_ARTIST", nullable = false)
+    private boolean isArtist = false;
+
     public User(
             @NotNull @Size(max = 64) String userId,
             @NotNull @Size(max = 100) String username,
