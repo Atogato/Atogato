@@ -1,6 +1,8 @@
 import './globals.css'
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
+import App from './App'
+import { poppins, pretendard } from './fonts'
 
 export const metadata = {
   title: 'Create Next App',
@@ -10,10 +12,12 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <body className="relative">
-        <Navbar />
-        {children}
-        <Footer />
+      <body className={`relative ${pretendard.className} ${poppins.variable}`}>
+        <App>
+          <Navbar />
+          {children}
+          <Footer />
+        </App>
       </body>
     </html>
   )

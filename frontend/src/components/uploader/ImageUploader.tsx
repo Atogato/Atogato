@@ -3,23 +3,22 @@ import React, { useCallback } from 'react'
 import { useDropzone, FileRejection } from 'react-dropzone'
 
 interface ImageUploaderProps {
+  className?: string
   onImageUpload: (image: File) => void
 }
 
 export default function ImageUploader(props: ImageUploaderProps) {
-  const { onImageUpload } = props
-  const handleDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      if (acceptedFiles.length > 0) {
-        const imageFile = acceptedFiles[0]
-        onImageUpload(imageFile)
-      }
-    },
-    [onImageUpload],
-  )
+  const { onImageUpload, className } = props
+
+  const handleDrop = (acceptedFiles: File[]) => {
+    if (acceptedFiles.length > 0) {
+      const imageFile = acceptedFiles[0]
+      onImageUpload(imageFile)
+    }
+  }
 
   const handleRejected = useCallback((fileRejections: FileRejection[]) => {
-    alert('정해진 이미지만 업로드 가능합니다!')
+    alert('jpg, png, webp 확장자 이미지만 업로드 가능합니다!')
   }, [])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -33,11 +32,13 @@ export default function ImageUploader(props: ImageUploaderProps) {
     onDropRejected: handleRejected,
   })
 
+  const customClassName = `dropzone ${isDragActive ? 'active bg-gray-400' : ''} border-2 ${className}`
+
   return (
-    <div {...getRootProps()} className={`dropzone ${isDragActive ? 'active' : ''} border-2`}>
+    <div {...getRootProps()} className={customClassName}>
       <input {...getInputProps()} />
       {isDragActive ? (
-        <p className="bg-black text-white">이미지 업로드 중...</p>
+        <p className="text-white">이미지 업로드 중...</p>
       ) : (
         <p>이미지를 드래그하거나 클릭해서 업로드 하세요</p>
       )}

@@ -2,20 +2,10 @@ import ImageUploader from '@/components/uploader/ImageUploader'
 import Editor from '@/components/editor/Editor'
 import { SyntheticEvent, ChangeEvent, useState, useRef, MutableRefObject, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { localStorage } from '@/app/storage'
+import Image from 'next/image'
 
-// image file FormData 전송 테스트용
-async function toBase64(file: File) {
-  return new Promise((resolve, reject) => {
-    const fileReader = new FileReader()
-    fileReader.readAsDataURL(file)
-    fileReader.onloadend = () => {
-      resolve(fileReader.result)
-    }
-    fileReader.onerror = (error) => {
-      reject(error)
-    }
-  })
-}
+const BACKEND_API = 'http://localhost:7072/api/projects'
 
 type Genre = {
   genre: string
@@ -24,22 +14,27 @@ type Genre = {
 
 export default function ProjectForm() {
   // TODO: data fetching으로 장르 정보 불러오기
+  const [token, setToken] = useState<string | null>()
   const genreRange: Genre[] = [
     {
-      genre: 'acting',
-      label: '연기',
+      genre: '공연',
+      label: '공연',
     },
     {
-      genre: 'making',
+      genre: '전시',
+      label: '전시',
+    },
+    {
+      genre: '제작',
       label: '제작',
     },
     {
-      genre: 'singing',
-      label: '노래',
+      genre: '기획',
+      label: '기획',
     },
     {
-      genre: 'dancing',
-      label: '춤',
+      genre: '취미',
+      label: '취미',
     },
   ]
 
@@ -57,40 +52,33 @@ export default function ProjectForm() {
 
   const startRequiredDate = useRef('')
   const endRequiredDate = useRef('')
-  const youTubeLink = useRef('')
 
-  // const [imageFiles, setImageFiles] = useState<File[]>([])
-  const [imageFiles, setImageFiles] = useState<string[]>([])
+  const [imageFiles, setImageFiles] = useState<File[]>([])
 
   // TODO: 서버로 FormData 전송
   const submitHandler = async (e: SyntheticEvent) => {
     e.preventDefault()
     const formData = new FormData()
-    const jsonData = {
-      userId: '1',
-      genre: projectGenre.current,
-      projectName: projectName.current,
-      location: selectedArea.current,
-      deadline: endRequiredDate.current,
-      requiredPeople: requiredPeople.current,
-      description: projectContent.current,
-    }
-    formData.append('info', JSON.stringify(jsonData))
-    // formData.append('genre', projectGenre.current)
-    // formData.append('projectName', projectName.current)
-    // formData.append('location', selectedArea.current)
-    // formData.append('deadline', endRequiredDate.current)
-    // formData.append('requiredPeople', requiredPeople.current)
-    // formData.append('description', projectContent.current)
+
+    formData.append('projectArtCategory', projectGenre.current)
+    formData.append('projectName', projectName.current)
+    formData.append('location', selectedArea.current)
+    formData.append('projectDeadline', endPjtDate.current)
+    formData.append('applicationDeadline', endRequiredDate.current)
+    formData.append('requiredPeople', requiredPeople.current)
+    formData.append('description', projectContent.current)
+    formData.append('requiredCategory', requiredGenre.current)
 
     // TODO: image file을 실제로 보낼 때에는 File 객체 형태로 보내야 함
-    // imageFiles.forEach((image, idx) => {
-    //   formData.append('files', image, `pjtImage${idx}`)
-    // })
-    formData.append('images', JSON.stringify(imageFiles))
+    imageFiles.forEach((image, idx) => {
+      formData.append('images', image, `pjtImage${idx}`)
+    })
 
-    const res = await fetch('/api/projects', {
+    const res = await fetch(BACKEND_API, {
       method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: formData,
     })
     if (res.ok) {
@@ -99,8 +87,10 @@ export default function ProjectForm() {
   }
 
   useEffect(() => {
+    const user = localStorage.getItem('token')
+    setToken(user)
     router.prefetch('/project/list')
-  }, [router])
+  }, [router, token])
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>, refObj: MutableRefObject<string>) => {
     refObj.current = e.target.value
@@ -113,10 +103,10 @@ export default function ProjectForm() {
   return (
     // TODO: 일반 문자로 처리한 부분을 next-translate 사용해서 t()형태로 변환
     // TODO: 반복되는 input label 컴포넌트화 및 재활용
-    <form className="flex flex-col space-y-4 pb-10" encType="multipart/form-data" onSubmit={submitHandler}>
+    <form className="flex max-w-md flex-col space-y-4 pb-10" encType="multipart/form-data" onSubmit={submitHandler}>
       <div>
         <h2> 프로젝트 장르 </h2>
-        <div>
+        <div className="flex gap-3">
           {genreRange.map((elem, idx) => {
             return (
               <div key={`pjt-${idx}`}>
@@ -146,7 +136,7 @@ export default function ProjectForm() {
           }}
         />
       </div>
-      <div className="h-52">
+      <div>
         <h2> 프로젝트 소개 </h2>
         <Editor onEditorUpdated={editorHandler} />
       </div>
@@ -235,7 +225,7 @@ export default function ProjectForm() {
       </div>
       <div>
         <h2> 필요한 역할 </h2>
-        <div>
+        <div className="flex gap-3">
           {genreRange.map((elem, idx) => {
             return (
               <div key={`required-${idx}`}>
@@ -255,34 +245,29 @@ export default function ProjectForm() {
           })}
         </div>
       </div>
-      <div>
+      <div className="w-full">
         <h2> 소개 이미지 </h2>
-        <ImageUploader
-          onImageUpload={async (image) => {
-            const base64 = await toBase64(image)
-            setImageFiles((prev) => [...prev, base64 as string])
-          }}
-        />
-      </div>
-      <div>
-        <h2> 참고 링크 </h2>
-        <div>
-          <div>
-            <label className="w-1/6" htmlFor="youtube">
-              유튜브{' '}
-            </label>
-            <input
-              className="w-5/6 border-2"
-              type="url"
-              id="youtube"
-              name="youtube"
-              pattern="https://.*"
-              placeholder="https://example.com"
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                onChangeHandler(e, youTubeLink)
-              }}
-            />
-          </div>
+        <div className="flex flex-wrap gap-4">
+          {imageFiles.map((imageFile, idx) => {
+            const previewUrl = URL.createObjectURL(imageFile)
+            return (
+              <div key={`preview-image-${idx}`} className="aspect-square w-2/12">
+                <Image
+                  className="object-fit h-full w-full"
+                  src={previewUrl}
+                  alt={`preview-image-${idx}`}
+                  width={300}
+                  height={300}
+                ></Image>
+              </div>
+            )
+          })}
+          <ImageUploader
+            className="aspect-square w-2/12"
+            onImageUpload={(image) => {
+              setImageFiles((prev) => [...prev, image])
+            }}
+          />
         </div>
       </div>
       <button className="border-2"> 등록하기 </button>

@@ -1,16 +1,23 @@
 'use client'
 
-import { DataObject } from '../page'
+import Image from 'next/image'
+import { DataObject } from './SwipeArtist'
 
 interface DataProps {
   user: DataObject
 }
 
 export default function Phone({ user }: DataProps): JSX.Element {
-  console.log(user)
   return (
     <div className="relative mx-auto h-full max-h-[650px] min-h-[600px] w-full min-w-[320px] max-w-[350px] overflow-auto rounded-3xl border-4  border-zinc-400 bg-gray-200 ">
-      <img alt="name" src="/images/sample/image.png" className=" h-full w-full rounded-t-2xl object-cover" />
+      <div style={{ width: '100%', height: '100%' }}>
+        <Image
+          fill={true}
+          alt="name"
+          src="/images/sample/image.png"
+          className=" h-full w-full rounded-t-2xl object-cover"
+        />
+      </div>
       <div className="absolute inset-0 rounded-t-3xl bg-gradient-to-b from-transparent to-black opacity-100"></div>
       <div className="absolute  h-full w-full bg-gradient-to-b from-black to-transparent opacity-100"></div>
       <div className="absolute bottom-0 left-0 right-0 top-0">
@@ -31,9 +38,9 @@ export default function Phone({ user }: DataProps): JSX.Element {
         </div>
       </div>
       <div className="h-full w-full bg-white"></div>
-      <img alt="name" src="/images/sample/image.png" className="mb-2" />
-      <img alt="name" src="/images/sample/image.png" className="mb-2" />
-      <img alt="name" src="/images/sample/image.png" className="rounded-b-2xl" />
+      <Image alt="name" width={400} height={400} src="/images/sample/image.png" className="mb-2" />
+      <Image alt="name" width={400} height={400} src="/images/sample/image.png" className="mb-2" />
+      <Image alt="name" width={400} height={400} src="/images/sample/image.png" className="rounded-b-2xl" />
     </div>
   )
 }

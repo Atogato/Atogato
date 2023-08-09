@@ -1,18 +1,17 @@
-'use client'
-
 import ArtistForm from './ArtistForm'
 import ProjectForm from './ProjectForm'
-import SignupForm from './SignupForm'
+import LoginForm from './LoginForm'
+import { FormType } from '@/types/form'
 
-type FormContentType = 'project' | 'artist' | 'signup' | 'login'
+const FORM_CONTENT_TYPES = {
+  artist: ArtistForm,
+  project: ProjectForm,
+  login: LoginForm,
+  signup: () => <></>,
+}
 
-export default function FormContent({ type }: { type: FormContentType }) {
-  if (type === 'artist') {
-    return <ArtistForm />
-  } else if (type === 'project') {
-    return <ProjectForm />
-  } else if (type === 'signup') {
-    return <SignupForm />
-  }
-  return <></>
+export default function FormContent({ type }: { type: FormType }) {
+  const Content = FORM_CONTENT_TYPES[type]
+
+  return <Content />
 }
