@@ -10,5 +10,8 @@ import java.util.List;
 public interface ProjectApplicationRepository extends JpaRepository<ProjectApplication, Long> {
     List<ProjectApplication> findByAppliedArtistId(String appliedArtistId);
     List<ProjectApplication> findByProjectId(Long projectId);
+
+    List<ProjectApplication> findByAppliedArtistIdAndApplicationStatus(String appliedArtistId, ProjectApplication.ApplicationStatus applicationStatus);
+
 }
 

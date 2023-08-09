@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio.backend.api.artist.dto.FavoriteRequestDTO;
+import portfolio.backend.api.artist.dto.FavoriteResponseDTO;
 import portfolio.backend.api.artist.entity.Artist;
 import portfolio.backend.api.artist.entity.ArtistFavorite;
 import portfolio.backend.api.artist.exception.DuplicateResourceException;
@@ -16,7 +17,9 @@ import portfolio.backend.authentication.api.entity.user.User;
 import portfolio.backend.authentication.api.repository.user.UserRepository;
 import portfolio.backend.authentication.api.service.UserService;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,8 +29,11 @@ public class ArtistFavoriteService {
     private final ArtistRepository artistRepository;
 
 
-    public List<ArtistFavorite> findAllByUserId(String userId) {
-        return artistFavoriteRepository.findAllByUserId(userId);
+    public List<FavoriteResponseDTO> findAllByUserId(String userId) {
+        List<ArtistFavorite> artistFavorites = artistFavoriteRepository.findAllByUserId(userId);
+        return artistFavorites.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -71,6 +77,18 @@ public class ArtistFavoriteService {
         artistRepository.save(artist);
     }
 
+    private FavoriteResponseDTO convertToDTO(ArtistFavorite artistFavorite) {
+        FavoriteResponseDTO dto = new FavoriteResponseDTO();
+        dto.setArtistId(artistFavorite.getArtist().getArtistId());
 
+        // Fetch the artist information using the artist repository
+        Artist artist = artistRepository.findById(dto.getArtistId())
+                .orElseThrow(() -> new NotFoundException("Artist not found: " + dto.getArtistId()));
+
+        dto.setSelfIntroduction(artist.getSelfIntroduction());
+        dto.setArtistName(artist.getArtistName());
+
+        return dto;
+    }
 
 }

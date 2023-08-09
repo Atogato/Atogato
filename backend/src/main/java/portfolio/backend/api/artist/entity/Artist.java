@@ -18,7 +18,7 @@ import java.time.LocalDate;
 public class Artist {
 
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String userId;
 
     @Id
@@ -32,7 +32,7 @@ public class Artist {
     @Column(nullable = true)
     private String location;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String selfIntroduction;
 
     @Column(columnDefinition = "TEXT")

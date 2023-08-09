@@ -64,7 +64,7 @@ public class ArtistController {
                                                @RequestParam(value = "artistName") String artistName,
                                                @RequestParam(value = "description") String description,
                                                @RequestParam(value = "location", required = false) String location,
-                                               @RequestParam(value = "selfIntroduction", required = false) String selfIntroduction,
+                                               @RequestParam(value = "selfIntroduction") String selfIntroduction,
                                                @RequestParam(value = "creatorArtCategory") String creatorArtCategory,
                                                @RequestParam(value = "interestCategory") String interestCategory,
                                                @RequestParam(value = "snsLink", required = false) String snsLink,
@@ -74,6 +74,11 @@ public class ArtistController {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String userId = authentication.getName();
+
+        Optional<Artist> existingArtist = artistRepository.findByUserId(userId);
+        if (existingArtist.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("계정의 아티스트가 이미 등록 되어 있습니다.");
+        }
 
         try {
             Artist artist = new Artist();

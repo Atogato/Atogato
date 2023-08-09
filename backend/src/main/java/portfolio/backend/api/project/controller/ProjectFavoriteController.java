@@ -4,10 +4,13 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import portfolio.backend.api.artist.dto.FavoriteResponseDTO;
 import portfolio.backend.api.artist.entity.ArtistFavorite;
 import portfolio.backend.api.artist.exception.HttpResponseEntity;
 import portfolio.backend.api.project.dto.FavoriteProjectRequestDTO;
+import portfolio.backend.api.project.dto.FavoriteProjectResponseDTO;
 import portfolio.backend.api.project.entity.ProjectFavorite;
 import portfolio.backend.api.project.service.ProjectFavoriteService;
 import springfox.documentation.annotations.ApiIgnore;
@@ -24,14 +27,18 @@ import java.util.List;
 public class ProjectFavoriteController {
 
     private final ProjectFavoriteService projectFavoriteService;
-    // 프로젝트를 좋아요 누를시 insert function 실행
 
     @GetMapping
-    public List<ProjectFavorite> getAllByUserId(@ApiIgnore Authentication authentication) {
-        String currentUserId = authentication.getName();
-        List<ProjectFavorite> projectFavorites = projectFavoriteService.findAllByUserId(currentUserId);
+    public List<FavoriteProjectResponseDTO> getAllByUserId(@ApiIgnore Authentication authentication) {
+
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String userId = authentication.getName();
+        List<FavoriteProjectResponseDTO> projectFavorites = projectFavoriteService.findAllByUserId(userId);
+
         return projectFavorites;
     }
+
 
     @PostMapping
     public HttpResponseEntity.ResponseResult<?> insert(@RequestBody @Valid FavoriteProjectRequestDTO favoriteProjectRequestDTO) throws Exception {

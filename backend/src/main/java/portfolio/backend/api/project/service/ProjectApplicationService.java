@@ -43,6 +43,15 @@ public class ProjectApplicationService {
         return projectApplicationRepository.findByAppliedArtistId(currentUserId);
     }
 
+
+    public List<Long> getAcceptedProjectsForUser(String userId) {
+        return projectApplicationRepository.findByAppliedArtistIdAndApplicationStatus(userId, ProjectApplication.ApplicationStatus.ACCEPTED)
+                .stream()
+                .map(ProjectApplication::getProjectId)
+                .collect(Collectors.toList());
+    }
+
+
     public ProjectApplication updateApplicationStatus(Long applicationId, ProjectApplication.ApplicationStatus newStatus, String currentUserId) {
         ProjectApplication application = projectApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new ResourceNotFoundException("지원서 찾을수 없음: " + applicationId));
