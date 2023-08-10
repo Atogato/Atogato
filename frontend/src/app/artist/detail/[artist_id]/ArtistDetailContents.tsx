@@ -1,23 +1,38 @@
 'use client'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Artist } from '@/types/artist'
+import DOMPurify from 'dompurify'
 
 const PdfViewer = dynamic(() => import('@/components/pdf-viewer'), { ssr: false })
 
-export default function ArtistDetailContents() {
+export default function ArtistDetailContents({ artist }: { artist: Artist }) {
   const DUMMY = {
     name: 'test',
     genre: '연기',
     description: '안녕하세요. 저는 xx아티스트 입니다.',
     detail: ['무술', '액션', '웹드라마'],
     images: ['image', 'image', 'image', 'image', 'image', 'image'],
+    pdf: '/test.pdf',
   }
 
   const [isOpen, setIsOpen] = useState(false)
+  const [isCleaned, setIsCleaned] = useState<Boolean>(false)
 
   function toggle() {
     setIsOpen((status) => !status)
+  }
+
+  useEffect(() => {
+    if (typeof window != undefined) {
+      artist.description = DOMPurify.sanitize(artist.description)
+      setIsCleaned(true)
+    }
+  }, [])
+
+  if (!artist) {
+    return <> No artist info </>
   }
 
   return (
@@ -27,19 +42,17 @@ export default function ArtistDetailContents() {
         <h2 className="hide"> 아티스트 정보 </h2>
         <div className="w-full">
           <ul>
-            <li> 이름: {DUMMY.name} </li>
-            <li> 장르: {DUMMY.genre} </li>
+            <li> {artist?.artistName} </li>
+            <li> {artist?.creatorArtCategory} </li>
           </ul>
-          <div>
-            <p>{DUMMY.description}</p>
-          </div>
+          {isCleaned ? <div dangerouslySetInnerHTML={{ __html: artist.description }} /> : <> Loading...... </>}
         </div>
         <div>
           <div className="relative">
             <Image
               className="h-auto w-full"
               src="/images/sample/image.png"
-              alt="artist-image"
+              alt="artist main image"
               width={300}
               height={300}
             ></Image>
@@ -66,21 +79,21 @@ export default function ArtistDetailContents() {
           </button>
         </div>
       </section>
-      <section>
+      <section className="mb-5">
         <h2 className="hide"> 관심 분야 </h2>
-        <ul>
-          <li> 관심 분야: </li>
-          <li> 관심 분야: </li>
-          <li> 관심 분야: </li>
+        <ul className="flex justify-around">
+          {DUMMY.detail.map((field, idx) => {
+            return <li key={`detail-field-${idx}`}> 관심 분야: {field} </li>
+          })}
         </ul>
       </section>
-      <section>
+      <section className="mb-5">
         <h2 className="hide"> 아티스트 소개 이미지 </h2>
         <div>
-          <ul className="gird-rows-2 grid grid-cols-3 ">
+          <ul className="gird-rows-2 grid grid-cols-3 gap-5 ">
             {DUMMY.images.map((_, idx) => {
               return (
-                <li key={idx} className="p-4">
+                <li key={idx}>
                   <Image
                     className="h-auto w-full"
                     src="/images/sample/image.png"
@@ -97,24 +110,21 @@ export default function ArtistDetailContents() {
       </section>
       <div className="text-center">
         <h2 className="hide"> 포트폴리오 파일 조회 </h2>
-        <button
-          onClick={() => {
-            toggle()
-          }}
-          className="border-2 hover:bg-sky-400 hover:text-blue-700"
-        >
-          포트폴리오 보기
-        </button>
-        {isOpen ? <PdfViewer /> : <></>}
+        {DUMMY.pdf && (
+          <button onClick={toggle} className="border-2 hover:bg-sky-400 hover:text-blue-700">
+            포트폴리오 보기
+          </button>
+        )}
+        {DUMMY.pdf && isOpen ? <PdfViewer pdf="/test.pdf" /> : <></>}
       </div>
-      <div>
+      {/* <div>
         <h2 className="hide">SNS 링크</h2>
         <ul>
           <li> 유튜브 </li>
           <li> 인스타그램 </li>
           <li> 트위터 </li>
         </ul>
-      </div>
+      </div> */}
     </article>
   )
 }

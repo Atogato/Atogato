@@ -1,3 +1,3 @@
-export default function ArtistDetailContainer({ children }: { children?: JSX.Element }) {
-  return <div>{children}</div>
+export default function ArtistDetailContainer({ className, children }: { className?: string; children?: JSX.Element }) {
+  return <div className="mx-auto max-w-5xl">{children}</div>
 }
