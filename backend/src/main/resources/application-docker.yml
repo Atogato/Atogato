@@ -113,7 +113,6 @@ cloud:
     credentials:
       accessKey: ${accessKey}
       secretKey: ${secretKey}
-
     region:
       static: ap-northeast-2
     stack:

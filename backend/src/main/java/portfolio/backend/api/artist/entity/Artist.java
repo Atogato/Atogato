@@ -48,8 +48,10 @@ public class Artist {
     @Column(nullable=false)
     private String creatorArtCategory;
 
-    @Column(nullable=false)
-    private String interestCategory;
+    @ElementCollection
+    @CollectionTable(name = "artist_interest_categories", joinColumns = @JoinColumn(name = "artist_id"))
+    @Column(name = "interest_category", nullable = false)
+    private List<String> interestCategories = new ArrayList<>();
 
     @Column(nullable=true)
     private String snsLink;
@@ -131,12 +133,12 @@ public class Artist {
         this.creatorArtCategory = creatorArtCategory;
     }
 
-    public String getInterestCategory() {
-        return interestCategory;
+    public List<String> getInterestCategories() {
+        return interestCategories;
     }
 
-    public void setInterestCategory(String interestCategory) {
-        this.interestCategory = interestCategory;
+    public void setInterestCategories(List<String> interestCategories) {
+        this.interestCategories = interestCategories;
     }
 
     public String getSnsLink() {
@@ -155,13 +157,12 @@ public class Artist {
         this.mainImage = mainImage;
     }
 
-
-    public List<ExtraImage> getExtraImage() {
+    public List<ExtraImage> getExtraImages() {
         return extraImages;
     }
 
-    public void setExtraImages(List<ExtraImage> extraImage) {
-        this.extraImages = extraImage;
+    public void setExtraImages(List<ExtraImage> extraImages) {
+        this.extraImages = extraImages;
     }
 
     public String getPortfolio() {

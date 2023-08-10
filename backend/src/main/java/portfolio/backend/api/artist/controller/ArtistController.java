@@ -73,7 +73,7 @@ public class ArtistController {
                                                @RequestParam(value = "location", required = false) String location,
                                                @RequestParam(value = "selfIntroduction") String selfIntroduction,
                                                @RequestParam(value = "creatorArtCategory") String creatorArtCategory,
-                                               @RequestParam(value = "interestCategory") String interestCategory,
+                                               @RequestParam(value = "interestCategory") List<String> interestCategories,
                                                @RequestParam(value = "snsLink", required = false) String snsLink,
                                                @RequestParam(value = "birthdate", required = false) String birthdate,
                                                @ApiIgnore Authentication authentication) throws IOException {
@@ -109,14 +109,8 @@ public class ArtistController {
 
         try {
             Artist artist = new Artist();
-            //이미지 한 장 저장
             artist.setMainImage(String.valueOf(imageUrl));
-            //이미지 여러 장 저장
-
             artist.setExtraImages(extraImageEntities);
-
-
-            //portfolio file 첨부
             artist.setPortfolio(String.valueOf(portfolioUrl));
             artist.setSelfIntroduction(selfIntroduction);
             artist.setArtistName(artistName);
@@ -125,8 +119,8 @@ public class ArtistController {
             artist.setCreatorArtCategory(creatorArtCategory);
             artist.setSnsLink(snsLink);
 
-            if (interestCategory != null) {
-                artist.setInterestCategory(interestCategory);
+            if (interestCategories != null && !interestCategories.isEmpty()) {
+                artist.setInterestCategories(interestCategories);
             }
 
             if (birthdate != null) {
@@ -146,31 +140,76 @@ public class ArtistController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create artist.");
         }
     }
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     @ApiOperation(value = "아티스트 업데이트")
-    public Artist updateArtist(@ApiParam(value = "업데이트 하려는 유저", required = true)@PathVariable Long id,
-                               @RequestBody Artist updateArtist) {
+    public ResponseEntity<?> updateArtist(@ApiParam(value = "업데이트 하려는 유저", required = true)@PathVariable Long id,
+                                          @RequestParam(value = "mainImage", required = false) MultipartFile mainImageFile,
+                                          @RequestParam(value = "portfolio", required = false) MultipartFile portfolioFile,
+                                          @RequestParam Map<String, Object> updates) {
+        String currentUserId = SecurityContextHolder.getContext().getAuthentication().getName();
 
         Artist existingArtist = artistRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
+        if (!existingArtist.getUserId().equals(currentUserId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not the owner of this artist.");
+        }
 
-        existingArtist.setCreatorArtCategory(updateArtist.getCreatorArtCategory());
-        existingArtist.setArtistName(updateArtist.getArtistName());
-        existingArtist.setSelfIntroduction(updateArtist.getSelfIntroduction());
-        existingArtist.setLocation(updateArtist.getLocation());
-        existingArtist.setDescription(updateArtist.getDescription());
-        existingArtist.setBirthdate(updateArtist.getBirthdate());
-        existingArtist.setInterestCategory(updateArtist.getInterestCategory());
-        existingArtist.setSnsLink(updateArtist.getSnsLink());
-        return artistRepository.save(existingArtist);
+        if (updates.containsKey("creatorArtCategory")) {
+            existingArtist.setCreatorArtCategory((String) updates.get("creatorArtCategory"));
+        }
+        if (updates.containsKey("artistName")) {
+            existingArtist.setArtistName((String) updates.get("artistName"));
+        }
+        if (updates.containsKey("selfIntroduction")) {
+            existingArtist.setSelfIntroduction((String) updates.get("selfIntroduction"));
+        }
+        if (updates.containsKey("location")) {
+            existingArtist.setLocation((String) updates.get("location"));
+        }
+        if (updates.containsKey("description")) {
+            existingArtist.setDescription((String) updates.get("description"));
+        }
+        if (updates.containsKey("interestCategories")) {
+            List<String> newInterestCategories = (List<String>) updates.get("interestCategories");
+            existingArtist.setInterestCategories(newInterestCategories);
+        }
+        if (updates.containsKey("snsLink")) {
+            existingArtist.setSnsLink((String) updates.get("snsLink"));
+        }
+        try {
+            if (mainImageFile != null) {
+                String key = s3Service.saveUploadFile(mainImageFile);
+                URL imageUrl = s3Client.getUrl("atogato", key);
+                existingArtist.setMainImage(String.valueOf(imageUrl));
+            }
+            if (portfolioFile != null) {
+                String portfolioKey = s3Service.portfolioSaveUploadFile(portfolioFile);
+                URL portfolioUrl = s3Client.getUrl("atogatobucket", portfolioKey);
+                existingArtist.setPortfolio(String.valueOf(portfolioUrl));
+            }
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while uploading the file to S3. Please try again.");
+        }
+
+        if (updates.containsKey("birthdate")) {
+            LocalDate birthdateObj = LocalDate.parse((String) updates.get("birthdate"));
+            existingArtist.setBirthdate(birthdateObj);
+        }
+        return ResponseEntity.ok(artistRepository.save(existingArtist));
 
     }
 
     @DeleteMapping("/{id}")
-    public void deleteArtist(@PathVariable Long id) {
-        Artist artist = artistRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
-        artistRepository.delete(artist);
-    }
+    public ResponseEntity<?> deleteArtist(@PathVariable Long id) {
+        String currentUserId = SecurityContextHolder.getContext().getAuthentication().getName();
 
+        Artist artistToDelete = artistRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
+        if (!artistToDelete.getUserId().equals(currentUserId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not the owner of this artist.");
+        }
+
+        artistRepository.delete(artistToDelete);
+        return ResponseEntity.ok("Artist deleted successfully.");
+    }
 }
