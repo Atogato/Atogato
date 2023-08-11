@@ -1,7 +1,7 @@
 package portfolio.backend.api.project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
-import portfolio.backend.authentication.api.entity.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -62,15 +62,14 @@ public class Project {
     private List<RequiredCategory> requiredCategory;
     private Boolean swipeAlgorithm;
 
-    @Column(nullable=true)
-    private String image;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ProjectImages> projectImages;
+
     @Column(nullable=false)
     private Integer liked = 0;
 
     @Column(columnDefinition = "TEXT")
     private String description;
-
-//    private Long participantId;
 
     @ElementCollection
     private Set<String> participantArtistIds = new HashSet<>();
@@ -168,6 +167,15 @@ public class Project {
         this.requiredCategory = requiredCategory;
     }
 
+    public Set<ProjectImages> getProjectImages() {
+        return projectImages;
+    }
+
+    public void setProjectImages(Set<ProjectImages> projectImages) {
+        this.projectImages = projectImages;
+    }
+
+
     public Boolean getSwipeAlgorithm() {
         return swipeAlgorithm;
     }
@@ -176,13 +184,6 @@ public class Project {
         this.swipeAlgorithm = swipeAlgorithm;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 
     public String getDescription() {
         return description;
@@ -226,12 +227,5 @@ public class Project {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-//    public Long getParticipantId() {
-//        return participantId;
-//    }
-
-//    public void setParticipantId(Long participantId) {
-//        this.participantId = participantId;
-//    }
 
 }
