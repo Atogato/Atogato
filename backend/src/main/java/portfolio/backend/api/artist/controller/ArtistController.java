@@ -81,9 +81,7 @@ public class ArtistController {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String userId = authentication.getName();
-
-
-
+      
         Optional<Artist> existingArtist = artistRepository.findByUserId(userId);
         if (existingArtist.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("계정의 아티스트가 이미 등록 되어 있습니다.");
@@ -104,7 +102,6 @@ public class ArtistController {
 
         String portfolioKey = s3Service.portfolioSaveUploadFile(portfolioFile);
         URL portfolioUrl = s3Client.getUrl("atogatobucket", portfolioKey);
-
 
 
         try {
