@@ -62,7 +62,6 @@ public class ArtistFavoriteService {
     public void delete(FavoriteRequestDTO favoriteRequestDTO){
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-//        User user = userService.getUser(principal.getUsername());
         String userId = principal.getUsername();
 
         Artist artist = artistRepository.findById(favoriteRequestDTO.getArtistId())

@@ -112,9 +112,8 @@ public class ArtistSwipeService {
     }
 
 
-    public List<Artist> getMatchesWhereUserIsInvolved() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = authentication.getName();
+    public List<Artist> getMatchesWhereUserIsInvolved(String userId) {
+
 
         List<ArtistSwipe> artistSwipe = artistSwipeRepository.findMatchedAndNotRejectedSwipesForUser(userId);
         List<String> userIdsInvolved = artistSwipe.stream()

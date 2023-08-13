@@ -3,10 +3,13 @@ package portfolio.backend.api.artist.controller;
 
 import io.swagger.annotations.Api;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import portfolio.backend.api.artist.entity.Artist;
 import portfolio.backend.api.artist.entity.ArtistSwipe;
 import portfolio.backend.api.artist.services.ArtistSwipeService;
+import portfolio.backend.authentication.api.entity.user.User;
+import portfolio.backend.authentication.api.service.UserService;
 
 import java.util.List;
 
@@ -15,16 +18,24 @@ import java.util.List;
 @Api(tags = {"Artist Swipe"})
 public class ArtistSwipeController {
     private final ArtistSwipeService artistSwipeService;
+    private final UserService userService;
 
-    public ArtistSwipeController(ArtistSwipeService artistSwipeService) {
+
+    public ArtistSwipeController(ArtistSwipeService artistSwipeService, UserService userService) {
         this.artistSwipeService = artistSwipeService;
+        this.userService = userService;
+
     }
 
 
     // 매칭되었다
     @GetMapping("/matched")
+
     public List<Artist> getMatchesWhereUserIsInvolved() {
-        return artistSwipeService.getMatchesWhereUserIsInvolved();
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.getUser(principal.getUsername());
+
+        return artistSwipeService.getMatchesWhereUserIsInvolved(principal.getUsername());
     }
 
 
