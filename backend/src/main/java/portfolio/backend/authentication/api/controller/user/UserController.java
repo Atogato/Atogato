@@ -22,7 +22,7 @@ import portfolio.backend.authentication.common.ApiResponse;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 @Api(tags = {"Current User"})
 public class UserController {
@@ -34,20 +34,17 @@ public class UserController {
     private final ProjectApplicationService projectApplicationService;
     private final ArtistRepository artistRepository;
 
-
     @GetMapping
     public ApiResponse getUser() {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         User user = userService.getUser(principal.getUsername());
         boolean isArtist = artistRepository.findByUserId(user.getUserId()).isPresent();
 
-        List<Artist> matchedArtists = artistSwipeService.getMatchesWhereUserIsInvolved();
+        List<Artist> matchedArtists = artistSwipeService.getMatchesWhereUserIsInvolved(principal.getUsername());
 
         List<FavoriteResponseDTO> favoriteArtists = artistFavoriteService.findAllByUserId(principal.getUsername());
         List<FavoriteProjectResponseDTO> favoriteProjects = projectFavoriteService.findAllByUserId(principal.getUsername());
         List<Long> acceptedProjects = projectApplicationService.getAcceptedProjectsForUser(principal.getUsername());
-
 
         UserWithMatches userWithMatches = new UserWithMatches(user, matchedArtists, favoriteArtists, favoriteProjects, acceptedProjects, isArtist);
 
@@ -71,7 +68,6 @@ public class UserController {
             this.favoriteProjects = favoriteProjects;
             this.acceptedProjects = acceptedProjects;
             this.isArtist = isArtist;
-
         }
     }
 }

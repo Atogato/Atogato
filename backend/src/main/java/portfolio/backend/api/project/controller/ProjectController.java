@@ -5,10 +5,13 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import portfolio.backend.api.artist.entity.Artist;
 import portfolio.backend.api.imageupload.service.ProjectS3Service;
 import portfolio.backend.api.project.entity.Project;
 import portfolio.backend.api.project.entity.ProjectImages;
@@ -23,9 +26,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Api(tags = {"Project"})
@@ -38,8 +39,7 @@ public class ProjectController {
     private final AmazonS3 s3Client;
     private final ProjectS3Service projectS3Service;
 
-
-    @Autowired // project Parameter 생성
+    @Autowired
     public ProjectController(ProjectRepository projectRepository, UserRepository userRepository, UserService userService, AmazonS3 s3Client, ProjectS3Service projectS3Service) {
         this.projectRepository = projectRepository;
         this.userService = userService;
@@ -48,12 +48,11 @@ public class ProjectController {
         this.projectS3Service = projectS3Service;
     }
 
-
     // 특정 프로젝트 PK Param GET
     @GetMapping("/{id}")
     public Project getProjectById(@PathVariable Long id) {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("프로젝트 ID 찾을 수 없음: " + id));
         return project;
     }
 
@@ -89,11 +88,9 @@ public class ProjectController {
             @ApiIgnore Authentication authentication) {
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         String userId = authentication.getName();
 
         Project project = new Project();
-
         Set<ProjectImages> projectImages = new HashSet<>();
 
         for (MultipartFile projectImageFile : projectImageFiles) {
@@ -128,33 +125,67 @@ public class ProjectController {
     }
 
     // 특정 프로젝트 PUT
-    @PutMapping("/{id}")
-    public Project updateProject(@PathVariable Long id, @RequestBody Project updatedProject) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateProject(@PathVariable Long id, @RequestParam Map<String, Object> updates) {
         Project existingProject = projectRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("프로젝트 ID 찾을 수 없음: " + id));
 
-        existingProject.setProjectName(updatedProject.getProjectName());
-        existingProject.setCreatedDate(updatedProject.getCreatedDate());
-        existingProject.setProjectArtCategory(updatedProject.getProjectArtCategory());
-        existingProject.setLocation(updatedProject.getLocation());
-        existingProject.setSwipeAlgorithm(updatedProject.getSwipeAlgorithm());
-//        existingProject.setImage(updatedProject.getImage());
-        existingProject.setRequiredCategory(updatedProject.getRequiredCategory());
-        existingProject.setRequiredPeople(updatedProject.getRequiredPeople());
-        existingProject.setProjectDeadline(updatedProject.getProjectDeadline());
-        existingProject.setApplicationDeadline(updatedProject.getApplicationDeadline());
-        existingProject.setOngoingStatus(updatedProject.getOngoingStatus());
-        existingProject.setRemoteStatus(updatedProject.getRemoteStatus());
-        existingProject.setDescription(updatedProject.getDescription());
-        return projectRepository.save(existingProject);
+        String currentUserId = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (!existingProject.getUserId().equals(currentUserId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("프로젝트 관리자가 아닙니다");
+        }
+
+        if (updates.containsKey("projectName")) {
+            existingProject.setProjectName((String) updates.get("projectName"));
+        }
+        if (updates.containsKey("projectArtCategory")) {
+            existingProject.setProjectArtCategory(Project.ProjectCategory.valueOf((String) updates.get("projectArtCategory")));
+        }
+        if (updates.containsKey("location")) {
+            existingProject.setLocation((String) updates.get("location"));
+        }
+        if (updates.containsKey("projectDeadline")) {
+            existingProject.setProjectDeadline(LocalDate.parse((String) updates.get("projectDeadline")));
+        }
+        if (updates.containsKey("applicationDeadline")) {
+            existingProject.setApplicationDeadline(LocalDate.parse((String) updates.get("applicationDeadline")));
+        }
+        if (updates.containsKey("requiredPeople")) {
+            existingProject.setRequiredPeople(Long.valueOf((String) updates.get("requiredPeople")));
+        }
+        if (updates.containsKey("requiredCategory")) {
+            List<Project.RequiredCategory> categories = Arrays.asList((Project.RequiredCategory[]) updates.get("requiredCategory"));
+            existingProject.setRequiredCategory(categories);
+        }
+        if (updates.containsKey("swipeAlgorithm")) {
+            existingProject.setSwipeAlgorithm(Boolean.parseBoolean((String) updates.get("swipeAlgorithm")));
+        }
+        if (updates.containsKey("description")) {
+            existingProject.setDescription((String) updates.get("description"));
+        }
+        if (updates.containsKey("ongoingStatus")) {
+            existingProject.setOngoingStatus(Boolean.parseBoolean((String) updates.get("ongoingStatus")));
+        }
+        if (updates.containsKey("remoteStatus")) {
+            existingProject.setRemoteStatus((String) updates.get("remoteStatus"));
+        }
+
+        return ResponseEntity.ok(projectRepository.save(existingProject));
     }
 
     // 특정 프레제트 DELETE
     @DeleteMapping("/{id}")
-    public void deleteProject(@PathVariable Long id) {
+    public ResponseEntity<?> deleteProject(@PathVariable Long id) {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("프로젝트 ID 찾을 수 없음: " + id));
+        if (!project.getUserId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("프로젝트 관리자가 아닙니다");
+        }
+
         projectRepository.delete(project);
+        return ResponseEntity.ok("프로젝트 삭제 성공");
+
     }
 
 }

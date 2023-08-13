@@ -1,131 +1,125 @@
-//package portfolio.backend.api.project;
-//
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//import static org.mockito.Mockito.*;
-//
-//import com.amazonaws.services.s3.AmazonS3;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.extension.ExtendWith;
-//import org.mockito.ArgumentCaptor;
-//import org.mockito.Captor;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.junit.jupiter.MockitoExtension;
-//import org.springframework.mock.web.MockMultipartFile;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import portfolio.backend.api.project.controller.ProjectController;
-//import portfolio.backend.api.project.entity.Project;
-//import portfolio.backend.api.project.repository.ProjectRepository;
-//import portfolio.backend.api.project.exception.ResourceNotFoundException;
-//import portfolio.backend.authentication.api.service.UserService;
-//import portfolio.backend.authentication.config.properties.AppProperties;
-//
-//import java.net.URL;
-//import java.time.LocalDate;
-//import java.util.Arrays;
-//import java.util.HashSet;
-//import java.util.Optional;
-//
-//@ExtendWith(MockitoExtension.class)
-//public class ProjectControllerTest {
-//
-//    @InjectMocks
-//    private ProjectController projectController;
-//
-//    @Mock
-//    private ProjectRepository projectRepository;
-//
-//    @Mock
-//    private AmazonS3 s3Client;
-//
-//    @Mock
-//    private Authentication authentication;
-//
-//    @Mock
-//    private UserService userService;
-//
-//    // Mock other dependencies as required
-//
-//    // 테스트 할 두개의 프로젝트
-//    private Project project;
-//    private Project project2;
-//
-//
-//    @BeforeEach
-//    public void setUp() {
-//        project = new Project();
-//
-//        // Setting up basic fields
-//        project.setProjectId(1L);
-//        project.setProjectName("Test Project");
-//
-//        // Setting up other fields
-//        project.setUserId("testUserId");
-//        project.setOngoingStatus(true);
-//        project.setRemoteStatus("both");
-//        project.setCreatedDate(LocalDate.now());
-//        project.setProjectArtCategory(Project.ProjectCategory.공연);
-//        project.setLocation("Test Location");
-//        project.setProjectDeadline(LocalDate.now().plusDays(10));
-//        project.setApplicationDeadline(LocalDate.now().plusDays(5));
-//        project.setRequiredPeople(5L);
-//        project.setRequiredCategory(Arrays.asList(Project.RequiredCategory.연기, Project.RequiredCategory.노래));
-//        project.setSwipeAlgorithm(true);
-//
-//        // For project images, we'll just set up an empty set for simplicity in this test setup
-//        project.setProjectImages(new HashSet<>());
-//        project.setDescription("This is a test project description.");
-//
-//        // Setting up an empty set for participant artist IDs as a placeholder
-//        project.setParticipantArtistIds(new HashSet<>());
-//
-//        project2 = new Project();
-//        // Setting up basic fields for the second project
-//        project2.setProjectId(2L);
-//        project2.setProjectName("Test Project 2");
-//
-//        // Setting up other fields for the second project
-//        project2.setUserId("testUserId2");
-//        project2.setOngoingStatus(false);
-//        project2.setRemoteStatus("remote");
-//        project2.setCreatedDate(LocalDate.now().minusDays(1));
-//        project2.setProjectArtCategory(Project.ProjectCategory.전시);
-//        project2.setLocation("Test Location 2");
-//        project2.setProjectDeadline(LocalDate.now().plusDays(20));
-//        project2.setApplicationDeadline(LocalDate.now().plusDays(15));
-//        project2.setRequiredPeople(10L);
-//        project2.setRequiredCategory(Arrays.asList(Project.RequiredCategory.노래, Project.RequiredCategory.작곡));
-//        project2.setSwipeAlgorithm(false);
-//        project2.setProjectImages(new HashSet<>());
-//        project2.setDescription("This is a test project description for the second project.");
-//        project2.setParticipantArtistIds(new HashSet<>());
-//    }
-//
-//    @Test
-//    public void testGetProjectById() {
-//        when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
-//
-//        Project result = projectController.getProjectById(1L);
-//        assertNotNull(result);
-//        assertEquals("Test Project", result.getProjectName());
-//
-//        when(projectRepository.findById(2L)).thenReturn(Optional.of(project2));
-//
-//        Project result2 = projectController.getProjectById(2L);
-//        assertNotNull(result2);
-//        assertEquals("Test Project 2", result2.getProjectName());
-//    }
-//
-//    @Test
-//    public void testGetProjectById_NotFound() {
-//        when(projectRepository.findById(1L)).thenReturn(Optional.empty());
-//
-//        assertThrows(ResourceNotFoundException.class, () -> projectController.getProjectById(1L));
-//    }
-//
+package portfolio.backend.api.project;
+
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.amazonaws.services.s3.AmazonS3;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import portfolio.backend.api.project.controller.ProjectController;
+import portfolio.backend.api.project.entity.Project;
+import portfolio.backend.api.project.repository.ProjectRepository;
+import portfolio.backend.api.project.exception.ResourceNotFoundException;
+import portfolio.backend.authentication.api.service.UserService;
+import portfolio.backend.authentication.config.properties.AppProperties;
+
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
+
+@ExtendWith(MockitoExtension.class)
+public class ProjectControllerTest {
+
+    @InjectMocks
+    private ProjectController projectController;
+
+    @Mock
+    private ProjectRepository projectRepository;
+
+    @Mock
+    private AmazonS3 s3Client;
+
+    @Mock
+    private Authentication authentication;
+
+    @Mock
+    private UserService userService;
+
+    // 테스트 할 두개의 프로젝트
+    private Project project;
+    private Project project2;
+
+
+    @BeforeEach
+    public void setUp() {
+        project = new Project();
+
+        project.setProjectId(1L);
+        project.setProjectName("Test Project");
+
+        project.setUserId("testUserId");
+        project.setOngoingStatus(true);
+        project.setRemoteStatus("both");
+        project.setCreatedDate(LocalDate.now());
+        project.setProjectArtCategory(Project.ProjectCategory.공연);
+        project.setLocation("Test Location");
+        project.setProjectDeadline(LocalDate.now().plusDays(10));
+        project.setApplicationDeadline(LocalDate.now().plusDays(5));
+        project.setRequiredPeople(5L);
+        project.setRequiredCategory(Arrays.asList(Project.RequiredCategory.연기, Project.RequiredCategory.노래));
+        project.setSwipeAlgorithm(true);
+
+        project.setProjectImages(new HashSet<>());
+        project.setDescription("This is a test project description.");
+
+        project.setParticipantArtistIds(new HashSet<>());
+
+        project2 = new Project();
+        // Setting up basic fields for the second project
+        project2.setProjectId(2L);
+        project2.setProjectName("Test Project 2");
+
+        // Setting up other fields for the second project
+        project2.setUserId("testUserId2");
+        project2.setOngoingStatus(false);
+        project2.setRemoteStatus("remote");
+        project2.setCreatedDate(LocalDate.now().minusDays(1));
+        project2.setProjectArtCategory(Project.ProjectCategory.전시);
+        project2.setLocation("Test Location 2");
+        project2.setProjectDeadline(LocalDate.now().plusDays(20));
+        project2.setApplicationDeadline(LocalDate.now().plusDays(15));
+        project2.setRequiredPeople(10L);
+        project2.setRequiredCategory(Arrays.asList(Project.RequiredCategory.노래, Project.RequiredCategory.작곡));
+        project2.setSwipeAlgorithm(false);
+        project2.setProjectImages(new HashSet<>());
+        project2.setDescription("This is a test project description for the second project.");
+        project2.setParticipantArtistIds(new HashSet<>());
+    }
+
+    @Test
+    public void testGetProjectById() {
+        when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
+
+        Project result = projectController.getProjectById(1L);
+        assertNotNull(result);
+        assertEquals("Test Project", result.getProjectName());
+
+        when(projectRepository.findById(2L)).thenReturn(Optional.of(project2));
+
+        Project result2 = projectController.getProjectById(2L);
+        assertNotNull(result2);
+        assertEquals("Test Project 2", result2.getProjectName());
+    }
+
+    @Test
+    public void testGetProjectById_NotFound() {
+        when(projectRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> projectController.getProjectById(1L));
+    }
+
 //    @Test
 //    public void testCreateProject() throws Exception {
 //        // Mock the Authentication object and set it in the SecurityContextHolder
@@ -169,10 +163,9 @@
 //        verify(s3Client, times(1)).getUrl(anyString(), anyString());
 //        verify(mockAuthentication, times(1)).getName();
 //    }
-//
-//    // Outside the test method, define the ArgumentCaptor
-//    @Captor
-//    private ArgumentCaptor<Project> argumentCaptor;
-//
-//
-//}
+
+    @Captor
+    private ArgumentCaptor<Project> argumentCaptor;
+
+
+}
