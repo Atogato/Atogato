@@ -39,16 +39,17 @@ public class ArtistFavoriteController {
 
     // 아티스트 좋아요 누를시 insert function 실행
     @PostMapping
-    public HttpResponseEntity.ResponseResult<?> insert(@RequestBody @Valid FavoriteRequestDTO favoriteRequestDTO,
+    public HttpResponseEntity.ResponseResult<?> insert(@RequestParam Long artistId,
                                                        @ApiIgnore Authentication authentication) throws Exception {
-
+        FavoriteRequestDTO favoriteRequestDTO = new FavoriteRequestDTO(artistId);
         artistFavoriteService.insert(favoriteRequestDTO);
         return HttpResponseEntity.success();
     }
 
     // 아티스트 좋아요 한번 더 누를시 delete function 실행
     @DeleteMapping
-    public HttpResponseEntity.ResponseResult<?> delete(@RequestBody @Valid FavoriteRequestDTO favoriteRequestDTO){
+    public HttpResponseEntity.ResponseResult<?> delete(@RequestParam Long artistId){
+        FavoriteRequestDTO favoriteRequestDTO = new FavoriteRequestDTO(artistId);
         artistFavoriteService.delete(favoriteRequestDTO);
         return HttpResponseEntity.success();
     }

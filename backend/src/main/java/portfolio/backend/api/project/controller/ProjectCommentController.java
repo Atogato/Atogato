@@ -23,12 +23,14 @@ public class ProjectCommentController {
     private final ProjectCommentRepository projectCommentRepository;
     private final ProjectCommentService projectCommentService;
 
+    private final ProjectRepository projectRepository;
+
     @Autowired
-    public ProjectCommentController(ProjectCommentRepository projectCommentRepository, ProjectCommentService projectCommentService) {
+    public ProjectCommentController(ProjectCommentRepository projectCommentRepository, ProjectCommentService projectCommentService, ProjectRepository projectRepository) {
         this.projectCommentRepository = projectCommentRepository;
         this.projectCommentService = projectCommentService;
+        this.projectRepository = projectRepository;
     }
-    
 
     @GetMapping("/{projectId}")
     public List<ProjectComment> getCommentsByProjectId(@PathVariable Long projectId) {
@@ -39,6 +41,10 @@ public class ProjectCommentController {
     public ProjectComment createComment(@RequestParam("projectId") Long projectId,
                                         @RequestParam("comment") String comment,
                                         @ApiIgnore Authentication authentication) {
+        if (!projectRepository.existsById(projectId)) {
+            throw new ResourceNotFoundException("프로젝트 ID를 차지 못했습니다: " + projectId);
+        }
+
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userId = authentication.getName();
 
@@ -49,12 +55,12 @@ public class ProjectCommentController {
         return projectCommentService.createComment(newProjectComment);
     }
 
-    @PutMapping("/{id}")
-    public ProjectComment updateComment(@PathVariable Long id, @RequestBody ProjectComment updatedComment) {
+    @PatchMapping("/{id}")
+    public ProjectComment updateComment(@PathVariable Long id,  @RequestParam("comment") String comment) {
         ProjectComment existingComment = projectCommentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
 
-        existingComment.setComment(updatedComment.getComment());
+        existingComment.setComment(comment);
         return projectCommentRepository.save(existingComment);
     }
 

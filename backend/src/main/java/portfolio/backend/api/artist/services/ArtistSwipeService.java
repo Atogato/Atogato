@@ -29,6 +29,9 @@ public class ArtistSwipeService {
     public void like(String receiverId) throws Exception{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String senderId = authentication.getName();
+        if(!artistRepository.existsByUserId(receiverId)) {
+            throw new Exception("The receiver does not exist as an artist.");
+        }
 
         if(artistSwipeRepository.existsByLikedSenderIdAndLikedReceiverId(senderId, receiverId)){
             throw new Exception("매칭이 이미 존재합니다");
@@ -46,7 +49,6 @@ public class ArtistSwipeService {
             artistSwipeRepository.save(artistSwipe);
         }
     }
-
 
 
     public void reject(String receiverId) {
@@ -96,7 +98,6 @@ public class ArtistSwipeService {
         artistSwipeRepository.deleteAll(oldRejectedMatches);
     }
 
-
     public List<Artist> getArtistsWhoLikedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userId = authentication.getName();
@@ -107,13 +108,11 @@ public class ArtistSwipeService {
                 .collect(Collectors.toList());
 
         List<Artist> artistsWhoLiked = artistRepository.findByUserIdIn(userIdsWhoLiked);
-
         return artistsWhoLiked;
     }
 
 
     public List<Artist> getMatchesWhereUserIsInvolved(String userId) {
-
 
         List<ArtistSwipe> artistSwipe = artistSwipeRepository.findMatchedAndNotRejectedSwipesForUser(userId);
         List<String> userIdsInvolved = artistSwipe.stream()

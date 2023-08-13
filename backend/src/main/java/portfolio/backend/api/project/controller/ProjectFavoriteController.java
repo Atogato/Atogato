@@ -41,17 +41,17 @@ public class ProjectFavoriteController {
 
 
     @PostMapping
-    public HttpResponseEntity.ResponseResult<?> insert(@RequestBody @Valid FavoriteProjectRequestDTO favoriteProjectRequestDTO) throws Exception {
+    public HttpResponseEntity.ResponseResult<?> insert(@RequestParam Long projectId) throws Exception {
+        FavoriteProjectRequestDTO favoriteProjectRequestDTO = new FavoriteProjectRequestDTO(projectId);
         projectFavoriteService.insert(favoriteProjectRequestDTO);
         return HttpResponseEntity.success();
     }
 
     // 프로젝트를 좋아요 한번 더 누를시 delete function 실행
-
     @DeleteMapping
-    public HttpResponseEntity.ResponseResult<?> delete(@RequestBody @Valid FavoriteProjectRequestDTO favoriteProjectRequestDTO){
+    public HttpResponseEntity.ResponseResult<?> delete(@RequestParam Long projectId){
+        FavoriteProjectRequestDTO favoriteProjectRequestDTO = new FavoriteProjectRequestDTO(projectId);
         projectFavoriteService.delete(favoriteProjectRequestDTO);
         return HttpResponseEntity.success();
     }
-
 }

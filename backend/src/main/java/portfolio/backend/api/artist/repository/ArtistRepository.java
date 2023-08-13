@@ -12,5 +12,5 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
     List<Artist> findByUserIdIn(List<String> userIds);
 
     Optional<Artist> findByUserId(String userId);
-
+    boolean existsByUserId(String userId);
 }
