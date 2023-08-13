@@ -89,9 +89,7 @@ public class ArtistController {
 
         String key = s3Service.saveUploadFile(imageFile);
         URL imageUrl = s3Client.getUrl("atogato", key);
-
         List<ExtraImage> extraImageEntities = new ArrayList<>();
-
 
         for (MultipartFile extraImageFile : extraImageFiles) {
             String extraImageUrl = s3Service.extraSaveUploadFile(extraImageFile);
@@ -101,7 +99,7 @@ public class ArtistController {
         }
 
         String portfolioKey = s3Service.portfolioSaveUploadFile(portfolioFile);
-        URL portfolioUrl = s3Client.getUrl("atogatobucket", portfolioKey);
+        URL portfolioUrl = s3Client.getUrl("atogato", portfolioKey);
 
 
         try {
@@ -181,7 +179,7 @@ public class ArtistController {
             }
             if (portfolioFile != null) {
                 String portfolioKey = s3Service.portfolioSaveUploadFile(portfolioFile);
-                URL portfolioUrl = s3Client.getUrl("atogatobucket", portfolioKey);
+                URL portfolioUrl = s3Client.getUrl("atogato", portfolioKey);
                 existingArtist.setPortfolio(String.valueOf(portfolioUrl));
             }
         } catch (IOException e) {

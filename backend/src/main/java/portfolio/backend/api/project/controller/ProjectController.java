@@ -23,7 +23,9 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Api(tags = {"Project"})
@@ -90,34 +92,23 @@ public class ProjectController {
 
         String userId = authentication.getName();
 
-        List<Map<String, Object>> projectImageUrlList = new ArrayList<>();
-
-        for (MultipartFile projectImageFile : projectImageFiles) {
-            //업로드된 파일 정보 저장: [1] Map에 저장
-            Map<String, Object> projectImageUrls = new HashMap<>();
-            String extraKey = projectS3Service.projectSaveUploadFile(projectImageFile);
-            URL projectImageUrl = s3Client.getUrl("atogatobucket", extraKey);
-            projectImageUrls.put("projectImageUrl", projectImageUrl);
-            //[2] 여러 개의 Map을 List에 저장
-            projectImageUrlList.add(projectImageUrls);
-        }
-
-
         Project project = new Project();
 
         Set<ProjectImages> projectImages = new HashSet<>();
 
         for (MultipartFile projectImageFile : projectImageFiles) {
-            String extraKey = projectS3Service.projectSaveUploadFile(projectImageFile);
-            URL projectImageUrl = s3Client.getUrl("atogato", extraKey);
+            try {
+                String extraKey = projectS3Service.projectSaveUploadFile(projectImageFile);
+                URL projectImageUrl = s3Client.getUrl("atogato", extraKey);
 
-            ProjectImages projectImage = new ProjectImages();
-            projectImage.setImageUrl(projectImageUrl.toString());
-            projectImage.setProject(project);
-
-            projectImages.add(projectImage);
+                ProjectImages projectImage = new ProjectImages();
+                projectImage.setImageUrl(projectImageUrl.toString());
+                projectImage.setProject(project);
+                projectImages.add(projectImage);
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
         }
-
 
         project.setUserId(userId);
         project.setProjectName(projectName);
@@ -131,7 +122,6 @@ public class ProjectController {
         project.setRequiredCategory(requiredCategory);
         project.setRequiredPeople(requiredPeople);
         project.setSwipeAlgorithm(swipeAlgorithm);
-        project.setImage(image);
         project.setDescription(description);
 
         return projectRepository.save(project);
