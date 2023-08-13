@@ -3,7 +3,6 @@ package portfolio.backend.api.artist.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import portfolio.backend.api.artist.entity.Artist;
 import portfolio.backend.api.artist.entity.ArtistSwipe;
 
 import java.time.LocalDate;

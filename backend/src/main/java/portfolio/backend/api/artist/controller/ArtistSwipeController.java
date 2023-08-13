@@ -20,30 +20,23 @@ public class ArtistSwipeController {
     private final ArtistSwipeService artistSwipeService;
     private final UserService userService;
 
-
     public ArtistSwipeController(ArtistSwipeService artistSwipeService, UserService userService) {
         this.artistSwipeService = artistSwipeService;
         this.userService = userService;
-
     }
-
 
     // 매칭되었다
     @GetMapping("/matched")
-
     public List<Artist> getMatchesWhereUserIsInvolved() {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.getUser(principal.getUsername());
-
         return artistSwipeService.getMatchesWhereUserIsInvolved(principal.getUsername());
     }
-
 
     @GetMapping("/sorted")
     public List<ArtistSwipe> getSwipesSortedByLikedReceiver() {
         return artistSwipeService.getSwipesSortedByLikedReceiver();
     }
-
 
     @PostMapping("/like")
     public ResponseEntity<String> like(@RequestParam String receiverId) {
@@ -60,5 +53,4 @@ public class ArtistSwipeController {
         artistSwipeService.reject(receiverId);
         return ResponseEntity.ok("싫어요 ㅠㅠ");
     }
-
 }
