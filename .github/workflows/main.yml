@@ -24,7 +24,9 @@ jobs:
           distribution: 'adopt'
 
       - name: Run unit tests
-        run: ./gradlew test
+        run: |
+          cd backend
+          ./gradlew test
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
