@@ -8,14 +8,14 @@ import java.time.LocalDate;
 
 @Service
 public class ProjectService {
-    private final ProjectRepository projectRepository; // Instance of Project Created
+    private final ProjectRepository projectRepository;
 
     public ProjectService(ProjectRepository projectRepository){ // Constructor
         this.projectRepository = projectRepository;
     }
 
     public Project createProject(Project project){
-        project.setCreatedDate(LocalDate.now()); // created date = today
+        project.setCreatedDate(LocalDate.now());
         return projectRepository.save(project);
     }
 }

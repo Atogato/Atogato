@@ -1,16 +1,25 @@
 package portfolio.backend.api.project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
-import portfolio.backend.authentication.api.entity.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="Project")
 public class Project {
 
+    public enum ProjectCategory{
+        공연, 전시, 제작, 기획, 취미
+    }
+
+    public enum RequiredCategory{
+        연기, 노래, 제작, 춤, 작곡
+    }
     @Column(nullable = false)
     private String userId;
 
@@ -29,32 +38,41 @@ public class Project {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate createdDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable=false)
-    private String creatorArtCategory;
+    private ProjectCategory projectArtCategory;
 
     @Column(nullable=true)
     private String location;
 
     @Column(nullable=false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate deadline;
+    private LocalDate projectDeadline;
+
+    @Column(nullable=false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate applicationDeadline;
 
     @Column(nullable=false)
     private Long requiredPeople;
 
     @Column(nullable=false)
-    @ElementCollection
-    private List<String> requiredCategory;
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass=RequiredCategory.class)
+    private List<RequiredCategory> requiredCategory;
     private Boolean swipeAlgorithm;
 
-    @Column(nullable=true)
-    private String image;
-    private Long liked;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ProjectImages> projectImages;
+
+    @Column(nullable=false)
+    private Integer liked = 0;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    private Long participantId;
+    @ElementCollection
+    private Set<String> participantArtistIds = new HashSet<>();
 
     public Long getProjectId() {
         return projectId;
@@ -75,6 +93,14 @@ public class Project {
         this.projectName = projectName;
     }
 
+    public Set<String> getParticipantArtistIds() {
+        return participantArtistIds;
+    }
+
+    public void setParticipantArtistIds(Set<String> participantArtistIds) {
+        this.participantArtistIds = participantArtistIds;
+    }
+
     public LocalDate getCreatedDate() {
 
         return createdDate;
@@ -85,14 +111,14 @@ public class Project {
         this.createdDate = createdDate;
     }
 
-    public String getCreatorArtCategory() {
+    public ProjectCategory getProjectArtCategory() {
 
-        return creatorArtCategory;
+        return projectArtCategory;
     }
 
-    public void setCreatorArtCategory(String creatorArtCategory) {
+    public void setProjectArtCategory(ProjectCategory projectArtCategory) {
 
-        this.creatorArtCategory = creatorArtCategory;
+        this.projectArtCategory = projectArtCategory;
     }
 
 
@@ -106,14 +132,24 @@ public class Project {
         this.location = location;
     }
 
-    public LocalDate getDeadline() {
+    public LocalDate getProjectDeadline() {
 
-        return deadline;
+        return projectDeadline;
     }
 
-    public void setDeadline(LocalDate deadline) {
-        this.deadline = deadline;
+    public void setProjectDeadline(LocalDate projectDeadline) {
+        this.projectDeadline = projectDeadline;
     }
+
+    public LocalDate getApplicationDeadline() {
+
+        return applicationDeadline;
+    }
+
+    public void setApplicationDeadline(LocalDate applicationDeadline) {
+        this.applicationDeadline = applicationDeadline;
+    }
+
 
     public Long getRequiredPeople() {
         return requiredPeople;
@@ -123,13 +159,22 @@ public class Project {
         this.requiredPeople = requiredPeople;
     }
 
-    public List<String> getRequiredCategory() {
+    public List<RequiredCategory> getRequiredCategory() {
         return requiredCategory;
     }
 
-    public void setRequiredCategory(List<String> requiredCategory) {
+    public void setRequiredCategory(List<RequiredCategory> requiredCategory) {
         this.requiredCategory = requiredCategory;
     }
+
+    public Set<ProjectImages> getProjectImages() {
+        return projectImages;
+    }
+
+    public void setProjectImages(Set<ProjectImages> projectImages) {
+        this.projectImages = projectImages;
+    }
+
 
     public Boolean getSwipeAlgorithm() {
         return swipeAlgorithm;
@@ -139,13 +184,6 @@ public class Project {
         this.swipeAlgorithm = swipeAlgorithm;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 
     public String getDescription() {
         return description;
@@ -157,11 +195,11 @@ public class Project {
     }
 
 
-    public Long getLiked() {
+    public Integer getLiked() {
         return liked;
     }
 
-    public void setLiked(Long liked) {
+    public void setLiked(Integer liked) {
         this.liked = liked;
     }
 
@@ -188,13 +226,6 @@ public class Project {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-    public Long getParticipantId() {
-        return participantId;
-    }
-
-    public void setParticipantId(Long participantId) {
-        this.participantId = participantId;
     }
 
 }

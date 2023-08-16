@@ -27,10 +27,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 
-@ApiIgnore
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Api(tags = {"User Refresh Token"})
 public class AuthController {
 
     private final AppProperties appProperties;
@@ -41,6 +41,7 @@ public class AuthController {
     private final static long THREE_DAYS_MSEC = 259200000;
     private final static String REFRESH_TOKEN = "refresh_token";
 
+    @ApiIgnore
     @PostMapping("/login")
     public ApiResponse login(
             HttpServletRequest request,

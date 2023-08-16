@@ -16,9 +16,10 @@ services:
 
   backend:
     container_name: backend
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image : 9907daniel/project_atogato-backend:latest
+    # build:
+    #  context: ./backend
+    #  dockerfile: Dockerfile
     ports:
       - "7072:7072"
     depends_on:
@@ -30,11 +31,13 @@ services:
 
   frontend:
     container_name: frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: 9907daniel/project_atogato-frontend:latest
+    # build:
+    #  context: ./frontend
+    #  dockerfile: Dockerfile
     ports:
       - "3000:3000"
+
 
 networks:
   mynetwork:

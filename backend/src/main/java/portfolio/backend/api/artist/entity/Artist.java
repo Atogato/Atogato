@@ -1,7 +1,9 @@
 package portfolio.backend.api.artist.entity;
 
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.License;
 import lombok.Getter;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -9,6 +11,9 @@ import portfolio.backend.authentication.api.entity.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Getter
 @DynamicUpdate
@@ -17,8 +22,7 @@ import java.time.LocalDate;
 @Table(name="artists")
 public class Artist {
 
-
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String userId;
 
     @Id
@@ -29,22 +33,38 @@ public class Artist {
     @Column(nullable=false)
     private String artistName;
 
+    @Column(nullable = true)
+    private String location;
+
+    @Column(nullable = false)
+    private String selfIntroduction;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(nullable = false, columnDefinition = "integer default 0")
     private Integer liked;
 
     @Column(nullable=false)
     private String creatorArtCategory;
 
-    @Column(nullable=false)
-    private String interestCategory;
+    @ElementCollection
+    @CollectionTable(name = "artist_interest_categories", joinColumns = @JoinColumn(name = "artist_id"))
+    @Column(name = "interest_category", nullable = false)
+    private List<String> interestCategories = new ArrayList<>();
 
     @Column(nullable=true)
     private String snsLink;
 
     @Lob
-    private byte[] mainImage;
+    private String mainImage;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist", cascade = CascadeType.ALL)
+    private List<ExtraImage> extraImages = new ArrayList<>();
+
+
+    @Lob
+    private String portfolio;
 
     @Column(nullable=true)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -74,6 +94,21 @@ public class Artist {
         this.artistName = artistName;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public String getSelfIntroduction() {
+        return selfIntroduction;
+    }
+
+    public void setSelfIntroduction(String selfIntroduction) {
+        this.selfIntroduction = selfIntroduction;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
     public String getDescription() {
         return description;
     }
@@ -98,12 +133,12 @@ public class Artist {
         this.creatorArtCategory = creatorArtCategory;
     }
 
-    public String getInterestCategory() {
-        return interestCategory;
+    public List<String> getInterestCategories() {
+        return interestCategories;
     }
 
-    public void setInterestCategory(String interestCategory) {
-        this.interestCategory = interestCategory;
+    public void setInterestCategories(List<String> interestCategories) {
+        this.interestCategories = interestCategories;
     }
 
     public String getSnsLink() {
@@ -114,12 +149,28 @@ public class Artist {
         this.snsLink = snsLink;
     }
 
-    public byte[] getMainImage() {
+    public String getMainImage() {
         return mainImage;
     }
 
-    public void setMainImage(byte[] mainImage) {
+    public void setMainImage(String mainImage) {
         this.mainImage = mainImage;
+    }
+
+    public List<ExtraImage> getExtraImages() {
+        return extraImages;
+    }
+
+    public void setExtraImages(List<ExtraImage> extraImages) {
+        this.extraImages = extraImages;
+    }
+
+    public String getPortfolio() {
+        return portfolio;
+    }
+
+    public void setPortfolio(String portfolio) {
+        this.portfolio = portfolio;
     }
 
     public LocalDate getBirthdate() {
