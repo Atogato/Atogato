@@ -60,7 +60,7 @@ jobs:
           chmod 600 key.pem
       - name: Copy docker-compose file to remote server
         run: |
-          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i key.pem docker-compose.yml ubuntu@13.125.101.0 :~
+          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i key.pem docker-compose.yml ubuntu@13.125.101.0
       - name: Deploy Docker Compose services
         run: |
           ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@13.125.101.0   <<EOF
