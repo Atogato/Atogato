@@ -9,6 +9,11 @@ env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   AWS_PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
+  ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+  GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+
 
 jobs:
   build:
@@ -22,6 +27,15 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+
+      - name: Modify application.yml
+        run: |
+          sed -i "s/ACCESS_KEY_PLACEHOLDER/${ACCESS_KEY}/g" ./backend/src/main/resources/application-docker.yml
+          sed -i "s/SECRET_KEY_PLACEHOLDER/${SECRET_KEY}/g" ./backend/src/main/resources/application-docker.yml
+          sed -i "s/GOOGLE_CLIENT_ID_PLACEHOLDER/${GOOGLE_CLIENT_ID}/g" ./backend/src/main/resources/application-docker.yml
+          sed -i "s/GOOGLE_CLIENT_SECRET_PLACEHOLDER/${GOOGLE_CLIENT_SECRET}/g" ./backend/src/main/resources/application-docker.yml
+
+
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
