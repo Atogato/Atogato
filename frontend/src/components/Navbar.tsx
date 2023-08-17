@@ -30,19 +30,14 @@ export default function Navbar() {
       <Link href="/" className="hidden lg:block">
         <Logo className="mb-[30px] mt-[30px]" width="151px" height="45px" color="#171616" />
       </Link>
-      <div className="block w-full flex-grow lg:flex lg:w-auto lg:items-center">
-        <div className="flex justify-center gap-24 lg:flex-grow">
+      <div className="block flex flex-grow items-center">
+        <div className="flex flex-grow justify-center gap-24">
           {menus.map((content, idx) => (
             <Menu key={idx} content={content} />
           ))}
         </div>
-        <div>
-          <Link
-            href="/auth/login"
-            className="block rounded-[40px]	px-[36px] py-[16px] text-right text-[18px] leading-none text-[#171616]/50 hover:border-transparent hover:bg-[#7960BE]/75 hover:text-white lg:inline-block"
-          >
-            로그인
-          </Link>
+        <div className="rounded-[40px] px-[36px] py-[16px] text-right text-[18px] leading-none text-[#171616]/50 hover:border-transparent hover:bg-[#7960BE]/75 hover:text-white">
+          <Link href="/auth/login">로그인</Link>
         </div>
       </div>
     </nav>
