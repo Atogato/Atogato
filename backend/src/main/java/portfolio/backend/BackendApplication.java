@@ -17,7 +17,7 @@ import portfolio.backend.authentication.config.properties.CorsProperties;
 		CorsProperties.class,
 		AppProperties.class
 })
-@PropertySource("classpath:/aws.properties")
+//@PropertySource("classpath:/aws.properties")
 public class BackendApplication {
 
 

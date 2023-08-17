@@ -107,7 +107,6 @@ app:
     authorizedRedirectUris:
       - http://localhost:3000/oauth/redirect
 
-
 # aws s3 bucket
 cloud:
   aws:
