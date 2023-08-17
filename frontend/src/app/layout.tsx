@@ -12,7 +12,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <body className={`relative ${pretendard.className} ${poppins.variable}`}>
+      <body className={`relative ${pretendard.className} ${poppins.variable} min-w-[1280px] max-w-[1920px]`}>
         <App>
           <Navbar />
           {children}
