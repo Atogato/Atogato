@@ -1,7 +1,8 @@
-export default function Home() {
+import Banner from '@/components/Banner'
+export default function HomePage() {
   return (
     <main>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
+      <Banner className="min-h-fit" />
     </main>
   )
 }

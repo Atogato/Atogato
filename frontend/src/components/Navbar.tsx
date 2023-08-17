@@ -26,9 +26,9 @@ export function Menu({ content }: { content: Menu }) {
 export default function Navbar() {
   const menus: Menu[] = ['About', 'Project', 'Artist']
   return (
-    <nav className="flex flex-wrap items-center bg-white px-40">
-      <Link href="/">
-        <Logo className="mb-[56px] mt-[60px] block" width="151px" height="45px" color="#171616" />
+    <nav className="flex flex-wrap items-center border-b border-[#171616]/30 bg-white px-40">
+      <Link href="/" className="hidden lg:block">
+        <Logo className="mb-[30px] mt-[30px]" width="151px" height="45px" color="#171616" />
       </Link>
       <div className="block w-full flex-grow lg:flex lg:w-auto lg:items-center">
         <div className="flex justify-center gap-24 lg:flex-grow">
@@ -39,7 +39,7 @@ export default function Navbar() {
         <div>
           <Link
             href="/auth/login"
-            className="inline-block rounded-[40px] px-[36px] py-[16px] text-[18px] leading-none text-[#171616]/50 hover:border-transparent hover:bg-[#7960BE]/75 hover:text-white"
+            className="block rounded-[40px]	px-[36px] py-[16px] text-right text-[18px] leading-none text-[#171616]/50 hover:border-transparent hover:bg-[#7960BE]/75 hover:text-white lg:inline-block"
           >
             로그인
           </Link>
