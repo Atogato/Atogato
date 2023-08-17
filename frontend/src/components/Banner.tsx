@@ -5,12 +5,12 @@ import Ellipse from '@/assets/ellipse.svg'
 function LinkButton({ className, text }: { className?: string; text?: string }) {
   return (
     <Link href="/artist/form" className={`${className || ''}`}>
-      <div className="relative flex items-center">
-        <div className="absolute w-[30%]">
-          <b className="ps-1 text-[#171616]/80"> {text || '텍스트를 입력해주세요.'} </b>
+      <div className="relative flex items-center	">
+        <div className="absolute w-44">
+          <b className="whitespace-nowrap ps-1 text-[#171616]/80	"> {text || '텍스트를 입력해주세요.'} </b>
           <div className="mt-1 h-[10px] w-full skew-x-[-45deg] border-r border-t border-black bg-transparent "></div>
         </div>
-        <Ellipse width="7rem" height="7rem" className="absolute start-24" />
+        <Ellipse width="6rem" height="6rem" className="absolute start-28" />
       </div>
     </Link>
   )
