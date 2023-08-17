@@ -35,8 +35,8 @@ spring:
       client:
         registration:
           google:
-            client-id: 376505397432-j8ic0nqg20iteq6rst945u6vto89pptu.apps.googleusercontent.com
-            client-secret: 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
+            client-id: GOOGLE_CLIENT_ID_PLACEHOLDER
+            client-secret: GOOGLE_CLIENT_SECRET_PLACEHOLDER
             scope:
               - email
               - profile
@@ -119,8 +119,8 @@ app:
 cloud:
   aws:
     credentials:
-      accessKey: ${accessKey}
-      secretKey: ${secretKey}
+      accessKey: ACCESS_KEY_PLACEHOLDER
+      secretKey: SECRET_KEY_PLACEHOLDER
     region:
       static: ap-northeast-2
     stack:
