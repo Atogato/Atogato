@@ -33,8 +33,7 @@ services:
 
   nginx:
     container_name: nginx
-    build:
-      context: ./nginx
+    image: nginx:latest
     restart: always
     ports:
       - 80:80
@@ -42,6 +41,8 @@ services:
     depends_on:
       - backend
       - frontend
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
     networks:
       - mynetwork
 
