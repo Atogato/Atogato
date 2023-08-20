@@ -169,6 +169,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         corsConfig.setMaxAge(corsConfig.getMaxAge());
 
         corsConfig.addAllowedOrigin("http://localhost:7072/swagger-ui.html");
+        corsConfig.addAllowedOrigin("http://atogato.duckdns.org");
+
 
         corsConfigSource.registerCorsConfiguration("/**", corsConfig);
         return corsConfigSource;
