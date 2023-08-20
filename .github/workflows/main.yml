@@ -1,4 +1,4 @@
-name: Build on DockerHub and Deploy to AWS
+name: Atogato CICD Pipeline
 on:
   push:
     branches: [ "develop" ]

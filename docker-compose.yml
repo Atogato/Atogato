@@ -25,13 +25,25 @@ services:
       - mynetwork
     restart: on-failure
 
-
   frontend:
     container_name: frontend
     image: 9907daniel/project_atogato-frontend:latest
     ports:
       - "3000:3000"
 
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - mynetwork
 
 networks:
   mynetwork:
