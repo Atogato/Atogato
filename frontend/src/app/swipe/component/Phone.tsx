@@ -1,13 +1,13 @@
 'use client'
 
 import Image from 'next/image'
-import { DataObject } from './SwipeArtist'
+import { Artists } from './SwipeArtist'
 
-interface DataProps {
-  user: DataObject
+interface ArtistProps {
+  user: Artists
 }
 
-export default function Phone({ user }: DataProps): JSX.Element {
+export default function Phone({ user }: ArtistProps): JSX.Element {
   return (
     <div className="relative mx-auto h-full max-h-[650px] min-h-[600px] w-full min-w-[320px] max-w-[350px] overflow-auto rounded-3xl border-4  border-zinc-400 bg-gray-200 ">
       <div style={{ width: '100%', height: '100%' }}>
@@ -24,8 +24,8 @@ export default function Phone({ user }: DataProps): JSX.Element {
         <div className="h-4/6"></div>
         <div className="p-4 text-white">
           <div className="my-3 space-y-2">
-            <h2 className="text-xl font-bold">{user.userName}</h2>
-            <p className="text-sm">{user.genre}</p>
+            <h2 className="text-xl font-bold">{user.artistName}</h2>
+            <p className="text-sm">{user.creatorArtCategory}</p>
             <p className="text-sm">{user.location}</p>
           </div>
           <p className="text-sm">
