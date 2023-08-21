@@ -4,6 +4,14 @@ FROM node:16-alpine
 
 WORKDIR /app
 
+RUN apk add --update --no-cache \
+    build-base \
+    cairo-dev \
+    pango-dev \
+    jpeg-dev \
+    giflib-dev \
+    librsvg-dev
+
 # COPY [host machine] -> [conatiner] (path relative to  dockerfil)
 COPY package.json yarn.lock ./
 
