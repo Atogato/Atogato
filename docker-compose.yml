@@ -30,6 +30,8 @@ services:
     image: 9907daniel/project_atogato-frontend:latest
     ports:
       - "3000:3000"
+    networks:
+      - mynetwork
 
   nginx:
     container_name: nginx
