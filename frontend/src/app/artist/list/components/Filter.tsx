@@ -1,13 +1,18 @@
 'use client'
 import { useState } from 'react'
-import Filteredlist from './Filteredlist'
-import { Projects } from '../page'
+import FilteredList from './FilteredList'
+import { Artists } from '../page'
+import { localStorage } from '@/app/storage'
 
-type projectsProps = {
-  data: Projects[]
+type artistsProps = {
+  data: Artists[]
 }
 
-export default function Filter({ data }: projectsProps): JSX.Element {
+export default function Filter({ data }: artistsProps): JSX.Element {
+  const token = localStorage.getItem('token')
+
+  console.log('Token found in localStorage:', token)
+
   const [selectedOptions, setSelectedOptions] = useState<string[]>(['All', 'All'])
   const [isActive, setIsActive] = useState([false, false])
 
@@ -28,6 +33,7 @@ export default function Filter({ data }: projectsProps): JSX.Element {
       return updatedIsActive
     })
   }
+
   return (
     <div>
       <div className="flex">
@@ -88,7 +94,7 @@ export default function Filter({ data }: projectsProps): JSX.Element {
           )}
         </div>
       </div>
-      <Filteredlist options={selectedOptions} data={data} />
+      <FilteredList options={selectedOptions} artists={data} />
     </div>
   )
 }

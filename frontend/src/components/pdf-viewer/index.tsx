@@ -9,7 +9,7 @@ import type { PDFDocumentProxy } from 'pdfjs-dist'
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString()
 
-function PdfViewer() {
+function PdfViewer({ pdf }: { pdf?: string }) {
   const [numPages, setNumPages] = useState<number>()
 
   function onDocumentLoadSuccess({ numPages: nextNumPages }: PDFDocumentProxy) {
@@ -29,7 +29,7 @@ function PdfViewer() {
       <div className="Example__container">
         <div className="Example__container__document">
           <Document
-            file="/test.pdf"
+            file={pdf}
             onLoadSuccess={onDocumentLoadSuccess}
             options={{
               cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,

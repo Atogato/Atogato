@@ -1,85 +1,94 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-
+import { localStorage } from '@/app/storage'
 import Phone from './Phone'
 
-export type DataObject = {
-  userId: number
-  userName: string
-  description: string
+export type Artists = {
+  artistId: number
+  artistName: string
   location: string
-  genre: string
+  description: string
+  creatorArtCategory: string
 }
 
 export default function SwipeArtist() {
+  const [result, setResult] = useState<Artists[]>([])
+  const [dataLoaded, setDataLoaded] = useState(false)
+  const [token, setToken] = useState<string | null>()
+
+  useEffect(() => {
+    const user = localStorage.getItem('token')
+    setToken(user)
+  }, [token])
+
+  useEffect(() => {
+    const api = async () => {
+      const data = await fetch('http://localhost:7072/api/artists', {
+        method: 'GET',
+      })
+      const jsonData = await data.json()
+      setResult(jsonData)
+      setDataLoaded(true)
+    }
+
+    api()
+  }, [])
   const endofDataset = [
     {
-      userId: 1,
-      userName: 'End',
+      artistId: 1,
+      artistName: 'End',
       description: 'No more users',
       location: '//',
-      genre: '//',
-    },
-  ]
-  const dataset = [
-    {
-      userId: 1,
-      userName: 'John Doe',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      location: 'New York',
-      genre: 'Rock',
-    },
-    {
-      userId: 2,
-      userName: 'Jane Smith',
-      description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.',
-      location: 'Los Angeles',
-      genre: 'Pop',
-    },
-    {
-      userId: 3,
-      userName: 'Mike Johnson',
-      description: 'Ut rhoncus turpis velit, ac gravida enim condimentum ut.',
-      location: 'Chicago',
-      genre: 'Hip Hop',
-    },
-    {
-      userId: 4,
-      userName: 'Emily Davis',
-      description: 'Sed fermentum dolor ut arcu fringilla, at varius odio vestibulum.',
-      location: 'Miami',
-      genre: 'Indie',
-    },
-    {
-      userId: 5,
-      userName: 'Alex Thompson',
-      description:
-        'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Cras tristique tempus pulvinar.',
-      location: 'San Francisco',
-      genre: 'Indie',
+      creatorArtCategory: '//',
     },
   ]
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [chosenGenre, setChosenGenre] = useState('All')
-  const [filteredUsers, setFilteredUsers] = useState<DataObject[]>([])
+  const [filteredUsers, setFilteredUsers] = useState<Artists[]>([])
 
-  const handleNext = () => {
-    const currentObject = dataset[currentIndex]
+  const handleRight = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:7072/api/artists/swipe/like?receiverId=${filteredUsers[currentIndex].artistId}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+    } catch (error) {
+      console.error('Error sending message:', error)
+    }
+    setCurrentIndex((prevIndex) => prevIndex + 1)
+  }
+  const handleLeft = async () => {
+    try {
+      const data = {
+        receiverId: filteredUsers[currentIndex].artistId.toString(),
+      }
+      const response = await fetch('http://localhost:7072/api/artists/swipe/reject', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      })
+    } catch (error) {
+      console.error('Error sending message:', error)
+    }
     setCurrentIndex((prevIndex) => prevIndex + 1)
   }
 
   useEffect(() => {
     if (chosenGenre === 'All') {
-      setFilteredUsers([...dataset])
+      setFilteredUsers([...result])
     } else {
-      setFilteredUsers([...dataset.filter((user) => user.genre === chosenGenre)])
+      setFilteredUsers([...result.filter((user) => user.creatorArtCategory === chosenGenre)])
     }
-  }, [chosenGenre])
-  //     const filteredUsers: DataObject[] = chosenGenre === 'All'
-  //   ? dataset
-  //   : dataset.filter((user) => user.genre === chosenGenre);
+  }, [chosenGenre, dataLoaded])
 
   const isEndOfDataset = currentIndex >= filteredUsers.length
   const user = isEndOfDataset ? endofDataset[0] : filteredUsers[currentIndex]
@@ -125,7 +134,7 @@ export default function SwipeArtist() {
                         border-b-[15px] border-r-[27px]
                         border-t-[15px] border-b-transparent
                         border-r-red-400 border-t-transparent"
-          onClick={handleNext}
+          onClick={handleLeft}
         ></div>
       </div>
       <div className="col-span-2 col-start-3 flex items-center justify-center">
@@ -137,7 +146,7 @@ export default function SwipeArtist() {
                     border-b-[15px] border-l-[27px]
                     border-t-[15px] border-b-transparent
                     border-l-blue-400 border-t-transparent"
-          onClick={handleNext}
+          onClick={handleRight}
         ></div>
       </div>
     </div>
