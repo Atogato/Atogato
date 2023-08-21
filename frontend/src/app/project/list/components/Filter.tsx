@@ -46,13 +46,13 @@ export default function Filter({ data }: projectsProps): JSX.Element {
                 <li onClick={() => handleOptionSelect(0, 'All')} className="px-2 py-2 hover:bg-gray-100">
                   All
                 </li>
-                <li onClick={() => handleOptionSelect(0, 'seoul')} className="px-2 py-2 hover:bg-gray-100">
+                <li onClick={() => handleOptionSelect(0, '서울')} className="px-2 py-2 hover:bg-gray-100">
                   서울
                 </li>
-                <li onClick={() => handleOptionSelect(0, 'gyeongi')} className="px-2 py-2 hover:bg-gray-100">
+                <li onClick={() => handleOptionSelect(0, '경기')} className="px-2 py-2 hover:bg-gray-100">
                   경기
                 </li>
-                <li onClick={() => handleOptionSelect(0, 'busan')} className="px-2 py-2 hover:bg-gray-100">
+                <li onClick={() => handleOptionSelect(0, '부산')} className="px-2 py-2 hover:bg-gray-100">
                   부산
                 </li>
               </ul>

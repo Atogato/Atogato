@@ -14,7 +14,7 @@ export default function Filteredlist({ options, data }: filteredListProps): JSX.
   return (
     <div>
       <div className="my-2 text-left text-2xl">PROJECTS</div>
-      <div className="grid grid-cols-3 place-content-center gap-4">
+      <div role="project-card" className="grid grid-cols-3 place-content-center gap-4">
         {options[0] === 'All' && options[1] === 'All'
           ? data.map((project) => <ProjectCard project={project} key={project.projectId} />)
           : options[0] !== 'All' && options[1] !== 'All'

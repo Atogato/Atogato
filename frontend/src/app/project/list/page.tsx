@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { localStorage } from '@/app/storage'
 
 import Newproject from './components/Newproject'
 import Timeline from './components/Timeline'
@@ -12,13 +13,18 @@ export type Projects = {
   location: string
   creatorArtCategory: string
   createdDate: [number, number, number]
-  deadline: [number, number, number]
+  applicationDeadline: [number, number, number]
   requiredPeople: number
   description: string
   remoteStatus: string
+  liked: number
 }
 export default function List() {
   const [result, setResult] = useState<Projects[]>([])
+  const [sorted, setSorted] = useState<Projects[]>([])
+  // const token = localStorage.getItem('token');
+
+  // console.log('Token :', token);
 
   useEffect(() => {
     const api = async () => {
@@ -32,23 +38,24 @@ export default function List() {
     api()
   }, [])
   console.log(result)
+  useEffect(() => {
+    const api = async () => {
+      const data = await fetch('http://localhost:7072/api/projects/sorted', {
+        method: 'GET',
+      })
+      const jsonData = await data.json()
+      setSorted(jsonData)
+    }
 
-  const recentProject = result
-    .sort((a, b) => {
-      const aDeadline = a.deadline.join('')
-      const bDeadline = b.deadline.join('')
-      return aDeadline.localeCompare(bDeadline)
-    })
-    .slice(0, 3)
+    api()
+  }, [])
+  console.log(result)
+
+  const recentProject = sorted.slice(0, 3)
   console.log(recentProject)
 
-  const newProject = result
-    .sort((a, b) => {
-      const aDeadline = a.deadline.join('')
-      const bDeadline = b.deadline.join('')
-      return bDeadline.localeCompare(aDeadline)
-    })
-    .slice(0, 3)
+  const newProject = result.slice(0, 3)
+
   console.log(newProject)
   return (
     <div>
