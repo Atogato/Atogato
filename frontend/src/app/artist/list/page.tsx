@@ -8,6 +8,7 @@ export type Artists = {
   location: string
   description: string
   creatorArtCategory: string
+  liked: number
 }
 
 export default function List() {
