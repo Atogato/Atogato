@@ -74,9 +74,15 @@ jobs:
       - name: Copy docker-compose file to remote server
         run: |
           scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i key.pem docker-compose.yml ubuntu@13.125.101.0:~
+
+      - name: Copy nginx conf to remote server
+        run: |
+          scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i key.pem ./nginx/conf/default.conf ubuntu@13.125.101.0:/home/ubuntu/nginx/conf/
+
       - name: Stop NGINX if running
         run: |
           ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@13.125.101.0 'sudo service nginx stop'
+          
       - name: Deploy Docker Compose services
         run: |
           ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@13.125.101.0   <<EOF
