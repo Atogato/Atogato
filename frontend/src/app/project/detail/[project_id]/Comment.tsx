@@ -1,62 +1,155 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Head from 'next/head'
-interface CommentParams {
+import { localStorage } from '@/app/storage'
+
+interface IdType {
   id: string
-  created_at: string
-  updated_at: string
-  username: string
-  payload: string
-  reply_of?: string
 }
-export default function Comment() {
+
+type Comments = {
+  commentId: number
+  projectId: number
+  commentUserId: string
+  comment: string
+  createdDate: string
+}
+
+export default function Comment({ id }: IdType): JSX.Element {
+  const idInt = parseInt(id, 10)
+  const [token, setToken] = useState<string | null>()
   const [comment, setComment] = useState<string>('')
-  // const [commentList, setCommentList] = useState<CommentParams[]>([])
+  const [result, setResult] = useState<Comments[]>([])
+  const [editComment, setEditComment] = useState<[number, string]>([0, ''])
+  const [currentCommentId, setCurrentCommentId] = useState<number>()
+
+  //  const user = localStorage.removeItem('token')
+
+  useEffect(() => {
+    const user = localStorage.getItem('token')
+    setToken(user)
+  }, [token])
+  console.log('token', token)
+
+  const getComment = async () => {
+    const data = await fetch(`http://localhost:7072/api/projects/comments/${id}`, {
+      method: 'GET',
+    })
+    const jsonData = await data.json()
+    setResult(jsonData)
+  }
+  useEffect(() => {
+    getComment()
+  }, [])
+  console.log(result)
+
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const commentValue = event.target.value
     setComment(commentValue)
   }
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    console.log(comment)
+  const onChangeEditComment = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const payload = event.target.value
+    setEditComment([editComment[0], editComment[1]])
   }
-  const commentList = [
-    {
-      id: 1,
-      username: 'user 1',
-      payload: 'first comment',
-      created_at: '2023-06-26',
-    },
-    {
-      id: 2,
-      username: 'user 2',
-      payload: 'second comment',
-      created_at: '2023-06-24',
-    },
-    {
-      id: 3,
-      username: 'user 3',
-      payload: 'thrid comment',
-      created_at: '2023-06-25',
-    },
-  ]
+  const confirmEdit = () => {
+    window.alert('Confirm edit comment')
+  }
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const formData = new FormData()
+    formData.append('projectId', id)
+    formData.append('comment', comment)
+    try {
+      const response = await fetch(`http://localhost:7072/api/projects/comments/`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      })
+      if (response.ok) {
+        window.alert('Success!')
+        setComment('')
+        getComment()
+      } else {
+        window.alert('Error')
+      }
+    } catch (error) {
+      window.alert('error')
+    }
+  }
 
+  const handleDelete = async (commentId) => {
+    try {
+      const response = await fetch(`http://localhost:7072/api/projects/comments/${commentId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      if (response.ok) {
+        window.alert('Success!')
+        getComment()
+      } else {
+        window.alert('Error')
+      }
+    } catch (error) {
+      window.alert('error')
+    }
+  }
   return (
     <div>
       <Head>
         <title>Comments Page</title>
       </Head>
       <div className="flex flex-col gap-4 pt-12 ">
-        {commentList
+        {result
           .sort((a, b) => {
-            const aDate = new Date(a.created_at)
-            const bDate = new Date(b.created_at)
+            const aDate = new Date(a.createdDate)
+            const bDate = new Date(b.createdDate)
             return +aDate - +bDate
           })
           .map((comment) => (
-            <div key={comment.id} className="rounded-md border p-4">
-              <p className="mb-2 font-semibold">{comment.username}</p>
-              <p className="font-light">{comment.payload}</p>
+            <div key={comment.commentId} className="rounded-md border p-4">
+              <p className="mb-2 font-semibold">{comment.commentUserId}</p>
+              {comment.commentId === editComment[0] ? (
+                <input
+                  type="text"
+                  value={editComment[1]}
+                  onChange={onChangeEditComment}
+                  className="w-full border-b pb-1"
+                />
+              ) : (
+                <p className="font-light">{comment.comment}</p>
+              )}
+              {editComment[0] === comment.commentId ? (
+                <div className="flex gap-2">
+                  <button type="button" onClick={confirmEdit} className="text-green-500">
+                    Confirm
+                  </button>
+                  <button type="button" onClick={() => setEditComment([0, ''])} className="text-gray-500">
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setEditComment([comment.commentId, comment.comment])}
+                  className="text-green-500"
+                >
+                  Edit
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => {
+                  handleDelete(comment.commentId)
+                }}
+                className="text-red-500"
+              >
+                Delete
+                {currentCommentId}
+              </button>
             </div>
           ))}
       </div>
