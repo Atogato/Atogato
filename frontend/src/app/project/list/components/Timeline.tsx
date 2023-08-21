@@ -1,5 +1,6 @@
+'use client'
 import Link from 'next/link'
-
+import { localStorage } from '@/app/storage'
 import { Projects } from '../page'
 
 type projectsProps = {
@@ -33,7 +34,11 @@ export default function Timeline({ data }: projectsProps): JSX.Element {
         </div>
       ))}
       {data.map((project, i) => {
-        const d2 = new Date(project.deadline[0], project.deadline[1] - 1, project.deadline[2])
+        const d2 = new Date(
+          project.applicationDeadline[0],
+          project.applicationDeadline[1] - 1,
+          project.applicationDeadline[2],
+        )
         const dl = d2.getDay()
         let d3
         {
