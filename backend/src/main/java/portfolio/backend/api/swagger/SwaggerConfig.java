@@ -25,13 +25,12 @@ import java.util.Collections;
 @EnableWebMvc //이것도 함께 작성
 public class SwaggerConfig implements WebMvcConfigurer {
 
-    //swagger 2.9.2 버전 리소스 등록
-    //localhost:7072/swagger-ui/html
+
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) { //spring-security와 연결할 때 이 부분을 작성하지 않으면 404에러가 뜬다.
-        registry.addResourceHandler("swagger-ui.html")
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/api/swagger-ui.html**")
                 .addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**")
+        registry.addResourceHandler("/api/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
@@ -44,7 +43,8 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .build()
                 .apiInfo(apiInfo())
                 .securitySchemes(Collections.singletonList(apiKey()))
-                .securityContexts(Collections.singletonList(securityContext()));
+                .securityContexts(Collections.singletonList(securityContext()))
+                .pathMapping("/api");
     }
     private ApiKey apiKey() {
         return new ApiKey("Bearer Token", "Authorization", "header");

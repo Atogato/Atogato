@@ -28,13 +28,12 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
-      - name: Modify application.yml
+      - name: Apply Secret Keys in application.yml
         run: |
           sed -i "s/ACCESS_KEY_PLACEHOLDER/${ACCESS_KEY}/g" ./backend/src/main/resources/application.yml
           sed -i "s/SECRET_KEY_PLACEHOLDER/${SECRET_KEY}/g" ./backend/src/main/resources/application.yml
           sed -i "s/GOOGLE_CLIENT_ID_PLACEHOLDER/${GOOGLE_CLIENT_ID}/g" ./backend/src/main/resources/application.yml
           sed -i "s/GOOGLE_CLIENT_SECRET_PLACEHOLDER/${GOOGLE_CLIENT_SECRET}/g" ./backend/src/main/resources/application.yml
-
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -92,3 +91,6 @@ jobs:
           sudo docker-compose up -d
           EOF
 
+      - name: Prune unused Docker resources
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@13.125.101.0 'sudo docker system prune -f'
