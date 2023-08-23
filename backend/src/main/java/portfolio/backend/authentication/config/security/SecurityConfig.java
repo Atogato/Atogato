@@ -164,13 +164,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration corsConfig = new CorsConfiguration();
         corsConfig.setAllowedHeaders(Arrays.asList(corsProperties.getAllowedHeaders().split(",")));
         corsConfig.setAllowedMethods(Arrays.asList(corsProperties.getAllowedMethods().split(",")));
-        corsConfig.setAllowedOrigins(Arrays.asList(corsProperties.getAllowedOrigins().split(",")));
+        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://atogato.duckdns.org"));
+//        corsConfig.setAllowedOrigins(Arrays.asList(corsProperties.getAllowedOrigins().split(",")));
         corsConfig.setAllowCredentials(true);
         corsConfig.setMaxAge(corsConfig.getMaxAge());
 
         corsConfig.addAllowedOrigin("http://localhost:7072/swagger-ui.html");
-//        corsConfig.addAllowedOrigin("http://atogato.duckdns.org/swagger-ui.html");
-
 
         corsConfigSource.registerCorsConfiguration("/**", corsConfig);
         return corsConfigSource;
