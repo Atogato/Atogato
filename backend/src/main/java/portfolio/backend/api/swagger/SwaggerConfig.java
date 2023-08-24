@@ -28,9 +28,9 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/api/swagger-ui.html**")
+        registry.addResourceHandler("swagger-ui.html**")
                 .addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/api/webjars/**")
+        registry.addResourceHandler("webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
@@ -43,8 +43,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .build()
                 .apiInfo(apiInfo())
                 .securitySchemes(Collections.singletonList(apiKey()))
-                .securityContexts(Collections.singletonList(securityContext()))
-                .pathMapping("/api/");
+                .securityContexts(Collections.singletonList(securityContext()));
     }
     private ApiKey apiKey() {
         return new ApiKey("Bearer Token", "Authorization", "header");

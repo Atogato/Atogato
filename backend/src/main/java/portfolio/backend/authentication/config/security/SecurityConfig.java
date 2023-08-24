@@ -75,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/api/**").permitAll()
                     .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
                     .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
-                    .antMatchers( "/swagger-resources/**", "/swagger-ui/index.html", "/swagger-ui.html","/webjars/**", "/swagger/**", "/api/swagger-resources/**" ,"/v2/api-docs", "/api/swagger-ui/index.html", "/api/swagger-ui.html").permitAll() //swagger-ui
+                    .antMatchers( "/swagger-resources/**", "/swagger-ui/index.html", "/swagger-ui.html","/webjars/**", "/swagger/**" ,"/v2/api-docs").permitAll() //swagger-ui
                     .anyRequest().authenticated()
                 .and()
                     .oauth2Login()
@@ -98,7 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
                 .mvcMatchers(HttpMethod.OPTIONS, "/**")
-                .mvcMatchers("/swagger-ui.html/**", "/configuration/**", "/swagger-resources/**", "/v2/api-docs", "/webjars/**", "/api/swagger-ui.html/**", "/api/configuration/**", "/api/swagger-resources/**");
+                .mvcMatchers("/swagger-ui.html/**", "/configuration/**", "/swagger-resources/**", "/v2/api-docs", "/webjars/**");
     }
     /*
     * auth 매니저 설정
@@ -172,8 +172,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
-
-
 
 //        CorsConfiguration corsConfig = new CorsConfiguration();
 //        corsConfig.setAllowedHeaders(Arrays.asList(corsProperties.getAllowedHeaders().split(",")));
