@@ -31,6 +31,7 @@ import portfolio.backend.authentication.oauth.service.CustomUserDetailsService;
 import portfolio.backend.authentication.oauth.token.AuthTokenProvider;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
@@ -159,19 +160,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     * */
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
-        UrlBasedCorsConfigurationSource corsConfigSource = new UrlBasedCorsConfigurationSource();
+//        UrlBasedCorsConfigurationSource corsConfigSource = new UrlBasedCorsConfigurationSource();
 
-        CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedHeaders(Arrays.asList(corsProperties.getAllowedHeaders().split(",")));
-        corsConfig.setAllowedMethods(Arrays.asList(corsProperties.getAllowedMethods().split(",")));
-        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://atogato.duckdns.org"));
-//        corsConfig.setAllowedOrigins(Arrays.asList(corsProperties.getAllowedOrigins().split(",")));
-        corsConfig.setAllowCredentials(true);
-        corsConfig.setMaxAge(corsConfig.getMaxAge());
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(List.of("http://localhost:3000", "http://atogato.duckdns.org"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("*"));
 
-        corsConfig.addAllowedOrigin("http://localhost:7072/swagger-ui.html");
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
 
-        corsConfigSource.registerCorsConfiguration("/**", corsConfig);
-        return corsConfigSource;
+
+
+//        CorsConfiguration corsConfig = new CorsConfiguration();
+//        corsConfig.setAllowedHeaders(Arrays.asList(corsProperties.getAllowedHeaders().split(",")));
+//        corsConfig.setAllowedMethods(Arrays.asList(corsProperties.getAllowedMethods().split(",")));
+//        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://atogato.duckdns.org"));
+////        corsConfig.setAllowedOrigins(Arrays.asList(corsProperties.getAllowedOrigins().split(",")));
+//        corsConfig.setAllowCredentials(true);
+//        corsConfig.setMaxAge(corsConfig.getMaxAge());
+//
+//        corsConfig.addAllowedOrigin("http://localhost:7072/swagger-ui.html");
+//
+//        corsConfigSource.registerCorsConfiguration("/**", corsConfig);
+//        return corsConfigSource;
     }
 }
