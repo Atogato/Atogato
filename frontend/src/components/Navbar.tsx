@@ -40,13 +40,13 @@ export default function Navbar() {
       }
 
       if (window.scrollY > 0) {
-        navBarContainer.classList.remove('w-full', 'px-40', 'border-b')
+        navBarContainer.classList.remove('border-b', 'w-full')
         navBarContainer.classList.add(
           'rounded',
+          'w-[75%]',
           'z-50',
           'rounded-full',
           'mx-auto',
-          'w-[70%]',
           'shadow-[0_4px_24px_0_rgba(154,136,206,0.3)]',
         )
       } else {
@@ -54,11 +54,11 @@ export default function Navbar() {
           'rounded',
           'z-50',
           'rounded-full',
+          'w-[75%]',
           'mx-auto',
-          'w-[70%]',
           'shadow-[0_4px_24px_0_rgba(154,136,206,0.3)]',
         )
-        navBarContainer.classList.add('w-full', 'px-40', 'border-b')
+        navBarContainer.classList.add('border-b', 'w-full')
       }
     }
   }
