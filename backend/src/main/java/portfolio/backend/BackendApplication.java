@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import portfolio.backend.authentication.config.properties.AppProperties;
 import portfolio.backend.authentication.config.properties.CorsProperties;
-@PropertySource("classpath:/aws.properties")
+@PropertySource(value = "classpath:/aws.properties", ignoreResourceNotFound = true)
 @SpringBootApplication
 @EnableScheduling
 @EnableConfigurationProperties({
