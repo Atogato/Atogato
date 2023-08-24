@@ -17,8 +17,8 @@ services:
   backend:
     container_name: backend
     image : 9907daniel/project_atogato-backend:latest
-#    ports:
-#      - "7072:7072"
+    ports:
+      - "7072:7072"
     depends_on:
       - mysqldb
     networks:
