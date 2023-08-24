@@ -44,7 +44,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .apiInfo(apiInfo())
                 .securitySchemes(Collections.singletonList(apiKey()))
                 .securityContexts(Collections.singletonList(securityContext()))
-                .pathMapping("/api");
+                .pathMapping("/api/");
     }
     private ApiKey apiKey() {
         return new ApiKey("Bearer Token", "Authorization", "header");
