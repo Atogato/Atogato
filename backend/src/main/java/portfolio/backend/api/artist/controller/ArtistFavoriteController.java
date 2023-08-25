@@ -9,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import portfolio.backend.api.artist.dto.FavoriteRequestDTO;
 import portfolio.backend.api.artist.dto.FavoriteResponseDTO;
-import portfolio.backend.api.artist.entity.ArtistFavorite;
 import portfolio.backend.api.artist.exception.HttpResponseEntity;
 import portfolio.backend.api.artist.services.ArtistFavoriteService;
 import springfox.documentation.annotations.ApiIgnore;
@@ -28,10 +27,9 @@ public class ArtistFavoriteController {
 
     @GetMapping
     public List<FavoriteResponseDTO> getAllByUserId(@ApiIgnore Authentication authentication) {
-
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         String userId = authentication.getName();
+
         List<FavoriteResponseDTO> artistFavorites = artistFavoriteService.findAllByUserId(userId);
 
         return artistFavorites;

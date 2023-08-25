@@ -16,7 +16,9 @@ import portfolio.backend.api.artist.entity.ExtraImage;
 import portfolio.backend.api.artist.repository.ArtistRepository;
 import portfolio.backend.api.imageupload.service.S3Service;
 import portfolio.backend.api.project.exception.ResourceNotFoundException;
+import portfolio.backend.authentication.api.entity.user.User;
 import portfolio.backend.authentication.api.repository.user.UserRepository;
+import portfolio.backend.authentication.api.service.UserContextService;
 import portfolio.backend.authentication.api.service.UserService;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -36,6 +38,9 @@ public class ArtistController {
     private final S3Service s3Service;
 
     @Autowired
+    private UserContextService userContextService;
+
+    @Autowired
     public ArtistController(ArtistRepository artistRepository, UserRepository userRepository, UserService userService, AmazonS3 s3Client, S3Service s3Service) {
         this.artistRepository = artistRepository;
         this.userRepository = userRepository;
@@ -53,7 +58,7 @@ public class ArtistController {
     @GetMapping("/{id}")
     public Artist getArtistById(@PathVariable Long id) {
         return artistRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("ID 찾을 수 없음 " + id));
 
     }
 
@@ -61,12 +66,12 @@ public class ArtistController {
     @GetMapping("users/{userId}")
     public Artist getArtistByUserId(@PathVariable String userId) {
         return artistRepository.findByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("user does not have an artist: "));
+                .orElseThrow(() -> new ResourceNotFoundException("유저는 아티스트 등록이 되어 있지 않습니다 "));
     }
 
     @PostMapping("")
     public ResponseEntity<String> createArtist(@RequestParam(value = "mainImage") MultipartFile imageFile,
-                                               @RequestParam(value = "extraImage") List<MultipartFile> extraImageFiles,
+                                               @RequestParam(value = "extraImage", required = false) List<MultipartFile> extraImageFiles,
                                                @RequestParam(value = "portfolio") MultipartFile portfolioFile,
                                                @RequestParam(value = "artistName") String artistName,
                                                @RequestParam(value = "description") String description,
@@ -78,11 +83,9 @@ public class ArtistController {
                                                @RequestParam(value = "birthdate", required = false) String birthdate,
                                                @ApiIgnore Authentication authentication) throws IOException {
 
-        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userContextService.getCurrentUser();
 
-        String userId = authentication.getName();
-      
-        Optional<Artist> existingArtist = artistRepository.findByUserId(userId);
+        Optional<Artist> existingArtist = artistRepository.findByUserId(user.getUserId());
         if (existingArtist.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("계정의 아티스트가 이미 등록 되어 있습니다.");
         }
@@ -91,11 +94,13 @@ public class ArtistController {
         URL imageUrl = s3Client.getUrl("atogato", key);
         List<ExtraImage> extraImageEntities = new ArrayList<>();
 
-        for (MultipartFile extraImageFile : extraImageFiles) {
-            String extraImageUrl = s3Service.extraSaveUploadFile(extraImageFile);
-            ExtraImage extraImageEntity = new ExtraImage();
-            extraImageEntity.setImageUrl(extraImageUrl);
-            extraImageEntities.add(extraImageEntity);
+        if (extraImageFiles != null && !extraImageFiles.isEmpty()) {
+            for (MultipartFile extraImageFile : extraImageFiles) {
+                String extraImageUrl = s3Service.extraSaveUploadFile(extraImageFile);
+                ExtraImage extraImageEntity = new ExtraImage();
+                extraImageEntity.setImageUrl(extraImageUrl);
+                extraImageEntities.add(extraImageEntity);
+            }
         }
 
         String portfolioKey = s3Service.portfolioSaveUploadFile(portfolioFile);
@@ -122,17 +127,18 @@ public class ArtistController {
                 LocalDate birthdateObj = LocalDate.parse(birthdate);
                 artist.setBirthdate(birthdateObj);
             }
-            artist.setUserId(userId);
+            artist.setUserId(user.getUserId());
 
-            for (ExtraImage extraImage : extraImageEntities) {
-                extraImage.setArtist(artist);
+            if (!extraImageEntities.isEmpty()) {
+                for (ExtraImage extraImage : extraImageEntities) {
+                    extraImage.setArtist(artist);
+                }
             }
-
             artistRepository.save(artist);
-            return ResponseEntity.ok("Artist created successfully.");
+            return ResponseEntity.ok("아티스트 생성!");
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create artist.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("아티스트 생성 실패ㅠ");
         }
     }
     @PatchMapping("/{id}")
@@ -141,12 +147,12 @@ public class ArtistController {
                                           @RequestParam(value = "mainImage", required = false) MultipartFile mainImageFile,
                                           @RequestParam(value = "portfolio", required = false) MultipartFile portfolioFile,
                                           @RequestParam Map<String, Object> updates) {
-        String currentUserId = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userContextService.getCurrentUser();
 
         Artist existingArtist = artistRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
-        if (!existingArtist.getUserId().equals(currentUserId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not the owner of this artist.");
+                .orElseThrow(() -> new ResourceNotFoundException("ID가 존재하지 않습니다 " + id));
+        if (!existingArtist.getUserId().equals(user.getUserId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("현재 로그인 유저의 아티스트가 아닙니다");
         }
 
         if (updates.containsKey("creatorArtCategory")) {
@@ -183,7 +189,7 @@ public class ArtistController {
                 existingArtist.setPortfolio(String.valueOf(portfolioUrl));
             }
         } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while uploading the file to S3. Please try again.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("S3 파일 업로드 중 실패");
         }
 
         if (updates.containsKey("birthdate")) {
@@ -196,15 +202,15 @@ public class ArtistController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteArtist(@PathVariable Long id) {
-        String currentUserId = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userContextService.getCurrentUser();
 
         Artist artistToDelete = artistRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("ID not found: " + id));
-        if (!artistToDelete.getUserId().equals(currentUserId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not the owner of this artist.");
+                .orElseThrow(() -> new ResourceNotFoundException("ID가 존재하지 않습니다 " + id));
+        if (!artistToDelete.getUserId().equals(user.getUserId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("현재 로그인 유저의 아티스트가 아닙니다");
         }
 
         artistRepository.delete(artistToDelete);
-        return ResponseEntity.ok("Artist deleted successfully.");
+        return ResponseEntity.ok("아티스트 삭제 성공!");
     }
 }

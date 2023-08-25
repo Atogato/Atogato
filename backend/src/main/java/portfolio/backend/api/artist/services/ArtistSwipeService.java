@@ -30,7 +30,7 @@ public class ArtistSwipeService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String senderId = authentication.getName();
         if(!artistRepository.existsByUserId(receiverId)) {
-            throw new Exception("The receiver does not exist as an artist.");
+            throw new Exception("좋아요한 ID는 아티스트가 아닙니다");
         }
 
         if(artistSwipeRepository.existsByLikedSenderIdAndLikedReceiverId(senderId, receiverId)){
@@ -78,7 +78,12 @@ public class ArtistSwipeService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUserId = auth.getName();
 
-        List<ArtistSwipe> swipes = artistSwipeRepository.findAll();
+        List<ArtistSwipe> swipes = artistSwipeRepository.findAll().stream()
+                .filter(swipe -> !swipe.getMatched() && !swipe.getRejected())
+                .filter(swipe -> !swipe.getLikedSenderId().equals(currentUserId))
+                .filter(swipe -> artistRepository.existsByUserId(swipe.getLikedSenderId()) && artistRepository.existsByUserId(swipe.getLikedReceiverId()))
+                .collect(Collectors.toList());
+
         swipes.sort((a, b) -> {
             if (a.getLikedReceiverId().equals(currentUserId) && !b.getLikedReceiverId().equals(currentUserId)) {
                 return -1;

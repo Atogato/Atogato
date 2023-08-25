@@ -1,14 +1,11 @@
 package portfolio.backend.api.artist.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.License;
 import lombok.Getter;
-import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
-import portfolio.backend.authentication.api.entity.user.User;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,6 +26,10 @@ public class Artist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(hidden = true)
     private Long artistId;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "artist")
+    @JsonIgnore
+    private List<ArtistFavorite> favorites;
 
     @Column(nullable=false)
     private String artistName;
@@ -61,7 +62,6 @@ public class Artist {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist", cascade = CascadeType.ALL)
     private List<ExtraImage> extraImages = new ArrayList<>();
-
 
     @Lob
     private String portfolio;
