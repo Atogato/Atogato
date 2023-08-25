@@ -16,6 +16,8 @@ services:
 
   backend:
     container_name: backend
+    environment:
+      - SPRING_PROFILES_ACTIVE=deployment
     image : 9907daniel/project_atogato-backend:latest
     ports:
       - "7072:7072"
@@ -28,8 +30,6 @@ services:
   frontend:
     container_name: frontend
     image: 9907daniel/project_atogato-frontend:latest
-#    ports:
-#      - "3000:3000"
     networks:
       - mynetwork
 
