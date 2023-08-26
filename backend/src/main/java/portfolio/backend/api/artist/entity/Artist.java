@@ -19,17 +19,17 @@ import java.util.List;
 @Table(name="artists")
 public class Artist {
 
-    @Column(nullable = false, unique = true)
-    private String userId;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(hidden = true)
     private Long artistId;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "artist")
+    @Column(nullable = false, unique = true)
+    private String userId;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "artist", orphanRemoval = true)
     @JsonIgnore
-    private List<ArtistFavorite> favorites;
+    private List<ArtistFavorite> favorites = new ArrayList<>();
 
     @Column(nullable=false)
     private String artistName;
@@ -60,7 +60,7 @@ public class Artist {
     @Lob
     private String mainImage;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExtraImage> extraImages = new ArrayList<>();
 
     @Lob
@@ -179,6 +179,16 @@ public class Artist {
 
     public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
+    }
+
+    public void addExtraImage(ExtraImage extraImage) {
+        extraImages.add(extraImage);
+        extraImage.setArtist(this);
+    }
+
+    public void removeExtraImage(ExtraImage extraImage) {
+        extraImages.remove(extraImage);
+        extraImage.setArtist(null);
     }
 
 }

@@ -10,7 +10,7 @@ public class ExtraImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artist_id")
     @JsonIgnore
     private Artist artist;

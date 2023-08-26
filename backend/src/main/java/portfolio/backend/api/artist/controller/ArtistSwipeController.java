@@ -3,7 +3,6 @@ package portfolio.backend.api.artist.controller;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import portfolio.backend.api.artist.entity.Artist;
 import portfolio.backend.api.artist.entity.ArtistSwipe;
@@ -32,13 +31,12 @@ public class ArtistSwipeController {
     @GetMapping("/matched")
     public List<Artist> getMatchesWhereUserIsInvolved() {
         User user = userContextService.getCurrentUser();
-
         return artistSwipeService.getMatchesWhereUserIsInvolved(user.getUserId());
     }
 
     @GetMapping("/sorted")
-    public List<ArtistSwipe> getSwipesSortedByLikedReceiver() {
-        return artistSwipeService.getSwipesSortedByLikedReceiver();
+    public List<Artist> getArtistsSortedByLikedReceiver() {
+        return artistSwipeService.getArtistsSortedByLikedReceiver();
     }
 
     @PostMapping("/like")
