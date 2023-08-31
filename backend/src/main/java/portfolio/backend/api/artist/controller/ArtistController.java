@@ -66,9 +66,19 @@ public class ArtistController {
     public ResponseEntity<?> updateArtist(@ApiParam(value = "업데이트 하려는 유저", required = true) @PathVariable Long id,
                                           @RequestParam(value = "mainImage", required = false) MultipartFile mainImageFile,
                                           @RequestParam(value = "portfolio", required = false) MultipartFile portfolioFile,
-                                          @RequestParam Map<String, Object> updates) {
-        return artistService.updateArtist(id, mainImageFile, portfolioFile, updates);
+                                          @RequestParam(value = "artistName", required = false) String artistName,
+                                          @RequestParam(value = "description", required = false) String description,
+                                          @RequestParam(value = "location", required = false) String location,
+                                          @RequestParam(value = "selfIntroduction", required = false) String selfIntroduction,
+                                          @RequestParam(value = "creatorArtCategory", required = false) String creatorArtCategory,
+                                          @RequestParam(value = "interestCategories", required = false) List<String> interestCategories,
+                                          @RequestParam(value = "snsLink", required = false) String snsLink,
+                                          @RequestParam(value = "extraImages", required = false) List<MultipartFile> extraImageFiles,
+                                          @RequestParam(value = "birthdate", required = false) String birthdate) {
+        return artistService.updateArtist(id, mainImageFile, extraImageFiles, portfolioFile, artistName, description, location,
+                selfIntroduction, creatorArtCategory, interestCategories, snsLink, birthdate);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteArtist(@PathVariable Long id) {

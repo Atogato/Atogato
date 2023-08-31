@@ -72,11 +72,11 @@ public class ProjectFavoriteService {
         ProjectFavorite projectFavorite = projectFavoriteRepository.findByUserIdAndProject(userId, project)
                 .orElseThrow(() -> new NotFoundException("즐겨찾기 찾을 수 없음"));
 
+        project.setLiked(project.getLiked() - 1);
+        projectRepository.save(project);
+
         projectFavoriteRepository.delete(projectFavorite);
 
-
-        project.setLiked(project.getLiked() + 1);
-        projectRepository.save(project);
     }
 
     private FavoriteProjectResponseDTO convertToDTO(ProjectFavorite projectFavorite) {

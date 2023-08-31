@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Getter
@@ -61,7 +62,7 @@ public class Artist {
     private String mainImage;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ExtraImage> extraImages = new ArrayList<>();
+    private Set<ExtraImage> extraImages;
 
     @Lob
     private String portfolio;
@@ -157,11 +158,11 @@ public class Artist {
         this.mainImage = mainImage;
     }
 
-    public List<ExtraImage> getExtraImages() {
+    public Set<ExtraImage> getExtraImages() {
         return extraImages;
     }
 
-    public void setExtraImages(List<ExtraImage> extraImages) {
+    public void setExtraImages(Set<ExtraImage> extraImages) {
         this.extraImages = extraImages;
     }
 

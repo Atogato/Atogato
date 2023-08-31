@@ -19,10 +19,7 @@ import portfolio.backend.authentication.api.service.UserContextService;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ArtistService {
@@ -68,28 +65,51 @@ public class ArtistService {
         if (existingArtist.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("계정의 아티스트가 이미 등록 되어 있습니다.");
         }
+        Artist artist = new Artist();
+
+        Set<ExtraImage> extraImageEntities = new HashSet<>();
+        System.out.println("extraImageEntities" + extraImageEntities);
+        System.out.println("extraImageFiles" + extraImageFiles);
+        if (extraImageFiles != null) {
+
+            for (MultipartFile extraImageFile : extraImageFiles) {
+                System.out.println("extraImageFile" + extraImageFile);
+
+                try {
+                    String extraKey = s3Service.extraSaveUploadFile(extraImageFile);
+                    System.out.println("extraKey" + extraKey);
+
+                    URL extraImageUrl = s3Client.getUrl("atogato", extraKey);
+                    System.out.println("로그 extraImageUrl" + extraImageUrl);
+
+                    ExtraImage extraImageEntity = new ExtraImage();
+                    extraImageEntity.setImageUrl(extraImageUrl.toString());
+                    extraImageEntity.setArtist(artist);
+
+                    System.out.println("로그 extraImageEntity" + extraImageEntity);
+
+                    extraImageEntities.add(extraImageEntity);
+
+                    System.out.println("로그 extraImageEntities" + extraImageEntities);
+
+                    artist.setExtraImages(extraImageEntities);
+                    System.out.println("로그 artist" + artist.getExtraImages());
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
         String key = s3Service.saveUploadFile(imageFile);
         URL imageUrl = s3Client.getUrl("atogato", key);
-        List<ExtraImage> extraImageEntities = new ArrayList<>();
-
-        if (extraImageFiles != null && !extraImageFiles.isEmpty()) {
-            for (MultipartFile extraImageFile : extraImageFiles) {
-                String extraImageUrl = s3Service.extraSaveUploadFile(extraImageFile);
-                ExtraImage extraImageEntity = new ExtraImage();
-                extraImageEntity.setImageUrl(extraImageUrl);
-                extraImageEntities.add(extraImageEntity);
-            }
-        }
 
         String portfolioKey = s3Service.portfolioSaveUploadFile(portfolioFile);
         URL portfolioUrl = s3Client.getUrl("atogato", portfolioKey);
 
 
         try {
-            Artist artist = new Artist();
             artist.setMainImage(String.valueOf(imageUrl));
-            artist.setExtraImages(extraImageEntities);
             artist.setPortfolio(String.valueOf(portfolioUrl));
             artist.setSelfIntroduction(selfIntroduction);
             artist.setArtistName(artistName);
@@ -97,6 +117,8 @@ public class ArtistService {
             artist.setLocation(location);
             artist.setCreatorArtCategory(creatorArtCategory);
             artist.setSnsLink(snsLink);
+            artist.setExtraImages(extraImageEntities);
+
 
             if (interestCategories != null && !interestCategories.isEmpty()) {
                 artist.setInterestCategories(interestCategories);
@@ -108,11 +130,6 @@ public class ArtistService {
             }
             artist.setUserId(user.getUserId());
 
-            if (!extraImageEntities.isEmpty()) {
-                for (ExtraImage extraImage : extraImageEntities) {
-                    extraImage.setArtist(artist);
-                }
-            }
             artistRepository.save(artist);
             return ResponseEntity.ok("아티스트 생성!");
 
@@ -121,9 +138,10 @@ public class ArtistService {
         }
 
     }
-
-    public ResponseEntity<?> updateArtist(Long id, MultipartFile mainImageFile, MultipartFile portfolioFile,
-                                          Map<String, Object> updates) {
+    public ResponseEntity<?> updateArtist(Long id, MultipartFile mainImageFile, List<MultipartFile> extraImageFiles, MultipartFile portfolioFile,
+                                           String artistName, String description, String location,
+                                           String selfIntroduction, String creatorArtCategory,
+                                           List<String> interestCategories, String snsLink, String birthdate) {
         User user = userContextService.getCurrentUser();
 
         Artist existingArtist = artistRepository.findById(id)
@@ -132,28 +150,28 @@ public class ArtistService {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("현재 로그인 유저의 아티스트가 아닙니다");
         }
 
-        if (updates.containsKey("creatorArtCategory")) {
-            existingArtist.setCreatorArtCategory((String) updates.get("creatorArtCategory"));
+        if (creatorArtCategory != null) {
+            existingArtist.setCreatorArtCategory(creatorArtCategory);
         }
-        if (updates.containsKey("artistName")) {
-            existingArtist.setArtistName((String) updates.get("artistName"));
+        if (artistName != null) {
+            existingArtist.setArtistName(artistName);
         }
-        if (updates.containsKey("selfIntroduction")) {
-            existingArtist.setSelfIntroduction((String) updates.get("selfIntroduction"));
+        if (selfIntroduction != null) {
+            existingArtist.setSelfIntroduction(selfIntroduction);
         }
-        if (updates.containsKey("location")) {
-            existingArtist.setLocation((String) updates.get("location"));
+        if (location != null) {
+            existingArtist.setLocation(location);
         }
-        if (updates.containsKey("description")) {
-            existingArtist.setDescription((String) updates.get("description"));
+        if (description != null) {
+            existingArtist.setDescription(description);
         }
-        if (updates.containsKey("interestCategories")) {
-            List<String> newInterestCategories = (List<String>) updates.get("interestCategories");
-            existingArtist.setInterestCategories(newInterestCategories);
+        if (interestCategories != null) {
+            existingArtist.setInterestCategories(interestCategories);
         }
-        if (updates.containsKey("snsLink")) {
-            existingArtist.setSnsLink((String) updates.get("snsLink"));
+        if (snsLink != null) {
+            existingArtist.setSnsLink(snsLink);
         }
+
         try {
             if (mainImageFile != null) {
                 String key = s3Service.saveUploadFile(mainImageFile);
@@ -169,12 +187,34 @@ public class ArtistService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("S3 파일 업로드 중 실패");
         }
 
-        if (updates.containsKey("birthdate")) {
-            LocalDate birthdateObj = LocalDate.parse((String) updates.get("birthdate"));
+        if (extraImageFiles != null && !extraImageFiles.isEmpty()) {
+            Set<ExtraImage> extraImageEntities = new HashSet<>();
+            for (MultipartFile extraImageFile : extraImageFiles) {
+                try {
+                    String extraKey = s3Service.extraSaveUploadFile(extraImageFile);
+                    URL extraImageUrl = s3Client.getUrl("atogato", extraKey);
+
+                    ExtraImage extraImageEntity = new ExtraImage();
+                    extraImageEntity.setImageUrl(extraImageUrl.toString());
+                    extraImageEntity.setArtist(existingArtist);
+                    extraImageEntities.add(extraImageEntity);
+                    existingArtist.setExtraImages(extraImageEntities);
+
+                } catch (IOException e) {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("S3 파일 업로드 중 실패");
+                }
+            }
+            existingArtist.setExtraImages(extraImageEntities);
+        }
+
+        if (birthdate != null) {
+            LocalDate birthdateObj = LocalDate.parse(birthdate);
             existingArtist.setBirthdate(birthdateObj);
         }
+
         return ResponseEntity.ok(artistRepository.save(existingArtist));
     }
+
 
     public ResponseEntity<?> deleteArtist(Long id) {
         User user = userContextService.getCurrentUser();

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import portfolio.backend.api.project.entity.ProjectComment;
 import portfolio.backend.api.project.repository.ProjectCommentRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service

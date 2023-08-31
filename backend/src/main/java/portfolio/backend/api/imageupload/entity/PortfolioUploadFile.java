@@ -9,7 +9,6 @@ import static lombok.AccessLevel.PROTECTED;
 
 @NoArgsConstructor(access = PROTECTED)
 @Entity
-
 public class PortfolioUploadFile {
 
     @Id

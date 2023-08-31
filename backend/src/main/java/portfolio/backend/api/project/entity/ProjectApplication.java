@@ -14,8 +14,9 @@ public class ProjectApplication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable=false)
-    private Long projectId;
+    @ManyToOne
+    @JoinColumn(name = "projectId")
+    private Project project;
 
     @Column(nullable=false)
     private String appliedArtistId;
@@ -32,12 +33,14 @@ public class ProjectApplication {
         this.id = id;
     }
 
-    public Long getProjectId() {
-        return projectId;
+
+
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public String getAppliedArtistId() {

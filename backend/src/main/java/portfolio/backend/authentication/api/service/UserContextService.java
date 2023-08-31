@@ -7,8 +7,11 @@ import portfolio.backend.authentication.api.entity.user.User;
 
 @Service
 public class UserContextService {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserContextService(UserService userService) {
+        this.userService = userService;
+    }
 
     public User getCurrentUser(){
         org.springframework.security.core.userdetails.User principal =
