@@ -34,27 +34,32 @@ export default function Navbar() {
 
   function scrollHandler() {
     if (document) {
+      const navBar = document.querySelector('#navigation')
       const navBarContainer = document.querySelector('#navigation-container')
-      if (!navBarContainer) {
+      if (!navBar || !navBarContainer) {
         return
       }
 
       if (window.scrollY > 0) {
+        navBar.classList.add('mt-6')
+
         navBarContainer.classList.remove('border-b', 'w-full')
         navBarContainer.classList.add(
           'rounded',
-          'w-[75%]',
+          'w-[90%]',
           'z-50',
           'rounded-full',
           'mx-auto',
           'shadow-[0_4px_24px_0_rgba(154,136,206,0.3)]',
         )
       } else {
+        navBar.classList.remove('mt-6')
+
         navBarContainer.classList.remove(
           'rounded',
           'z-50',
           'rounded-full',
-          'w-[75%]',
+          'w-[90%]',
           'mx-auto',
           'shadow-[0_4px_24px_0_rgba(154,136,206,0.3)]',
         )
@@ -70,10 +75,10 @@ export default function Navbar() {
   }, [])
 
   return (
-    <nav id="navigation" className="fixed z-50 flex w-full min-w-[1290px] max-w-[1920px] justify-center">
+    <nav id="navigation" className="fixed z-50 flex h-[100px] w-full min-w-[1290px] max-w-[1920px] justify-center">
       <div
         id="navigation-container"
-        className="flex w-full flex-wrap items-center border-b border-[#171616]/30 bg-white px-40 duration-200 ease-in-out"
+        className="flex w-full flex-wrap items-center border-b border-[#171616]/30 bg-white px-36 duration-300 ease-in-out"
       >
         <Link href="/" className="hidden lg:block">
           <Logo className="mb-[30px] mt-[30px]" width="151px" height="45px" color="#171616" />
@@ -84,7 +89,7 @@ export default function Navbar() {
               <MenuItem key={idx} content={content} />
             ))}
           </div>
-          <div className="rounded-[40px] px-[36px] py-[16px] text-right text-[18px] leading-none text-[#171616]/50 hover:border-transparent hover:bg-[#7960BE]/75 hover:text-white">
+          <div className="rounded-[40px] px-[36px] py-[16px] text-right text-[15px] leading-none text-[#171616]/50 hover:border-transparent hover:bg-[#7960BE]/75 hover:text-white">
             <Link href="/auth/login">로그인</Link>
           </div>
         </div>
