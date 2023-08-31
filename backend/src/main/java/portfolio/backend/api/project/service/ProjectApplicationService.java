@@ -25,8 +25,16 @@ public class ProjectApplicationService {
     }
 
     public ProjectApplication apply(Long projectId, String currentUserId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("프로젝트가 존재하지 않습니다 : " + projectId));
+
+        List<ProjectApplication> existingApplications = projectApplicationRepository.findByAppliedArtistId(currentUserId);
+        if (existingApplications.stream().anyMatch(application -> application.getProject().getProjectId().equals(projectId))) {
+            throw new IllegalArgumentException("이미 이 프로젝트에 지원했습니다: " + projectId);
+        }
+
         ProjectApplication application = new ProjectApplication();
-        application.setProjectId(projectId);
+        application.setProject(project);
         application.setAppliedArtistId(currentUserId);
         return projectApplicationRepository.save(application);
     }
@@ -35,7 +43,7 @@ public class ProjectApplicationService {
         List<Project> myProjects = projectRepository.findByUserId(currentUserId);
 
         return myProjects.stream()
-                .flatMap(project -> projectApplicationRepository.findByProjectId(project.getProjectId()).stream())
+                .flatMap(project -> project.getApplications().stream())
                 .collect(Collectors.toList());
     }
 
@@ -47,7 +55,7 @@ public class ProjectApplicationService {
     public List<Long> getAcceptedProjectsForUser(String userId) {
         return projectApplicationRepository.findByAppliedArtistIdAndApplicationStatus(userId, ProjectApplication.ApplicationStatus.ACCEPTED)
                 .stream()
-                .map(ProjectApplication::getProjectId)
+                .map(application -> application.getProject().getProjectId())
                 .collect(Collectors.toList());
     }
 
@@ -56,8 +64,8 @@ public class ProjectApplicationService {
         ProjectApplication application = projectApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new ResourceNotFoundException("지원서 찾을수 없음: " + applicationId));
 
-        Project relatedProject = projectRepository.findById(application.getProjectId())
-                .orElseThrow(() -> new ResourceNotFoundException("프로젝트 찾을 수 없음: " + application.getProjectId()));
+
+        Project relatedProject = application.getProject();
 
         if (!relatedProject.getUserId().equals(currentUserId)) {
             throw new UnauthorizedAccessException("수정 권한이 없는 지원서입니다");

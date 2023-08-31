@@ -2,9 +2,9 @@ package portfolio.backend.api.project.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,8 +15,11 @@ public class ProjectComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
 
-    @Column(nullable = false)
-    private Long projectId;
+    @ManyToOne
+    @JoinColumn(name = "projectId", nullable = false)
+    @JsonPropertyOrder
+    private Project project;
+
 
     @Column(nullable = false)
     private String commentUserId;
@@ -27,7 +30,6 @@ public class ProjectComment {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdDate;
 
-
     public Long getCommentId() {
         return commentId;
     }
@@ -36,13 +38,6 @@ public class ProjectComment {
         this.commentId = commentId;
     }
 
-    public Long getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
-    }
 
     public String getCommentUserId() {
         return commentUserId;
@@ -67,4 +62,13 @@ public class ProjectComment {
     public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
 }

@@ -1,18 +1,16 @@
 package portfolio.backend.api.artist.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.License;
 import lombok.Getter;
-import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
-import portfolio.backend.authentication.api.entity.user.User;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Getter
@@ -22,13 +20,17 @@ import java.util.List;
 @Table(name="artists")
 public class Artist {
 
-    @Column(nullable = false, unique = true)
-    private String userId;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(hidden = true)
     private Long artistId;
+
+    @Column(nullable = false, unique = true)
+    private String userId;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "artist", orphanRemoval = true)
+    @JsonIgnore
+    private List<ArtistFavorite> favorites = new ArrayList<>();
 
     @Column(nullable=false)
     private String artistName;
@@ -59,9 +61,8 @@ public class Artist {
     @Lob
     private String mainImage;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist", cascade = CascadeType.ALL)
-    private List<ExtraImage> extraImages = new ArrayList<>();
-
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ExtraImage> extraImages;
 
     @Lob
     private String portfolio;
@@ -157,11 +158,11 @@ public class Artist {
         this.mainImage = mainImage;
     }
 
-    public List<ExtraImage> getExtraImages() {
+    public Set<ExtraImage> getExtraImages() {
         return extraImages;
     }
 
-    public void setExtraImages(List<ExtraImage> extraImages) {
+    public void setExtraImages(Set<ExtraImage> extraImages) {
         this.extraImages = extraImages;
     }
 
@@ -179,6 +180,16 @@ public class Artist {
 
     public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
+    }
+
+    public void addExtraImage(ExtraImage extraImage) {
+        extraImages.add(extraImage);
+        extraImage.setArtist(this);
+    }
+
+    public void removeExtraImage(ExtraImage extraImage) {
+        extraImages.remove(extraImage);
+        extraImage.setArtist(null);
     }
 
 }

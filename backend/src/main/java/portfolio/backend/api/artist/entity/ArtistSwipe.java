@@ -9,7 +9,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name="artist_swipe")
 public class ArtistSwipe {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "artist_swipe_id")

@@ -6,18 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import portfolio.backend.api.artist.dto.FavoriteResponseDTO;
-import portfolio.backend.api.artist.entity.ArtistFavorite;
 import portfolio.backend.api.artist.exception.HttpResponseEntity;
 import portfolio.backend.api.project.dto.FavoriteProjectRequestDTO;
 import portfolio.backend.api.project.dto.FavoriteProjectResponseDTO;
-import portfolio.backend.api.project.entity.ProjectFavorite;
 import portfolio.backend.api.project.service.ProjectFavoriteService;
+import portfolio.backend.authentication.api.service.UserContextService;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.validation.Valid;
 import java.util.List;
-
 
 @Slf4j
 @RestController
@@ -28,17 +24,15 @@ public class ProjectFavoriteController {
 
     private final ProjectFavoriteService projectFavoriteService;
 
+    private final UserContextService userContextService;
+
     @GetMapping
     public List<FavoriteProjectResponseDTO> getAllByUserId(@ApiIgnore Authentication authentication) {
-
-        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        String userId = authentication.getName();
-        List<FavoriteProjectResponseDTO> projectFavorites = projectFavoriteService.findAllByUserId(userId);
+        String currentUserId = userContextService.getCurrentUser().getUserId();
+        List<FavoriteProjectResponseDTO> projectFavorites = projectFavoriteService.findAllByUserId(currentUserId);
 
         return projectFavorites;
     }
-
 
     @PostMapping
     public HttpResponseEntity.ResponseResult<?> insert(@RequestParam Long projectId) throws Exception {

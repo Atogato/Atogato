@@ -9,9 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class FavoriteRequestDTO {
-
     private Long artistId;
-
     public FavoriteRequestDTO( Long artistId){
         this.artistId = artistId;
     }

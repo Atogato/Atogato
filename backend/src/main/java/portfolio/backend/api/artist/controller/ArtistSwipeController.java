@@ -1,14 +1,14 @@
 package portfolio.backend.api.artist.controller;
 
-
 import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import portfolio.backend.api.artist.entity.Artist;
 import portfolio.backend.api.artist.entity.ArtistSwipe;
 import portfolio.backend.api.artist.services.ArtistSwipeService;
 import portfolio.backend.authentication.api.entity.user.User;
+import portfolio.backend.authentication.api.service.UserContextService;
 import portfolio.backend.authentication.api.service.UserService;
 
 import java.util.List;
@@ -20,22 +20,23 @@ public class ArtistSwipeController {
     private final ArtistSwipeService artistSwipeService;
     private final UserService userService;
 
+    @Autowired
+    private UserContextService userContextService;
+
     public ArtistSwipeController(ArtistSwipeService artistSwipeService, UserService userService) {
         this.artistSwipeService = artistSwipeService;
         this.userService = userService;
     }
 
-    // 매칭되었다
     @GetMapping("/matched")
     public List<Artist> getMatchesWhereUserIsInvolved() {
-        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.getUser(principal.getUsername());
-        return artistSwipeService.getMatchesWhereUserIsInvolved(principal.getUsername());
+        User user = userContextService.getCurrentUser();
+        return artistSwipeService.getMatchesWhereUserIsInvolved(user.getUserId());
     }
 
     @GetMapping("/sorted")
-    public List<ArtistSwipe> getSwipesSortedByLikedReceiver() {
-        return artistSwipeService.getSwipesSortedByLikedReceiver();
+    public List<Artist> getArtistsSortedByLikedReceiver() {
+        return artistSwipeService.getArtistsSortedByLikedReceiver();
     }
 
     @PostMapping("/like")

@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import portfolio.backend.authentication.api.entity.user.User;
 
 import javax.persistence.*;
 
@@ -21,7 +20,6 @@ public class ProjectFavorite {
 
     @Column(name = "userId")
     private String userId;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projectId")
