@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { localStorage } from '@/app/storage'
 import Image from 'next/image'
 
-const BACKEND_API = 'http://localhost:7072/api/projects'
+const BACKEND_API = process.env.BACKEND_API_URL + 'projects/'
 
 type Genre = {
   genre: string
@@ -13,7 +13,6 @@ type Genre = {
 }
 
 export default function ProjectForm() {
-  // TODO: data fetching으로 장르 정보 불러오기
   const [token, setToken] = useState<string | null>()
   const genreRange: Genre[] = [
     {
@@ -44,7 +43,7 @@ export default function ProjectForm() {
   const projectName = useRef('')
   const projectContent = useRef('')
   const requiredPeople = useRef('')
-  const requiredGenre = useRef('')
+  const requiredGenre = useRef<string[]>([])
 
   const startPjtDate = useRef('')
   const endPjtDate = useRef('')
@@ -55,7 +54,6 @@ export default function ProjectForm() {
 
   const [imageFiles, setImageFiles] = useState<File[]>([])
 
-  // TODO: 서버로 FormData 전송
   const submitHandler = async (e: SyntheticEvent) => {
     e.preventDefault()
     const formData = new FormData()
@@ -67,11 +65,13 @@ export default function ProjectForm() {
     formData.append('applicationDeadline', endRequiredDate.current)
     formData.append('requiredPeople', requiredPeople.current)
     formData.append('description', projectContent.current)
-    formData.append('requiredCategory', requiredGenre.current)
 
-    // TODO: image file을 실제로 보낼 때에는 File 객체 형태로 보내야 함
+    requiredGenre.current.forEach((genre) => {
+      formData.append('requiredCategory', genre)
+    })
+
     imageFiles.forEach((image, idx) => {
-      formData.append('images', image, `pjtImage${idx}`)
+      formData.append('image', image, `pjtImage${idx}`)
     })
 
     const res = await fetch(BACKEND_API, {
@@ -231,11 +231,11 @@ export default function ProjectForm() {
               <div key={`required-${idx}`}>
                 <input
                   className="mr-1.5"
-                  type="radio"
+                  type="checkbox"
                   id={`required-${elem.genre}`}
                   name="required-genre"
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    onChangeHandler(e, requiredGenre)
+                    requiredGenre.current.push(e.target.value)
                   }}
                   value={elem.genre}
                 />
