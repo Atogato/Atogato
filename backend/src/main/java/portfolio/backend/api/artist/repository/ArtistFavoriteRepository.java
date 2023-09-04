@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ArtistFavoriteRepository extends JpaRepository<ArtistFavorite, Long> {
-
     Optional<ArtistFavorite> findByUserIdAndArtist(String userId, Artist artist);
     List<ArtistFavorite> findAllByUserId(String userId);
 

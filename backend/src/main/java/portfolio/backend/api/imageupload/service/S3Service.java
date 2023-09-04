@@ -89,10 +89,8 @@ public class S3Service {
         ExtraUploadFile extraUploadFile = new ExtraUploadFile(extraOriginalFilename, extraStoreFileUrl);
         extraUploadFileRepository.save(extraUploadFile);
 
-//        return ExtraKey;
-        return extraStoreFileUrl;
+        return extraKey;
     }
-
 
     //artist api portfolio 저장
     @Transactional

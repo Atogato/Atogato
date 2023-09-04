@@ -20,6 +20,4 @@ public class S3Controller {
             throws IOException {
         s3Service.saveUploadFile(multipartFile);
     }
-
-
 }

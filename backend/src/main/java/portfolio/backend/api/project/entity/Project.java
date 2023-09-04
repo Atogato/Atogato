@@ -2,9 +2,11 @@ package portfolio.backend.api.project.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
+import portfolio.backend.api.artist.entity.ArtistFavorite;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,6 +44,11 @@ public class Project {
     @Column(nullable=false)
     private ProjectCategory projectArtCategory;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @JsonIgnore
+    private List<ProjectComment> comments = new ArrayList<>();
+
     @Column(nullable=true)
     private String location;
 
@@ -67,6 +74,14 @@ public class Project {
 
     @Column(nullable=false)
     private Integer liked = 0;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
+    @JsonIgnore
+    private List<ProjectFavorite> favorites = new ArrayList<>();
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<ProjectApplication> applications = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -228,4 +243,27 @@ public class Project {
         this.userId = userId;
     }
 
+    public List<ProjectComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<ProjectComment> comments) {
+        this.comments = comments;
+    }
+
+    public List<ProjectFavorite> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<ProjectFavorite> favorites) {
+        this.favorites = favorites;
+    }
+
+    public List<ProjectApplication> getApplications() {
+        return applications;
+    }
+
+    public void setApplications(List<ProjectApplication> applications) {
+        this.applications = applications;
+    }
 }

@@ -30,7 +30,7 @@ public class ArtistSwipeService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String senderId = authentication.getName();
         if(!artistRepository.existsByUserId(receiverId)) {
-            throw new Exception("The receiver does not exist as an artist.");
+            throw new Exception("좋아요한 ID는 아티스트가 아닙니다");
         }
 
         if(artistSwipeRepository.existsByLikedSenderIdAndLikedReceiverId(senderId, receiverId)){
@@ -74,21 +74,49 @@ public class ArtistSwipeService {
         }
     }
 
-    public List<ArtistSwipe> getSwipesSortedByLikedReceiver() {
+    public List<Artist> getArtistsSortedByLikedReceiver() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUserId = auth.getName();
 
-        List<ArtistSwipe> swipes = artistSwipeRepository.findAll();
-        swipes.sort((a, b) -> {
-            if (a.getLikedReceiverId().equals(currentUserId) && !b.getLikedReceiverId().equals(currentUserId)) {
+        List<ArtistSwipe> allSwipes = artistSwipeRepository.findAll();
+        List<Artist> allArtists = artistRepository.findAll();
+
+        List<Artist> filteredArtists = allArtists.stream()
+                .filter(artist -> {
+                    // 유저가 포함된 Swipe 전부 확인
+                    Optional<ArtistSwipe> optionalSwipe = allSwipes.stream()
+                            .filter(swipe -> swipe.getLikedSenderId().equals(currentUserId) && swipe.getLikedReceiverId().equals(artist.getUserId())
+                                    || swipe.getLikedReceiverId().equals(currentUserId) && swipe.getLikedSenderId().equals(artist.getUserId()))
+                            .findFirst();
+                    if (optionalSwipe.isPresent()) {
+                        ArtistSwipe swipe = optionalSwipe.get();
+                        if (swipe.getLikedSenderId().equals(currentUserId)
+                                || swipe.getLikedReceiverId().equals(currentUserId) && (swipe.getMatched() || swipe.getRejected())) {
+                            return false;
+                        }
+                    }
+                    return true;
+                })
+                .collect(Collectors.toList());
+
+        filteredArtists.sort((a, b) -> {
+            Optional<ArtistSwipe> swipeA = allSwipes.stream()
+                    .filter(swipe -> swipe.getLikedReceiverId().equals(currentUserId) && swipe.getLikedSenderId().equals(a.getUserId()))
+                    .findFirst();
+            Optional<ArtistSwipe> swipeB = allSwipes.stream()
+                    .filter(swipe -> swipe.getLikedReceiverId().equals(currentUserId) && swipe.getLikedSenderId().equals(b.getUserId()))
+                    .findFirst();
+
+            if (swipeA.isPresent() && !swipeB.isPresent()) {
                 return -1;
-            } else if (!a.getLikedReceiverId().equals(currentUserId) && b.getLikedReceiverId().equals(currentUserId)) {
+            } else if (!swipeA.isPresent() && swipeB.isPresent()) {
                 return 1;
             }
+
             return 0;
         });
 
-        return swipes;
+        return filteredArtists;
     }
 
     @Scheduled(cron = "0 0 0 * * ?", zone="Asia/Seoul")

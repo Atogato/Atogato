@@ -6,6 +6,6 @@ import portfolio.backend.api.project.entity.ProjectComment;
 import java.util.List;
 
 public interface ProjectCommentRepository extends JpaRepository<ProjectComment, Long> {
-    List<ProjectComment> findByProjectId(Long projectId);
+//    List<ProjectComment> findByProjectId(Long projectId);
 
 }
