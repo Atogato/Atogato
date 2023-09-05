@@ -15,6 +15,7 @@ import portfolio.backend.authentication.common.ApiResponse;
 import portfolio.backend.authentication.config.properties.AppProperties;
 import portfolio.backend.authentication.oauth.entity.RoleType;
 import portfolio.backend.authentication.oauth.entity.UserPrincipal;
+import portfolio.backend.authentication.oauth.exception.TokenExpiredException;
 import portfolio.backend.authentication.oauth.token.AuthToken;
 import portfolio.backend.authentication.oauth.token.AuthTokenProvider;
 import portfolio.backend.authentication.utils.CookieUtil;
@@ -54,6 +55,8 @@ public class AuthController {
                         authReqModel.getPassword()
                 )
         );
+        System.out.println("어도" + authentication);
+
 
         String userId = authReqModel.getId();
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -64,12 +67,15 @@ public class AuthController {
                 ((UserPrincipal) authentication.getPrincipal()).getRoleType().getCode(),
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
+        System.out.println("날짜" + accessToken);
 
         long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
         AuthToken refreshToken = tokenProvider.createAuthToken(
                 appProperties.getAuth().getTokenSecret(),
                 new Date(now.getTime() + refreshTokenExpiry)
         );
+
+        System.out.println("토큰만료" + refreshTokenExpiry);
 
         // userId refresh token 으로 DB 확인
         UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserId(userId);
@@ -80,7 +86,10 @@ public class AuthController {
         } else {
             // DB에 refresh 토큰 업데이트
             userRefreshToken.setRefreshToken(refreshToken.getToken());
+            userRefreshTokenRepository.save(userRefreshToken);
         }
+
+        System.out.println("업데이트" + userRefreshToken);
 
         int cookieMaxAge = (int) refreshTokenExpiry / 60;
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
@@ -90,66 +99,98 @@ public class AuthController {
     }
 
     @GetMapping("/refresh")
-    public ApiResponse refreshToken (HttpServletRequest request, HttpServletResponse response) {
+    public ApiResponse refreshToken(HttpServletRequest request, HttpServletResponse response) {
         // access token 확인
         String accessToken = HeaderUtil.getAccessToken(request);
         AuthToken authToken = tokenProvider.convertAuthToken(accessToken);
-        if (!authToken.validate()) {
-            return ApiResponse.invalidAccessToken();
-        }
+        try {
+            if (!authToken.validate()) {
+                return ApiResponse.invalidAccessToken();
+            }
+        } catch (TokenExpiredException e) {
+            Claims claims = e.getClaims();
+            if (claims == null) {
+                return ApiResponse.notExpiredTokenYet();
+            }
+            String userId = claims.getSubject();
+            RoleType roleType = RoleType.of(claims.get("role", String.class));
 
-        // expired access token 인지 확인
-        Claims claims = authToken.getExpiredTokenClaims();
-        if (claims == null) {
-            return ApiResponse.notExpiredTokenYet();
-        }
-
-        String userId = claims.getSubject();
-        RoleType roleType = RoleType.of(claims.get("role", String.class));
-
-        // refresh token
-        String refreshToken = CookieUtil.getCookie(request, REFRESH_TOKEN)
-                .map(Cookie::getValue)
-                .orElse((null));
-        AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
-
-        if (authRefreshToken.validate()) {
-            return ApiResponse.invalidRefreshToken();
-        }
-
-        // userId refresh token 으로 DB 확인
-        UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserIdAndRefreshToken(userId, refreshToken);
-        if (userRefreshToken == null) {
-            return ApiResponse.invalidRefreshToken();
-        }
-
-        Date now = new Date();
-        AuthToken newAccessToken = tokenProvider.createAuthToken(
-                userId,
-                roleType.getCode(),
-                new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
-        );
-
-        long validTime = authRefreshToken.getTokenClaims().getExpiration().getTime() - now.getTime();
-
-        // refresh 토큰 기간이 3일 이하로 남은 경우, refresh 토큰 갱신
-        if (validTime <= THREE_DAYS_MSEC) {
-            // refresh 토큰 설정
-            long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
-
-            authRefreshToken = tokenProvider.createAuthToken(
-                    appProperties.getAuth().getTokenSecret(),
-                    new Date(now.getTime() + refreshTokenExpiry)
+            Date now = new Date();
+            AuthToken newAccessToken = tokenProvider.createAuthToken(
+                    userId,
+                    roleType.getCode(),
+                    new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
             );
 
-            // DB에 refresh 토큰 업데이트
-            userRefreshToken.setRefreshToken(authRefreshToken.getToken());
-
-            int cookieMaxAge = (int) refreshTokenExpiry / 60;
-            CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-            CookieUtil.addCookie(response, REFRESH_TOKEN, authRefreshToken.getToken(), cookieMaxAge);
+            return ApiResponse.success("token", newAccessToken.getToken());
         }
-
-        return ApiResponse.success("token", newAccessToken.getToken());
+        return ApiResponse.notExpiredTokenYet();
     }
+//    @GetMapping("/refresh")
+//    public ApiResponse refreshToken(HttpServletRequest request, HttpServletResponse response) {
+//        // access token 확인
+//        String accessToken = HeaderUtil.getAccessToken(request);
+//        AuthToken authToken = tokenProvider.convertAuthToken(accessToken);
+//        try {
+//            if (!authToken.validate()) {
+//                return ApiResponse.invalidAccessToken();
+//            }
+//        } catch (TokenExpiredException e) {
+//            Claims claims = e.getClaims();
+//            if (claims == null) {
+//                return ApiResponse.notExpiredTokenYet();
+//            }
+//            String userId = claims.getSubject();
+//            RoleType roleType = RoleType.of(claims.get("role", String.class));
+//
+//            String refreshToken = CookieUtil.getCookie(request, REFRESH_TOKEN)
+//                    .map(Cookie::getValue)
+//                    .orElse(null);
+//
+//            AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
+//
+//            System.out.println("리프레쉬" + refreshToken);
+//            System.out.println("유저" + userId);
+//            System.out.println("토큰" + authRefreshToken);
+//
+//            if (!authRefreshToken.validate()) {
+//                return ApiResponse.invalidRefreshToken();
+//            }
+//
+//            UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserIdAndRefreshToken(userId, refreshToken);
+//            System.out.println("유저 리프레쉬" + userRefreshToken);
+//
+//            if (userRefreshToken == null) {
+//                return ApiResponse.invalidRefreshToken();
+//            }
+//
+//            Date now = new Date();
+//            AuthToken newAccessToken = tokenProvider.createAuthToken(
+//                    userId,
+//                    roleType.getCode(),
+//                    new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
+//            );
+//
+//            long validTime = authRefreshToken.getTokenClaims().getExpiration().getTime() - now.getTime();
+////
+//            if (validTime <= THREE_DAYS_MSEC) {
+//                long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
+//
+//                authRefreshToken = tokenProvider.createAuthToken(
+//                        appProperties.getAuth().getTokenSecret(),
+//                        new Date(now.getTime() + refreshTokenExpiry)
+//                );
+//
+//                userRefreshToken.setRefreshToken(authRefreshToken.getToken());
+//
+//                int cookieMaxAge = (int) refreshTokenExpiry / 60;
+//                CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+//                CookieUtil.addCookie(response, REFRESH_TOKEN, authRefreshToken.getToken(), cookieMaxAge);
+//            }
+//
+//            return ApiResponse.success("token", newAccessToken.getToken());
+//        }
+//        return ApiResponse.notExpiredTokenYet();
+//    }
 }
+
