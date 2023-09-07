@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
+import portfolio.backend.authentication.oauth.exception.TokenExpiredException;
 
 import java.security.Key;
 import java.util.Date;
@@ -67,6 +68,7 @@ public class AuthToken {
             log.info("Invalid JWT token.");
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT token.");
+            throw new TokenExpiredException("Token has expired", e);
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT token.");
         } catch (IllegalArgumentException e) {
