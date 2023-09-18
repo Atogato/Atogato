@@ -19,6 +19,7 @@ bin/
 
 ### IntelliJ IDEA ###
 .idea
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -35,3 +36,15 @@ out/
 
 ### VS Code ###
 .vscode/
+.env/
+src/main/resources/.env
+./main/resources/.env
+backend/src/main/resources/.env
+
+src/main/resources/aws.properties
+./main/resources/aws.properties
+backend/src/main/resources/aws.properties
+
+/backend/.env
+
+backend/.idea/

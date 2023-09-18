@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<head th:replace="fragments/header :: header" />
+
+<div class="container my-3">
+  <meta charset="UTF-8">
+  <div class="my-3 border-bottom">
+    <div>
+      <a href="/">home</a></br>
+      <h4>로그인</h4>
+    </div>
+  </div>
+
+  <form action="/api/auth/login" method="post">
+
+    <div th:if="${param.error}">
+      <div class="alert alert-danger">
+        사용자ID 또는 비밀번호를 확인해 주세요.
+      </div>
+    </div>
+
+    <a th:href="@{/oauth2/authorization/google}">Google</a>
+    <a th:href="@{/oauth2/authorization/facebook}">Facebook</a>
+    <a th:href="@{/oauth2/authorization/naver}">Naver</a>
+    <a th:href="@{/oauth2/authorization/kakao}">Kakao</a>
+
+
+    <div class="mb-3">
+      <label th:for="username" class="form-label">사용자ID(Email)</label>
+      <input type="text" name="username" id="username" class="form-control" placeholder="사용자ID(Email)를 입력해주세요">
+    </div>
+    <div class="mb-3">
+      <label th:for="password" class="form-label">비밀번호</label>
+      <input type="password" name="password" id="password" class="form-control" placeholder="비밀번호를 입력해주세요">
+    </div>
+
+    <button type="submit" class="btn btn-primary">로그인</button>
+<!--    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+  </form>
+
+</div>
+</html>

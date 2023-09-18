@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head th:replace="fragments/header :: header" />
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .fieldError {
+            color: #bd2130;
+        }
+    </style>
+</th:block>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            var errorMessage = [[${errorMessage}]];
+            if(errorMessage != null){
+                alert(errorMessage);
+            }
+        });
+  </script>
+
+</th:block>
+
+<div class="container my-3">
+    <meta charset="UTF-8">
+    <div class="my-3 border-bottom">
+        <div>
+            <a href="/">home</a></br>
+            <h4>회원가입</h4>
+        </div>
+    </div>
+
+    <form action="/api/auth/signup" th:object="${userCreateForm}" method="post">
+        <div class="mb-3">
+            <label th:for="username" class="form-label">사용자 아이디(Email)</label>
+            <input type="text" th:field="*{username}" class="form-control"
+                   placeholder="사용자 아이디(Email)를 입력하세요"
+                   th:class="${#fields.hasErrors('username')}? 'form-control
+            fieldError' : 'form-control'">
+            <p class="fieldError"
+               th:if="${#fields.hasErrors('username')}"
+               th:errors="*{username}">Incorrect date</p>
+
+        </div>
+
+        <div class="mb-3">
+            <label th:for="password1" class="form-label">비밀번호</label>
+            <input type="password" th:field="*{password1}" class="form-control"
+                   placeholder="비밀번호를 입력하세요"
+                   th:class="${#fields.hasErrors('password1')}? 'form-control
+            fieldError' : 'form-control'">
+            <p class="fieldError"
+               th:if="${#fields.hasErrors('password1')}"
+               th:errors="*{password1}">Incorrect date</p>
+        </div>
+
+        <div class="mb-3">
+            <label th:for="password2" class="form-label">비밀번호 확인</label>
+            <input type="password" th:field="*{password2}" class="form-control"
+                   placeholder="비밀번호를 확인하세요"
+                   th:class="${#fields.hasErrors('password2')}? 'form-control
+            fieldError' : 'form-control'">
+            <p class="fieldError"
+               th:if="${#fields.hasErrors('password2')}"
+               th:errors="*{password2}">Incorrect date</p>
+            <p th:if="${passwordInCorrect}" class="error" th:text="${passwordInCorrect}"></p>
+        </div>
+
+        <button type="submit" class="btn btn-primary">회원가입</button>
+    </form>
+    <br/>
+
+</div>
+</html>

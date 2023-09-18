@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  mysqldb:
+    container_name: mysqldb
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: projecta
+      MYSQL_DATABASE: backend
+    volumes:
+      - mysqldb_data:/var/lib/mysql
+    networks:
+      - mynetwork
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "7072:7072"
+    depends_on:
+      - mysqldb
+    networks:
+      - mynetwork
+    restart: on-failure
+
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - mynetwork
+
+
+networks:
+  mynetwork:
+
+volumes:
+  mysqldb_data:

@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/default}">
+<head th:replace="fragments/header :: header"/>
+
+<nav class="navbar navbar-dark bg-dark">
+
+    <div class="container-fluid">
+
+        <a class="navbar-brand" href="/">project_a</a>
+
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+            </li>
+
+            <li class="nav-item" sec:authorize="authenticated">
+                <th:block sec:authorize="hasRole('ROLE_USER')">
+                    <a th:text="${#authentication.name}" class="nav-link" style="color:white;">님</a>
+                </th:block>
+            </li>
+        </ul>
+
+
+        <div class="col-md-3 text-end">
+            <span sec:authorize="!authenticated">
+                <a href="/api/auth/login" class="btn btn-outline-primary me-2">Login</a>
+            </span>
+
+            <span sec:authorize="authenticated">
+                <a href="/api/auth/logout" class="btn btn-outline-primary me-2">Logout</a>
+            </span>
+
+            <a href="/api/auth/signup" class="btn btn-primary">Sign-up</a>
+        </div>
+    </div>
+</nav>

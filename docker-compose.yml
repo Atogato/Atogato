@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  mysqldb:
+    container_name: mysqldb
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: projecta
+      MYSQL_DATABASE: backend
+    volumes:
+      - mysqldb_data:/var/lib/mysql
+    networks:
+      - mynetwork
+
+  backend:
+    container_name: backend
+    environment:
+      - SPRING_PROFILES_ACTIVE=deployment
+    image : 9907daniel/project_atogato-backend:latest
+    ports:
+      - "7072:7072"
+    depends_on:
+      - mysqldb
+    networks:
+      - mynetwork
+    restart: on-failure
+
+  frontend:
+    container_name: frontend
+    image: 9907daniel/project_atogato-frontend:latest
+    networks:
+      - mynetwork
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - backend
+      - frontend
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+
+volumes:
+  mysqldb_data:

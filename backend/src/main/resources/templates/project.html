@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create New Project</title>
+</head>
+<body>
+<h1>Create New Project</h1>
+<form action="/api/projects" method="POST">
+  <label for="projectName">Project Name:</label>
+  <input type="text" id="projectName" name="projectName" required><br><br>
+
+  <label for="creatorArtCategory">Creator Art Category:</label>
+  <input type="text" id="creatorArtCategory" name="creatorArtCategory" required><br><br>
+
+  <label for="deadline">Deadline:</label>
+  <input type="date" id="deadline" name="deadline" required><br><br>
+
+  <label for="requiredPeople">Required People:</label>
+  <input type="number" id="requiredPeople" name="requiredPeople" required><br><br>
+
+  <label for="requiredCategory">Required Category:</label>
+  <select id="requiredCategory" name="requiredCategory" multiple required>
+    <option value="art">Art</option>
+    <option value="music">Music</option>
+    <option value="music">Dance</option>
+    <option value="music">Model</option>
+    <!-- Add more options here as needed -->
+  </select><br><br>
+
+
+  <label for="description">Description:</label><br>
+  <textarea id="description" name="description" rows="4" cols="50" required></textarea><br><br>
+  <input type="submit" value="Create Project">
+</form>
+</body>
+</html>
