@@ -1,6 +1,6 @@
 import ImageUploader from '@/components/uploader/ImageUploader'
 import Editor from '@/components/editor/Editor'
-import { SyntheticEvent, ChangeEvent, useState, useRef, MutableRefObject, useEffect } from 'react'
+import { SyntheticEvent, ChangeEvent, useState, useRef, MutableRefObject, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { localStorage } from '@/app/storage'
 import Image from 'next/image'
@@ -10,6 +10,18 @@ const BACKEND_API = process.env.BACKEND_API_URL + 'projects/'
 type Genre = {
   genre: string
   label: string
+}
+
+async function requestPOST(formData: FormData, url: string, token: string | null | undefined) {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  })
+
+  return res
 }
 
 export default function ProjectForm() {
@@ -34,6 +46,29 @@ export default function ProjectForm() {
     {
       genre: '취미',
       label: '취미',
+    },
+  ]
+
+  const roles: Genre[] = [
+    {
+      genre: '연기',
+      label: '연기',
+    },
+    {
+      genre: '노래',
+      label: '노래',
+    },
+    {
+      genre: '춤',
+      label: '춤',
+    },
+    {
+      genre: '제작',
+      label: '제작',
+    },
+    {
+      genre: '작곡',
+      label: '작곡',
     },
   ]
 
@@ -74,22 +109,45 @@ export default function ProjectForm() {
       formData.append('image', image, `pjtImage${idx}`)
     })
 
-    const res = await fetch(BACKEND_API, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    })
-    if (res.ok) {
-      router.replace('/project/list')
+    const res = await requestPOST(formData, BACKEND_API, token)
+    switch (res.status) {
+      case 200:
+        router.replace('/project/list')
+        return
+      case 401:
+        const refreshed = await fetch('/api/auth/refresh', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        const refreshData = await refreshed.json()
+        if (refreshData.status === 200 && refreshData.token) {
+          localStorage.setItem('token', refreshData.token)
+          setToken(refreshData.token)
+        }
+        const refreshResponse = await requestPOST(formData, BACKEND_API, refreshData.token)
+        console.log('refresh response: ', refreshResponse)
+        if (refreshResponse.ok) {
+          router.replace('/project/list')
+        } else {
+          console.log('required login again')
+          localStorage.removeItem('token')
+          router.replace('/auth/login')
+        }
+        return
+      default:
+        console.error('ProjectForm request failed')
     }
   }
 
   useEffect(() => {
     const user = localStorage.getItem('token')
-    setToken(user)
-    router.prefetch('/project/list')
+    if (user) {
+      setToken(user)
+      router.prefetch('/project/list')
+    } else {
+      router.replace('/auth/login/')
+    }
   }, [router, token])
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>, refObj: MutableRefObject<string>) => {
@@ -226,7 +284,7 @@ export default function ProjectForm() {
       <div>
         <h2> 필요한 역할 </h2>
         <div className="flex gap-3">
-          {genreRange.map((elem, idx) => {
+          {roles.map((elem, idx) => {
             return (
               <div key={`required-${idx}`}>
                 <input
