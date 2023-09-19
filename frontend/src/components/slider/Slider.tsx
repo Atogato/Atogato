@@ -21,16 +21,20 @@ export default function Slider() {
     <Flicking
       style={{ minHeight: '450px', overflow: 'visible', overflowX: 'hidden', display: 'flex', alignItems: 'center' }}
       align="prev"
-      cameraClass="flex gap-5"
+      cameraClass="flex gap-5 animate-[scroll_25s_linear_infinite]"
       preventDefaultOnDrag={true}
-      easing={(x) => x}
+      disableOnInit={true}
     >
       {images.map((image, idx) => {
         return (
-          <div
-            key={idx}
-            className="h-[300px] w-[300px] opacity-70 duration-200 ease-in hover:mx-[40px] hover:scale-125	hover:opacity-100 hover:drop-shadow-[0_4px_13px_rgba(103,80,164,0.80)]"
-          >
+          <div key={idx} className="h-[300px] w-[300px]">
+            <Image className="h-full w-full" src={image} alt="image" width={400} height={400}></Image>
+          </div>
+        )
+      })}
+      {images.map((image, idx) => {
+        return (
+          <div key={`${idx}-2`} className="h-[300px] w-[300px]">
             <Image className="h-full w-full" src={image} alt="image" width={400} height={400}></Image>
           </div>
         )
