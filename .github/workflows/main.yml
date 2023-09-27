@@ -1,7 +1,7 @@
 name: Atogato CICD Pipeline
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "main" ]
 
   pull_request:
     branches: [ "main" , "develop", "backend" ]
