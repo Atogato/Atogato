@@ -67,34 +67,50 @@ export default function ProjectSection() {
             </div>
           </button>
           {isActive[0] && (
-            <div className="absolute mt-2 w-[200px] rounded-md bg-white text-center shadow-lg">
+            <div className="absolute mt-[60px] w-[200px] rounded-md bg-white text-center shadow-lg">
               <ul className="py-2">
                 <li
                   onClick={() => handleOptionSelect(0, 'All')}
                   className="flex w-full gap-[16px] rounded-r-lg px-[12px] py-2 hover:bg-[#ECEAF3]"
                 >
-                  <div>box</div>
+                  <div>
+                    <label>
+                      <input type="checkbox" className="accent-[#7960BE]" />
+                    </label>
+                  </div>
                   <div>All</div>
                 </li>
                 <li
                   onClick={() => handleOptionSelect(0, '서울')}
                   className="flex w-full gap-[16px] rounded-r-lg px-[12px] py-2 hover:bg-[#ECEAF3]"
                 >
-                  <div>box</div>
+                  <div>
+                    <label>
+                      <input type="checkbox" className="accent-[#7960BE]" />
+                    </label>
+                  </div>
                   <div>서울</div>
                 </li>
                 <li
                   onClick={() => handleOptionSelect(0, '경기')}
                   className="flex w-full gap-[16px] rounded-r-lg px-[12px] py-2 hover:bg-[#ECEAF3]"
                 >
-                  <div>box</div>
+                  <div>
+                    <label>
+                      <input type="checkbox" className="accent-[#7960BE]" />
+                    </label>
+                  </div>
                   <div>경기</div>
                 </li>
                 <li
                   onClick={() => handleOptionSelect(0, '부산')}
                   className="flex w-full gap-[16px] rounded-r-lg px-[12px] py-2 hover:bg-[#ECEAF3]"
                 >
-                  <div>box</div>
+                  <div>
+                    <label>
+                      <input type="checkbox" className="accent-[#7960BE]" />
+                    </label>
+                  </div>
                   <div>부산</div>
                 </li>
               </ul>
@@ -121,35 +137,51 @@ export default function ProjectSection() {
             </div>
           </button>
           {isActive[1] && (
-            <div className="absolute mt-2 w-[200px] rounded-md bg-white text-center shadow-lg">
+            <div className="absolute ml-[210px] mt-[60px] w-[200px] rounded-md bg-white text-center shadow-lg">
               <ul className="py-2">
                 <li
                   onClick={() => handleOptionSelect(1, 'All')}
                   className="flex w-full gap-[16px] rounded-r-lg px-[12px] py-2 hover:bg-[#ECEAF3]"
                 >
-                  <div>box</div>
+                  <div>
+                    <label>
+                      <input type="checkbox" className="accent-[#7960BE]" />
+                    </label>
+                  </div>
                   <div>All</div>
                 </li>
                 <li
                   onClick={() => handleOptionSelect(1, '서울')}
                   className="flex w-full gap-[16px] rounded-r-lg px-[12px] py-2 hover:bg-[#ECEAF3]"
                 >
-                  <div>box</div>
-                  <div>서울</div>
+                  <div>
+                    <label>
+                      <input type="checkbox" className="accent-[#7960BE]" />
+                    </label>
+                  </div>
+                  <div>option 1</div>
                 </li>
                 <li
                   onClick={() => handleOptionSelect(1, '경기')}
                   className="flex w-full gap-[16px] rounded-r-lg px-[12px] py-2 hover:bg-[#ECEAF3]"
                 >
-                  <div>box</div>
-                  <div>경기</div>
+                  <div>
+                    <label>
+                      <input type="checkbox" className="accent-[#7960BE]" />
+                    </label>
+                  </div>
+                  <div>option 2</div>
                 </li>
                 <li
                   onClick={() => handleOptionSelect(1, '부산')}
                   className="flex w-full gap-[16px] rounded-r-lg px-[12px] py-2 hover:bg-[#ECEAF3]"
                 >
-                  <div>box</div>
-                  <div>부산</div>
+                  <div>
+                    <label>
+                      <input type="checkbox" className="accent-[#7960BE]" />
+                    </label>
+                  </div>
+                  <div>option 3</div>
                 </li>
               </ul>
             </div>

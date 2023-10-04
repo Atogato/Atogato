@@ -37,7 +37,7 @@ export default function Filter({ data }: artistsProps): JSX.Element {
 
   return (
     <div>
-      <div className="flex">
+      {/* <div className="flex">
         <div className="relative mr-3">
           <button
             onClick={() => {
@@ -95,7 +95,7 @@ export default function Filter({ data }: artistsProps): JSX.Element {
           )}
         </div>
       </div>
-      <FilteredList options={selectedOptions} artists={data} />
+      <FilteredList options={selectedOptions} artists={data} /> */}
       <ArtistSection />
     </div>
   )

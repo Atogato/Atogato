@@ -90,10 +90,10 @@ export default function ArtistGallery({ images = [] }: { images: string[] }) {
                     </div>
                     <div className="float-right mb-[30px]">
                       <div className="relative w-28">
-                        <div className="absolute right-[3px] z-40 flex h-[32px] w-[32px] items-center justify-center rounded-full border-2 border-white bg-[#7960BE] text-white">
+                        <div className="absolute right-[3px] z-50 flex h-[32px] w-[32px] items-center justify-center rounded-full border-2 border-white bg-[#7960BE] text-white">
                           +5
                         </div>
-                        <div className="absolute right-[17px] z-30 rounded-full border-2 border-white">
+                        <div className="absolute right-[17px] z-40 rounded-full border-2 border-white">
                           <Image
                             src={image}
                             alt={`project image`}
@@ -102,7 +102,7 @@ export default function ArtistGallery({ images = [] }: { images: string[] }) {
                             className="h-[28px] w-[28px] rounded-full"
                           ></Image>
                         </div>
-                        <div className="absolute right-[31px] z-20 rounded-full border-2 border-white">
+                        <div className="absolute right-[31px] z-30 rounded-full border-2 border-white">
                           <Image
                             src={image}
                             alt={`project image`}
@@ -111,7 +111,7 @@ export default function ArtistGallery({ images = [] }: { images: string[] }) {
                             className="h-[28px] w-[28px] rounded-full"
                           ></Image>
                         </div>
-                        <div className="absolute right-[45px] z-10 rounded-full border-2 border-white">
+                        <div className="absolute right-[45px] z-20 rounded-full border-2 border-white">
                           <Image
                             src={image}
                             alt={`project image`}

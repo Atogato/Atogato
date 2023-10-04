@@ -29,7 +29,6 @@ export default function List() {
   return (
     <div>
       <div>
-        <div className="my-2 text-left text-2xl">Filters</div>
         <Filter data={result} />
       </div>
     </div>
