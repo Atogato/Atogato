@@ -8,8 +8,8 @@ export default function Newproject({ data }: filteredListProps): JSX.Element {
   return (
     <div className="">
       <div className="mb-[114px] ml-[239px] mt-[140px] flex flex-col text-left text-2xl">
-        <div className="poppins mb-[8px] text-[40px] font-semibold text-[#7960BE]/70">New Project</div>
-        <div className="h-[70px] text-[70px] font-semibold leading-snug text-[#171616]/30">
+        <div className="poppins mb-[8px] text-2xl font-semibold text-[#7960BE]/70">New Project</div>
+        <div className="h-[70px] text-5xl font-semibold leading-snug text-[#171616]/30">
           <span className="font-semibold text-[#171616]">새로운 프로젝트</span>를 탐색해보세요
         </div>
       </div>

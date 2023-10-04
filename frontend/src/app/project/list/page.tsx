@@ -125,8 +125,8 @@ export default function List() {
       </div>
       <div className="flex h-[965px] flex-col  bg-[#F4F2F8]">
         <div className="mb-[114px] ml-[239px] mt-[140px] flex flex-col text-left text-2xl">
-          <div className="poppins mb-[8px] text-[40px] font-semibold text-[#7960BE]/70">Project</div>
-          <div className="h-[70px] text-[70px] font-semibold leading-snug text-[#171616]/30">
+          <div className="poppins mb-[8px] text-2xl font-semibold text-[#7960BE]/70">Project</div>
+          <div className="h-[70px] text-5xl font-semibold leading-snug text-[#171616]/30">
             <span className="font-semibold text-[#171616]">모집 임박 프로젝트</span>에 참여해보세요
           </div>
         </div>
