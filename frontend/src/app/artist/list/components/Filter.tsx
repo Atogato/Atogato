@@ -3,6 +3,7 @@ import { useState } from 'react'
 import FilteredList from './FilteredList'
 import { Artists } from '../page'
 import { localStorage } from '@/app/storage'
+import ArtistSection from '@/components/ArtistSection'
 
 type artistsProps = {
   data: Artists[]
@@ -36,7 +37,7 @@ export default function Filter({ data }: artistsProps): JSX.Element {
 
   return (
     <div>
-      <div className="flex">
+      {/* <div className="flex">
         <div className="relative mr-3">
           <button
             onClick={() => {
@@ -94,7 +95,8 @@ export default function Filter({ data }: artistsProps): JSX.Element {
           )}
         </div>
       </div>
-      <FilteredList options={selectedOptions} artists={data} />
+      <FilteredList options={selectedOptions} artists={data} /> */}
+      <ArtistSection />
     </div>
   )
 }

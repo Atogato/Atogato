@@ -1,7 +1,7 @@
 import { PROJECT_GENRES } from '@/app/common/genres'
 import Gallery2 from './Gallery2'
 import LinkButton from './LinkButton'
-export default function ProjectSection() {
+export default function ProjectSection2() {
   const gneres = ['전체', ...PROJECT_GENRES]
   const images = [
     '/images/sample/projects/project1.png',
