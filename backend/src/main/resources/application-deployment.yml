@@ -88,7 +88,7 @@ logging:
     org.hibernate.SQL: debug
 
 server:
-  port: 7072
+  port: 80
 
 # jwt secret key 설정
 jwt.secret: '8sknjlO3NPTBqo319DHLNqsQAfRJEdKsETOds'
