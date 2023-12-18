@@ -1,10 +1,10 @@
 import ImageUploader from '@/components/uploader/ImageUploader'
 import Editor from '@/components/editor/Editor'
-import { SyntheticEvent, ChangeEvent, useState, useRef, MutableRefObject, useEffect, useMemo } from 'react'
+import { SyntheticEvent, ChangeEvent, useState, useRef, MutableRefObject, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { localStorage } from '@/app/storage'
-import Image from 'next/image'
-
+import Check from '@/icons/check.svg'
+import DatePicker from '../datePicker/DatePicker'
 const BACKEND_API = process.env.BACKEND_API_URL + 'projects/'
 
 type Genre = {
@@ -83,6 +83,7 @@ export default function ProjectForm() {
   const startPjtDate = useRef('')
   const endPjtDate = useRef('')
   const selectedArea = useRef('seoul')
+  const selectedContected = useRef('online')
 
   const startRequiredDate = useRef('')
   const endRequiredDate = useRef('')
@@ -109,6 +110,7 @@ export default function ProjectForm() {
       formData.append('image', image, `pjtImage${idx}`)
     })
 
+    // TODO: refresh token 전송 및 access Token 재발급 custom hook
     const res = await requestPOST(formData, BACKEND_API, token)
     switch (res.status) {
       case 200:
@@ -126,11 +128,9 @@ export default function ProjectForm() {
           setToken(refreshData.token)
         }
         const refreshResponse = await requestPOST(formData, BACKEND_API, refreshData.token)
-        console.log('refresh response: ', refreshResponse)
         if (refreshResponse.ok) {
           router.replace('/project/list')
         } else {
-          console.log('required login again')
           localStorage.removeItem('token')
           router.replace('/auth/login')
         }
@@ -150,8 +150,8 @@ export default function ProjectForm() {
     }
   }, [router, token])
 
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>, refObj: MutableRefObject<string>) => {
-    refObj.current = e.target.value
+  const onChangeHandler = (refObj: MutableRefObject<string>, value: string) => {
+    refObj.current = value
   }
 
   const editorHandler = (value: string) => {
@@ -159,136 +159,166 @@ export default function ProjectForm() {
   }
 
   return (
-    // TODO: 일반 문자로 처리한 부분을 next-translate 사용해서 t()형태로 변환
-    // TODO: 반복되는 input label 컴포넌트화 및 재활용
-    <form className="flex max-w-md flex-col space-y-4 pb-10" encType="multipart/form-data" onSubmit={submitHandler}>
+    // TODO: 일반 문자로 처리한 부분을 next-translate 사용해서 t()형태로 변환(로컬라이제이션)
+    <form
+      className="flex w-[1024px] flex-col space-y-24 pb-10 ps-[40px] pt-[36px]"
+      encType="multipart/form-data"
+      onSubmit={submitHandler}
+    >
       <div>
-        <h2> 프로젝트 장르 </h2>
-        <div className="flex gap-3">
+        <h2 className="text-2xl text-[#171616]">
+          <span> 프로젝트 장르 </span>
+          <span className="ml-[16px] text-lg text-[#171616]/50"> 한 가지만 선택해주세요. </span>
+        </h2>
+        <fieldset className="mt-5 flex gap-14">
           {genreRange.map((elem, idx) => {
             return (
-              <div key={`pjt-${idx}`}>
+              <div key={`pjt-${idx}`} className="group/checkbox flex items-center">
                 <input
-                  className="mr-1.5"
+                  className="peer hidden"
                   type="radio"
                   id={`pjt-${elem.genre}`}
                   name="pjt-genre"
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    onChangeHandler(e, projectGenre)
+                    onChangeHandler(projectGenre, e.target.value)
                   }}
-                  value={elem.genre}
                 />
-                <label htmlFor={`pjt-${elem.genre}`}>{elem.label}</label>
+                <label
+                  className="mr-4 inline-block h-7 w-7 rounded border border-solid border-[#E1E1E1] hover:cursor-pointer peer-checked:hidden"
+                  htmlFor={`pjt-${elem.genre}`}
+                />
+                <label
+                  className="relative mr-4 hidden h-7 w-7 rounded border border-solid border-[#E1E1E1] hover:cursor-pointer peer-checked:inline-block peer-checked:bg-[#7960BE]"
+                  htmlFor={`pjt-${elem.genre}`}
+                >
+                  <Check
+                    width={15}
+                    height={15}
+                    className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%]"
+                  />
+                </label>
+                <label htmlFor={`pjt-${elem.genre}`} className="text-base">
+                  {elem.label}
+                </label>
               </div>
             )
           })}
-        </div>
+        </fieldset>
       </div>
       <div>
-        <h2> 프로젝트 이름 </h2>
+        <h2 className="text-2xl text-[#171616]"> 프로젝트 이름 </h2>
         <input
-          className="w-full border-2"
+          className="mt-5 w-full rounded border border-2 border-solid border-[#E1E1E1] bg-[#FAFAFA] p-4"
           type="text"
+          placeholder="프로젝트를 입력해주세요."
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            onChangeHandler(e, projectName)
+            onChangeHandler(projectName, e.target.value)
           }}
         />
       </div>
       <div>
-        <h2> 프로젝트 소개 </h2>
-        <Editor onEditorUpdated={editorHandler} />
+        <h2 className="text-2xl text-[#171616]"> 프로젝트 소개 </h2>
+        <Editor className="mt-5 h-96 w-full gap-y-4" onEditorUpdated={editorHandler} />
       </div>
       <div>
-        <h2> 프로젝트 기간 </h2>
-        <p>
-          <label htmlFor="pjt-start-period"> 시작 날짜: </label>
-          <input
-            className="select-all"
-            type="date"
+        <h2 className="text-2xl text-[#171616]"> 프로젝트 기간 </h2>
+        <div className="mt-5 flex items-center gap-4">
+          <DatePicker
             id="pjt-start-period"
             name="pjt-start-period"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              onChangeHandler(e, startPjtDate)
+            required={true}
+            onChange={(value) => {
+              onChangeHandler(startPjtDate, value)
             }}
           />
-        </p>
-        <p>
-          <label htmlFor="pjt-end-period"> 종료 날짜: </label>
-          <input
-            className="select-all"
-            type="date"
+          <span> ~ </span>
+          <DatePicker
             id="pjt-end-period"
             name="pjt-end-period"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              onChangeHandler(e, endPjtDate)
+            required={true}
+            onChange={(value) => {
+              onChangeHandler(endPjtDate, value)
             }}
           />
-        </p>
+        </div>
       </div>
       <div>
-        <h2> 모집 기간 </h2>
-        <p>
-          <label htmlFor="required-start-period"> 시작 날짜: </label>
-          <input
-            type="date"
+        <h2 className="text-2xl text-[#171616]"> 모집 기간 </h2>
+        <div className="mt-5 flex items-center gap-4">
+          <DatePicker
             id="required-start-period"
             name="required-start-period"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              onChangeHandler(e, startRequiredDate)
+            required={true}
+            onChange={(value) => {
+              onChangeHandler(startRequiredDate, value)
             }}
           />
-        </p>
-        <p>
-          <label htmlFor="required-end-period"> 종료 날짜: </label>
-          <input
-            type="date"
+          <span className="after:content-['~']" />
+          <DatePicker
             id="required-end-period"
             name="required-end-period"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              onChangeHandler(e, endRequiredDate)
+            required={true}
+            onChange={(value) => {
+              onChangeHandler(endRequiredDate, value)
             }}
           />
-        </p>
+        </div>
       </div>
       <div>
-        <h2> 모집 인원 </h2>
+        <h2 className="text-2xl text-[#171616]"> 활동 지역</h2>
+        <div className="flex gap-4">
+          <select
+            className="w-64 border-2 p-2"
+            name="area-1"
+            defaultValue={selectedArea.current}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+              onChangeHandler(selectedArea, e.target.value)
+            }}
+          >
+            <option defaultChecked value="seoul">
+              서울
+            </option>
+            <option value="busan">부산</option>
+            <option value="goyang">고양</option>
+            <option value="incheon">인천</option>
+          </select>
+          <select
+            className="w-64 border-2 p-2"
+            name="area-2"
+            defaultValue={selectedContected.current}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+              onChangeHandler(selectedContected, e.target.value)
+            }}
+          >
+            <option defaultChecked value="online">
+              온라인
+            </option>
+            <option value="offline">오프라인</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <h2 className="text-2xl text-[#171616]"> 모집 인원 </h2>
         <input
-          className="w-5 border-2"
+          className="mt-3 w-32 border-2"
           type="text"
           name="people"
           id="people"
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            onChangeHandler(e, requiredPeople)
+            onChangeHandler(requiredPeople, e.target.value)
           }}
         />
         <label htmlFor="people"> 명 </label>
       </div>
+
       <div>
-        <h2> 활동 지역</h2>
-        <select
-          className="border-2"
-          name="area"
-          defaultValue={selectedArea.current}
-          onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-            onChangeHandler(e, selectedArea)
-          }}
-        >
-          <option defaultChecked value="seoul">
-            서울
-          </option>
-          <option value="busan">부산</option>
-          <option value="goyang">고양</option>
-          <option value="incheon">인천</option>
-        </select>
-      </div>
-      <div>
-        <h2> 필요한 역할 </h2>
-        <div className="flex gap-3">
+        <h2 className="text-2xl text-[#171616]"> 필요한 역할 </h2>
+        <fieldset className="mt-5 flex gap-14">
           {roles.map((elem, idx) => {
             return (
-              <div key={`required-${idx}`}>
+              <div key={`required-${idx}`} className="group/checkbox flex items-center">
                 <input
-                  className="mr-1.5"
+                  className="peer hidden"
                   type="checkbox"
                   id={`required-${elem.genre}`}
                   name="required-genre"
@@ -297,16 +327,32 @@ export default function ProjectForm() {
                   }}
                   value={elem.genre}
                 />
-                <label htmlFor={`required-${elem.genre}`}>{elem.label}</label>
+                <label
+                  className="mr-4 inline-block h-7 w-7 rounded border border-solid border-[#E1E1E1] hover:cursor-pointer peer-checked:hidden"
+                  htmlFor={`required-${elem.genre}`}
+                />
+                <label
+                  className="relative mr-4 hidden h-7 w-7 rounded border border-solid border-[#E1E1E1] hover:cursor-pointer peer-checked:inline-block peer-checked:bg-[#7960BE]"
+                  htmlFor={`required-${elem.genre}`}
+                >
+                  <Check
+                    width={15}
+                    height={15}
+                    className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%]"
+                  />
+                </label>
+                <label htmlFor={`required-${elem.genre}`} className="text-base">
+                  {elem.label}
+                </label>
               </div>
             )
           })}
-        </div>
+        </fieldset>
       </div>
       <div className="w-full">
-        <h2> 소개 이미지 </h2>
-        <div className="flex flex-wrap gap-4">
-          {imageFiles.map((imageFile, idx) => {
+        <h2 className="text-2xl text-[#171616]"> 소개 이미지 </h2>
+        <div className="mt-4 flex flex-wrap gap-4">
+          {/* {imageFiles.map((imageFile, idx) => {
             const previewUrl = URL.createObjectURL(imageFile)
             return (
               <div key={`preview-image-${idx}`} className="aspect-square w-2/12">
@@ -319,16 +365,16 @@ export default function ProjectForm() {
                 ></Image>
               </div>
             )
-          })}
+          })} */}
           <ImageUploader
-            className="aspect-square w-2/12"
+            className="flex w-full flex-col gap-4"
             onImageUpload={(image) => {
               setImageFiles((prev) => [...prev, image])
             }}
           />
         </div>
       </div>
-      <button className="border-2"> 등록하기 </button>
+      <button className="h-[64px] rounded border-2 bg-[#7960BE] py-4 text-2xl text-[#FFF]"> 등록하기 </button>
     </form>
   )
 }

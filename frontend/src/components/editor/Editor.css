@@ -28,9 +28,42 @@
   min-height: fit-content;
 }
 
+.ql-toolbar.ql-snow {
+  border: none;
+}
+
+.ql-container.ql-snow {
+  border: 1px solid #ebebeb;
+}
+
+.ql-toolbar.ql-snow + .ql-container.ql-snow {
+  border-top: 1px solid #ebebeb;
+}
+
 .ql-container {
   max-height: 80%;
 }
+
+.ql-formats {
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(121, 96, 190, 0.8);
+}
+
 .ql-editor {
-  overflow-y: scroll;
+  padding: 12px;
+  resize: none;
+}
+
+.ql-formats .ql-picker-label {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ql-snow .ql-stroke {
+  stroke: rgba(255, 255, 255, 0.8);
+}
+
+.ql-snow .ql-fill,
+.ql-snow .ql-stroke.ql-fill {
+  fill: rgba(255, 255, 255, 0.8);
 }
