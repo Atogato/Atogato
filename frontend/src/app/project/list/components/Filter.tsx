@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import Filteredlist from './Filteredlist'
 import { Projects } from '../page'
+import ProjectSection2 from '@/components/ProjectSection2'
 
 type projectsProps = {
   data: Projects[]
@@ -30,7 +31,7 @@ export default function Filter({ data }: projectsProps): JSX.Element {
   }
   return (
     <div>
-      <div className="flex">
+      {/* <div className="flex">
         <div className="relative mr-3">
           <button
             onClick={() => {
@@ -87,8 +88,9 @@ export default function Filter({ data }: projectsProps): JSX.Element {
             </div>
           )}
         </div>
-      </div>
-      <Filteredlist options={selectedOptions} data={data} />
+      </div> */}
+      <ProjectSection2 />
+      {/* <Filteredlist options={selectedOptions} data={data} /> */}
     </div>
   )
 }

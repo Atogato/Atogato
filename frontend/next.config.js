@@ -10,6 +10,7 @@ const nextConfig = {
   env: {
     BACKEND_API_URL: process.env.BACKEND_API_URL,
     BACKEND_OAUTH_URL: process.env.BACKEND_OAUTH_URL,
+    OAUTH_REDIRECT_URL: process.env.OAUTH_REDIRECT_URL,
   },
 }
 

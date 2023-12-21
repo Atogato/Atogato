@@ -73,6 +73,13 @@ a {
   font-family: var(--font-poppins);
 }
 
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+}
+
 .hide {
   width: 0;
   height: 0;

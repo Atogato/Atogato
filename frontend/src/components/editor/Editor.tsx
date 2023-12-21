@@ -6,6 +6,7 @@ import ReactQuill, { Quill } from 'react-quill'
 import quillEmoji from 'quill-emoji'
 
 import 'react-quill/dist/quill.snow.css'
+
 import 'quill-emoji/dist/quill-emoji.css'
 import './Editor.css'
 
@@ -21,10 +22,11 @@ Quill.register(
 )
 
 type EdtiorProps = {
+  className?: string
   onEditorUpdated?: (value: string) => void
 }
 export default function Editor(props: EdtiorProps) {
-  const { onEditorUpdated } = props
+  const { className, onEditorUpdated } = props
   const modules = {
     toolbar: [
       [{ header: [1, 2, false] }],
@@ -60,5 +62,14 @@ export default function Editor(props: EdtiorProps) {
     }
   }, [value])
 
-  return <ReactQuill className="h-96" modules={modules} formats={formats} value={value} onChange={setValue} />
+  return (
+    <ReactQuill
+      placeholder="내용을 입력해주세요."
+      className={className}
+      modules={modules}
+      formats={formats}
+      value={value}
+      onChange={setValue}
+    />
+  )
 }

@@ -12,12 +12,10 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <body className={`relative ${pretendard.className} ${poppins.variable} min-w-[1280px] max-w-[1920px]`}>
-        <App>
-          <Navbar />
-          {children}
-          <Footer />
-        </App>
+      <body className={`relative ${pretendard.className} ${poppins.variable} mx-auto min-w-[1280px] max-w-[1920px]`}>
+        <Navbar />
+        <App>{children}</App>
+        <Footer />
       </body>
     </html>
   )
