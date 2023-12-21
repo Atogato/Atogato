@@ -28,8 +28,7 @@ export default function List() {
   console.log(result)
   return (
     <div>
-      <div className="mx-auto my-5 max-w-5xl">
-        <div className="my-2 text-left text-2xl">Filters</div>
+      <div>
         <Filter data={result} />
       </div>
     </div>

@@ -1,6 +1,7 @@
 'use client'
 import React, { useCallback } from 'react'
 import { useDropzone, FileRejection } from 'react-dropzone'
+import AttachImage from '@/icons/attach-image.svg'
 
 interface ImageUploaderProps {
   className?: string
@@ -32,16 +33,39 @@ export default function ImageUploader(props: ImageUploaderProps) {
     onDropRejected: handleRejected,
   })
 
-  const customClassName = `dropzone ${isDragActive ? 'active bg-gray-400' : ''} border-2 ${className}`
+  const customClassName = `${isDragActive ? 'active bg-gray-400' : ''} ${className}`
 
   return (
-    <div {...getRootProps()} className={customClassName}>
-      <input {...getInputProps()} />
-      {isDragActive ? (
-        <p className="text-white">이미지 업로드 중...</p>
-      ) : (
-        <p>이미지를 드래그하거나 클릭해서 업로드 하세요</p>
-      )}
-    </div>
+    <>
+      <div {...getRootProps()} className={customClassName}>
+        <div className="dropzone flex h-[216px] w-full items-center justify-center border-2">
+          <input {...getInputProps()} />
+          {isDragActive ? (
+            <p className="text-white">이미지 업로드 중...</p>
+          ) : (
+            <div className="flex flex-col items-center gap-5">
+              <AttachImage width={61} height={53} />
+              <div className="flex flex-col items-center gap-2">
+                <p className="text-lg">
+                  이미지를 드래그하거나 <strong className="text-[#7960BE]"> 파일을 업로드 </strong> 하세요
+                </p>
+                <p className="text-base"> 지원 확장자: jpeg, png, webp</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      <div {...getRootProps()} className="mx-auto">
+        <input {...getInputProps()} />
+        <button
+          className="w-[312px] rounded bg-[#7960BE] px-4 py-4 text-[#FFF]"
+          onClick={(e) => {
+            e.preventDefault()
+          }}
+        >
+          파일 선택
+        </button>
+      </div>
+    </>
   )
 }
