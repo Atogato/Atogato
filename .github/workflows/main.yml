@@ -37,9 +37,9 @@ jobs:
           sed -i "s/SECRET_KEY_PLACEHOLDER/${SECRET_KEY}/g" ./backend/src/main/resources/application-deployment.yml
           sed -i "s/GOOGLE_CLIENT_ID_PLACEHOLDER/${GOOGLE_CLIENT_ID}/g" ./backend/src/main/resources/application-deployment.yml
           sed -i "s/GOOGLE_CLIENT_SECRET_PLACEHOLDER/${GOOGLE_CLIENT_SECRET}/g" ./backend/src/main/resources/application-deployment.yml
-          echo "BACKEND_API_URL=${BACKEND_API_URL}" >> .env
-          echo "BACKEND_OAUTH_URL=${BACKEND_OAUTH_URL}" >> .env
-          echo "OAUTH_REDIRECT_URL=${OAUTH_REDIRECT_URL}" >> .env
+          echo "BACKEND_API_URL=${BACKEND_API_URL}" >> ./frontend/.env
+          echo "BACKEND_OAUTH_URL=${BACKEND_OAUTH_URL}" >> ./frontend/.env
+          echo "OAUTH_REDIRECT_URL=${OAUTH_REDIRECT_URL}" >> ./frontend/.env
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
