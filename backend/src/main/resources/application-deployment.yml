@@ -58,6 +58,7 @@ spring:
             redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
 
 
+
           kakao:
             client-id: ${KAKAO_CLIENT_ID}
             client-secret: ${KAKAO_CLIENT_SECRET}
