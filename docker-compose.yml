@@ -21,7 +21,7 @@ services:
     image : 9907daniel/project_atogato-backend:latest
     ports:
 #      - "7072:7072"
-      - "127.0.0.1:7072:7072"  
+      - "127.0.0.1:7072:7072"
     depends_on:
       - mysqldb
     networks:
