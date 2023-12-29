@@ -84,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository())
                 .and()
                     .redirectionEndpoint()
-                    .baseUri("/*/oauth2/code/*")
+                    .baseUri("/api/*/oauth2/code/*")
                 .and()
                     .userInfoEndpoint()
                     .userService(oAuth2UserService)
@@ -164,7 +164,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("http://localhost:3000", "http://atogato.duckdns.org", "http://localhost:7072/swagger-ui.html", "http://backend:7072/swagger-ui.html"));
+        config.setAllowedOrigins(List.of("http://localhost:3000", "http://atogato.duckdns.org", "http://localhost:7072/swagger-ui.html", "http://backend:7072/swagger-ui.html", "http://atogato.duckdns.org/api/", "http://atogato.duckdns.org/api/swagger-ui.html"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("*"));
