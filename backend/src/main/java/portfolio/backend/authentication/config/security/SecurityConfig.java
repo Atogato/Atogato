@@ -84,7 +84,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository())
                 .and()
                     .redirectionEndpoint()
-                    .baseUri("/api/*/oauth2/code/*")
+//                    .baseUri("/api/*/oauth2/code/*")
+                    .baseUri("/*/oauth2/code/*")
                 .and()
                     .userInfoEndpoint()
                     .userService(oAuth2UserService)
@@ -93,7 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .failureHandler(oAuth2AuthenticationFailureHandler());
 
 
-        
+
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
     @Override
