@@ -28,6 +28,7 @@ public class ArtistController {
         this.artistService = artistService;
     }
 
+    
     @GetMapping
     public List<Artist> getAllArtist() {
         return artistService.findAll();
