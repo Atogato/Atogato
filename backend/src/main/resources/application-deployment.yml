@@ -37,6 +37,8 @@ spring:
             scope:
               - email
               - profile
+            redirectUri: "{baseUrl}/api/{action}/oauth2/code/{registrationId}"
+
 
           facebook:
             client-id: ${FACEBOOK_CLIENT_ID}
