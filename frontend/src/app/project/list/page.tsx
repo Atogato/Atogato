@@ -74,7 +74,7 @@ export default function List() {
 
   useEffect(() => {
     const api = async () => {
-      const data = await fetch('http://localhost:7072/api/projects', {
+      const data = await fetch('http://atogato.duckdns.org/api/projects', {
         method: 'GET',
       })
       const jsonData = await data.json()
@@ -86,7 +86,7 @@ export default function List() {
   console.log(result)
   useEffect(() => {
     const api = async () => {
-      const data = await fetch('http://localhost:7072/api/projects/sorted', {
+      const data = await fetch('http://atogato.duckdns.org/api/projects/sorted', {
         method: 'GET',
       })
       const jsonData = await data.json()
