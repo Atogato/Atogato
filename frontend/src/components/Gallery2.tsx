@@ -24,18 +24,18 @@ export default function Gallery2({ images = [] }: { images: string[] }) {
                 <Image
                   src={image}
                   alt={`project image`}
-                  width={400}
-                  height={400}
+                  width={464}
+                  height={464}
                   className="h-full w-full group-hover:blur-[4px]"
                 ></Image>
                 <div
                   className="absolute inset-0 flex flex-col justify-end bg-white/30 p-5
                 opacity-0 transition-all duration-200 ease-out  group-hover:opacity-100"
                 >
-                  <div className="ml-[20px] mt-[374px] text-[28px] font-semibold text-[#171616]">
+                  <div className="ml-[30px] mt-[374px] text-[28px] font-semibold text-[#171616]">
                     여러가지 무늬를 그린 그림
                   </div>
-                  <div className="ml-[20px] mt-[6px] text-[18px] font-semibold text-[#171616]/75">김작가&이화가</div>
+                  <div className="ml-[30px] mt-[6px] text-[18px] font-semibold text-[#171616]/75">김작가&이화가</div>
                   <div className="mt-[57px] text-[20px] font-bold">
                     여러가지 추상적인 그림을 그려서 프로젝트를 만들어 팀원들과 진행해가고 있습니다.
                   </div>
