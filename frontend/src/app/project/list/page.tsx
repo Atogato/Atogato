@@ -75,6 +75,7 @@ export default function List() {
   useEffect(() => {
     const api = async () => {
       const data = await fetch(process.env.BACKEND_API_URL + 'projects', {
+
         method: 'GET',
       })
       const jsonData = await data.json()
@@ -87,6 +88,7 @@ export default function List() {
   useEffect(() => {
     const api = async () => {
       const data = await fetch(process.env.BACKEND_API_URL + 'projects/sorted', {
+
         method: 'GET',
       })
       const jsonData = await data.json()

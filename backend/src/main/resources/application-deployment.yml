@@ -37,6 +37,8 @@ spring:
             scope:
               - email
               - profile
+            redirectUri: "{baseUrl}/api/{action}/oauth2/code/{registrationId}"
+
 
           facebook:
             client-id: ${FACEBOOK_CLIENT_ID}
@@ -56,6 +58,7 @@ spring:
             authorization-grant-type: authorization_code
 #            redirect-uri: http://localhost:7072/login/oauth2/code/naver
             redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+
 
 
           kakao:
@@ -88,7 +91,7 @@ logging:
     org.hibernate.SQL: debug
 
 server:
-  port: 7072
+  port: 80
 
 # jwt secret key 설정
 jwt.secret: '8sknjlO3NPTBqo319DHLNqsQAfRJEdKsETOds'
