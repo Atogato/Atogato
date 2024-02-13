@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-const BACKEND_API = 'http://localhost:7072/api/v1/auth/refresh'
+const BACKEND_API = process.env.BACKEND_API_URL + 'v1/auth/refresh'
 
 export async function GET(request: NextRequest) {
   const REFRESH_TOKEN = cookies().get('refresh_token')

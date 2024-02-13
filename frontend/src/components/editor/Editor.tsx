@@ -28,14 +28,16 @@ type EdtiorProps = {
 export default function Editor(props: EdtiorProps) {
   const { className, onEditorUpdated } = props
   const modules = {
-    toolbar: [
-      [{ header: [1, 2, false] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-      ['emoji'],
-    ],
-    'emoji-toolbar': true,
-    'emoji-shortname': true,
+    // toolbar 옵션 선택 Design 완료 전까지 화면에 toolbar를 표시하지 않음
+    // toolbar: [
+    //   [{ header: [1, 2, false] }],
+    //   ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    //   [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+    //   ['emoji'],
+    // ],
+    toolbar: false,
+    'emoji-toolbar': false,
+    'emoji-shortname': false,
   }
   const formats = [
     'font',

@@ -16,7 +16,7 @@ export default function List() {
 
   useEffect(() => {
     const api = async () => {
-      const data = await fetch('http://localhost:7072/api/artists', {
+      const data = await fetch(process.env.BACKEND_API_URL + 'artists', {
         method: 'GET',
       })
       const jsonData = await data.json()
