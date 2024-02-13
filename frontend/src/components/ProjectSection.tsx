@@ -28,7 +28,7 @@ export default function ProjectSection() {
           {gneres.map((genre, idx) => {
             return (
               <li key={idx}>
-                <button className="rounded-[100px] bg-[#1D1B201F] px-6 py-2.5 hover:border hover:border-[#17161680]">
+                <button className="rounded-[100px] border border-transparent bg-[#1D1B201F] px-6  py-2.5	 hover:border-[#17161680]">
                   {genre}
                 </button>
               </li>

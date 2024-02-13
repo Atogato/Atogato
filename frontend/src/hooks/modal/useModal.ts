@@ -11,28 +11,15 @@ export function useModalState() {
 // Modal Dispatch custom hook
 export function useModalDispatch() {
   const dispatch = useContext(ModalSetterContext)
-  if (!dispatch) throw new Error('Cannot find ModalProvider')
-  return dispatch
-}
-
-export function useModal() {
-  const state = useModalState()
-  const disPatch = useModalDispatch()
 
   function openModal() {
-    disPatch({ type: 'OPEN' })
+    if (!dispatch) throw new Error('Cannot find ModalProvider')
+    dispatch({ type: 'OPEN' })
   }
   function closeModal() {
-    disPatch({ type: 'CLOSE' })
+    if (!dispatch) throw new Error('Cannot find ModalProvider')
+    dispatch({ type: 'CLOSE' })
   }
 
-  function toggleModal() {
-    if (state.isOpen) {
-      closeModal()
-    } else {
-      openModal()
-    }
-  }
-
-  return { state, openModal, closeModal, toggleModal }
+  return { openModal, closeModal }
 }
