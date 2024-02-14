@@ -27,5 +27,8 @@ services:
       - mynetwork
     restart: on-failure
 
+networks:
+  mynetwork:
+
 volumes:
   mysqldb_data:
