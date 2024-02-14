@@ -20,7 +20,8 @@ services:
       - SPRING_PROFILES_ACTIVE=deployment
     image : 9907daniel/project_atogato-backend:latest
     ports:
-      - "127.0.0.1:7072:7072"
+      - "7072:7072"
+      # - "127.0.0.1:7072:7072"
     depends_on:
       - mysqldb
     networks:
