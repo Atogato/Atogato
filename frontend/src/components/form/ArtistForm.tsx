@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { localStorage } from '@/app/storage'
 import Check from '@/icons/check.svg'
 
-const BACKEND_API = 'http://localhost:7072/api/artists'
+const BACKEND_API = process.env.BACKEND_API_URL + 'artists/'
 
 type Genre = {
   genre: string
