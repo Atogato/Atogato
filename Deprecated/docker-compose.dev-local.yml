@@ -12,7 +12,7 @@ services:
     volumes:
       - mysqldb_data:/var/lib/mysql
     networks:
-      mynetwork:
+      - mynetwork
 
   backend:
     container_name: backend
