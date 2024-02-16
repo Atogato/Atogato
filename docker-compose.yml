@@ -20,13 +20,26 @@ services:
       - SPRING_PROFILES_ACTIVE=deployment
     image : 9907daniel/project_atogato-backend:latest
     ports:
-      - "7072:7072"
-      # - "127.0.0.1:7072:7072"
+#      - "7072:7072"
+       - "127.0.0.1:7072:7072"
     depends_on:
       - mysqldb
     networks:
       - mynetwork
     restart: on-failure
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - backend
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+    networks:
+      - mynetwork
 
 networks:
   mynetwork:

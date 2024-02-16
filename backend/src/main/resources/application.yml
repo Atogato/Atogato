@@ -114,7 +114,7 @@ cloud:
   aws:
     credentials:
       accessKey:
-      secretKey:
+      secretKey: 
 #      accessKey: ${accessKey}
 #      secretKey: ${secretKey}
     region:
