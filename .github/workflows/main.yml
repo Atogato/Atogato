@@ -1,11 +1,9 @@
 name: Atogato CICD Pipeline
 on:
   push:
-    # branches: [ "main" ]   
-    branches: [ "migration_deployment" ]
-
-  # pull_request:
-  #   branches: [ "main" , "develop", "backend" ]
+     branches: [ "main" ]  
+  pull_request:
+     branches: [ "main" , "develop", "backend" ]
 
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
