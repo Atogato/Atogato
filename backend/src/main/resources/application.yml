@@ -30,8 +30,10 @@ spring:
       client:
         registration:
           google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
+            client-id:
+            client-secret:
+#            client-id: ${GOOGLE_CLIENT_ID}
+#            client-secret: ${GOOGLE_CLIENT_SECRET}
             scope:
               - email
               - profile
@@ -111,8 +113,10 @@ app:
 cloud:
   aws:
     credentials:
-      accessKey: ${accessKey}
-      secretKey: ${secretKey}
+      accessKey:
+      secretKey: 
+#      accessKey: ${accessKey}
+#      secretKey: ${secretKey}
     region:
       static: ap-northeast-2
     stack:

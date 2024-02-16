@@ -1,10 +1,10 @@
 name: Atogato CICD Pipeline
 on:
   push:
-    branches: [ "main" ]
-
+     branches: [ "main" ]  
   pull_request:
-    branches: [ "main" , "develop", "backend" ]
+     branches: [ "main" , "develop", "backend" ]
+
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -58,13 +58,13 @@ jobs:
           dockerfile: ./backend/Dockerfile
           tags: 9907daniel/project_atogato-backend:latest
 
-      - name: Build and push Docker image (FE)
-        uses: docker/build-push-action@v2
-        with:
-          context: ./frontend
-          push: true
-          dockerfile: ./frontend/Dockerfile
-          tags: 9907daniel/project_atogato-frontend:latest
+      # - name: Build and push Docker image (FE)
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: ./frontend
+      #     push: true
+      #     dockerfile: ./frontend/Dockerfile
+      #     tags: 9907daniel/project_atogato-frontend:latest
 
   deploy:
     needs: build
@@ -91,7 +91,6 @@ jobs:
       - name: Deploy Docker Compose services
         run: |
           ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@13.125.101.0   <<EOF
-          sudo docker rm frontend backend -f
           sudo docker-compose pull
           sudo docker-compose down
           sudo docker-compose up -d

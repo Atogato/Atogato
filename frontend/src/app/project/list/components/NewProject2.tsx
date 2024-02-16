@@ -3,7 +3,7 @@ import Image from 'next/image'
 type filteredListProps = {
   data: Projects[]
 }
-export default function Newproject({ data }: filteredListProps): JSX.Element {
+export default function Newproject2({ data }: filteredListProps): JSX.Element {
   console.log(data)
   return (
     <div className="">

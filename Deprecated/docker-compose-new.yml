@@ -21,12 +21,18 @@ services:
     image : 9907daniel/project_atogato-backend:latest
     ports:
 #      - "7072:7072"
-       - "127.0.0.1:7072:7072"
+      - "127.0.0.1:7072:7072"
     depends_on:
       - mysqldb
     networks:
       - mynetwork
     restart: on-failure
+
+  frontend:
+    container_name: frontend
+    image: 9907daniel/project_atogato-frontend:latest
+    networks:
+      - mynetwork
 
   nginx:
     container_name: nginx
@@ -34,8 +40,10 @@ services:
     restart: always
     ports:
       - 80:80
+      - 443:443
     depends_on:
       - backend
+      - frontend
     volumes:
       - ./nginx/conf:/etc/nginx/conf.d
     networks:
