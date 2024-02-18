@@ -104,6 +104,7 @@ app:
     authorizedRedirectUris:
       - http://localhost:3000/oauth/redirect
       - http://atogato.duckdns.org/oauth/redirect
+      - https://atogato-fe-tau.vercel.app/oauth/redirect
 
 
 # aws s3 bucket
