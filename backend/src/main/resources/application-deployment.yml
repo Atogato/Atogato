@@ -37,7 +37,7 @@ spring:
             scope:
               - email
               - profile
-            redirectUri: "{baseUrl}/api/{action}/oauth2/code/{registrationId}"
+            redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
 
 
           facebook:
