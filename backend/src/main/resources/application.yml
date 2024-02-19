@@ -37,13 +37,15 @@ spring:
             scope:
               - email
               - profile
+            redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
 
-          facebook:
-            client-id: ${FACEBOOK_CLIENT_ID}
-            client-secret: ${FACEBOOK_CLIENT_SECRET}
-            scope:
-              - email
-              - public_profile
+
+#          facebook:
+#            client-id: ${FACEBOOK_CLIENT_ID}
+#            client-secret: ${FACEBOOK_CLIENT_SECRET}
+#            scope:
+#              - email
+#              - public_profile
 
           naver:
             client-id: ${NAVER_CLIENT_ID}
@@ -57,8 +59,10 @@ spring:
             redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
 
           kakao:
-            client-id: ${KAKAO_CLIENT_ID}
-            client-secret: ${KAKAO_CLIENT_SECRET}
+            client-id:
+            client-secret:
+#            client-id: ${KAKAO_CLIENT_ID}
+#            client-secret: ${KAKAO_CLIENT_SECRET}
             redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
             authorization-grant-type: authorization_code
             client-authentication-method: POST
